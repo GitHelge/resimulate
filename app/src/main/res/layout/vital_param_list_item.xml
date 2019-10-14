@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    app:cardBackgroundColor="@color/bootstrap_gray_dark"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--
+    private const val hr = 60
+        private val pWave = PWave(1.0,1.0)
+        private const val qWaveFactor = 1.0
+        private val qrs = QRS(1.0,0.0,0.0)
+        private const val sWaveFactor = 1.0
+        private const val tWaveFactor = 1.0
+        private const val uWaveFactor = 1.0
+        private const val spo2 = 97
+        private const val respRate = 12
+        private const val etco2 = 36
+        private const val xValOffset = 0.0
+        private const val noise = 0.01
+
+    -->
+
+    <LinearLayout
+        android:background="@color/black"
+        android:layout_margin="2dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_margin="2dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <de.bauerapps.resimulate.views.ESTextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:id="@+id/tw_param_name"
+                android:textStyle="bold"
+                android:gravity="start|center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:text="Placeholder"
+                android:layout_height="match_parent" />
+
+            <!--<com.beardedhen.androidbootstrap.BootstrapEditText
+                android:hint="Enter Value"
+                android:layout_marginEnd="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <resimulatemulate.views.ESBootstrapButton
+                app:bootstrapSize="md"
+                android:visibility="invisible"
+                app:fontAwesomeIcon="fa_check"
+                app:esBrand="primary"
+                app:roundedCorners="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>-->
+
+            <com.beardedhen.androidbootstrap.BootstrapEditText
+                android:layout_width="wrap_content"
+                android:id="@+id/tw_param_value"
+                android:minWidth="50dp"
+                android:imeOptions="actionDone"
+                android:inputType="numberSigned|numberDecimal"
+                android:layout_margin="2dp"
+                android:maxLength="5"
+                android:maxLines="1"
+                android:text="0.0"
+                android:minHeight="30dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_margin="2dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <de.bauerapps.resimulate.views.ESTextView
+                android:layout_width="wrap_content"
+                android:id="@+id/tw_param_min"
+                android:text="0.0"
+                android:gravity="center"
+                android:minWidth="50dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_height="match_parent" />
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:max="120"
+                android:progress="30"
+                android:id="@+id/sb_param_change"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:progressDrawable="@drawable/custom_seekbar_progress_track"
+                android:splitTrack="false"
+                android:thumb="@drawable/custom_thumb_colored"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+            <de.bauerapps.resimulate.views.ESTextView
+                android:layout_width="wrap_content"
+                android:id="@+id/tw_param_max"
+                android:gravity="center"
+                android:text="10.0"
+                android:minWidth="50dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</androidx.cardview.widget.CardView>

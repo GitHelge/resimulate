@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:background="@color/bootstrap_gray_dark">
+
+    <TextView
+        android:background="@drawable/layout_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:padding="8dp"
+        android:gravity="center"
+        android:text="@string/scenario_overview"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_scenarios"
+        android:layout_width="match_parent"
+        tools:listitem="@layout/scenario_overview_list_item"
+        android:layout_weight="1"
+        android:layout_height="0dp"/>
+
+    <LinearLayout
+        android:background="@drawable/layout_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <de.bauerapps.resimulate.views.ESBootstrapButton
+            android:id="@+id/b_cancel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            app:bootstrapSize="xl"
+            android:minWidth="60dp"
+            app:fontAwesomeIcon="fa_times"
+            app:hasWhiteBackground="true"
+            app:roundedCorners="true"
+            app:useCustomTextColor="@color/bootstrap_brand_danger" />
+
+        <de.bauerapps.resimulate.views.ESBootstrapButton
+            android:id="@+id/b_check"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            app:bootstrapSize="xl"
+            android:minWidth="60dp"
+            app:fontAwesomeIcon="fa_check"
+            app:hasWhiteBackground="true"
+            app:roundedCorners="true"
+            app:useCustomTextColor="@color/bootstrap_brand_success" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

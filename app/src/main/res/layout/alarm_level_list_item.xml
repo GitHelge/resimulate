@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    app:cardBackgroundColor="@color/black"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--
+    private const val hr = 60
+        private val pWave = PWave(1.0,1.0)
+        private const val qWaveFactor = 1.0
+        private val qrs = QRS(1.0,0.0,0.0)
+        private const val sWaveFactor = 1.0
+        private const val tWaveFactor = 1.0
+        private const val uWaveFactor = 1.0
+        private const val spo2 = 97
+        private const val respRate = 12
+        private const val etco2 = 36
+        private const val xValOffset = 0.0
+        private const val noise = 0.01
+
+    -->
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:id="@+id/tw_alarm_name"
+                android:textStyle="bold"
+                android:gravity="start"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/white"
+                android:text="Placeholder"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/tw_alarm_value"
+                android:text="0.0"
+                android:minWidth="50dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/tw_alarm_min"
+                android:text="0.0"
+                android:minWidth="50dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:layout_height="match_parent" />
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:max="120"
+                android:progress="30"
+                android:id="@+id/sb_alarm_change"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:progressDrawable="@drawable/custom_seekbar_progress_track"
+                android:splitTrack="false"
+                android:thumb="@drawable/custom_thumb_colored"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/tw_alarm_max"
+                android:text="10.0"
+                android:minWidth="50dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</androidx.cardview.widget.CardView>

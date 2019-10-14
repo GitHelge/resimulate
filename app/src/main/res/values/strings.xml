@@ -1,0 +1,200 @@
+<resources>
+    <array name="pathologyArray">
+        <item>@string/sinus_rhythm</item>
+        <item>@string/asystole</item>
+        <item>@string/junc_rhythm</item>
+        <item>@string/vent_tach</item>
+        <item>@string/vent_fib</item>
+        <item>@string/art_fib</item>
+        <item>@string/av_block_3</item>
+        <item>@string/st_elev</item>
+    </array>
+
+    <string name="dummy_button" translatable="false">Dummy Button</string>
+    <string name="dummy_content" translatable="false">DUMMY\nCONTENT</string>
+    <string name="es_icon_cd" translatable="false">ReSimulate Icon</string>
+    <string name="coarse_location_description">"For connecting to other devices, the permission to access a coarse location is required.     "</string>
+
+    <string name="app_name" translatable="false">ReSimulate</string>
+    <string name="hr_bpm_oxy">HR (Oxy) [bpm]</string>
+    <string name="hr_bpm">HR [bpm]</string>
+    <string name="pathology_designer">Scenario Design</string>
+
+    <string name="sinus_rhythm">Sinus Rhythm</string>
+    <string name="asystole">Asystole</string>
+    <string name="junc_rhythm">Junctional Rhythm</string>
+    <string name="vent_tach">Ventricular Tachycardia</string>
+    <string name="vent_fib">Ventricular Fibrillation</string>
+    <string name="art_fib">Artrial Fibrillation</string>
+    <string name="av_block_3" translatable="false">AV Block 3</string>
+    <string name="st_elev">ST Elevation</string>
+
+    <string name="emergency_simulator" translatable="false">ReSimulate</string>
+    <string name="use_as">Connect as:</string>
+    <string name="name" translatable="false">Name</string>
+    <string name="searching_for_trainee">Searching for Trainee…</string>
+    <string name="searching_for_trainer">Searching for Trainer…</string>
+    <string name="allow">ALLOW</string>
+    <string name="es_icon" translatable="false">ReSimulate Icon</string>
+    <string name="ecg">ECG</string>
+    <string name="oxy" translatable="false">Oxy</string>
+    <string name="etco2" translatable="false">etCO2</string>
+    <string name="nibp_mmhg" translatable="false">NIBP [mmHG]</string>
+    <string name="nibp_default" translatable="false">--/--</string>
+    <string name="map_default" translatable="false">(--)</string>
+    <string name="defibrillator" translatable="false">Defibrillator</string>
+    <string name="energy">Energy</string>
+    <string name="defi_energy_default" translatable="false">150\nJ</string>
+    <string name="charge">CHARGE</string>
+    <string name="sync" translatable="false">SYNC</string>
+    <string name="pacer" translatable="false">Pacer</string>
+    <string name="on_off" translatable="false">ON/OFF</string>
+    <string name="pacer_energy_default" translatable="false">10\nmA</string>
+    <string name="frequency">Frequency</string>
+    <string name="pacer_frequenc_default" translatable="false">60\nbpm</string>
+    <string name="time_default" translatable="false">0:00:00</string>
+    <string name="peak_vol_default" translatable="false">0%</string>
+    <string name="nibp" translatable="false">NIBP</string>
+    <string name="vs_default" translatable="false">--</string>
+    <string name="spo2_percent" translatable="false">SpO2 [%]</string>
+    <string name="etco2_mmhg" translatable="false">etCO2 [mmHG]</string>
+    <string name="resp_rate_bpm">resp rate [bpm]</string>
+    <string name="nibp_repeat" translatable="false">{fa_retweet} NIBP</string>
+    <string name="connection_indicator_placeholder">Connected to\nChristian</string>
+    <string name="spo2" translatable="false">SpO2</string>
+    <string name="resp_rate">Resp Rate</string>
+    <string name="sys_nibp">Systolic NIBP</string>
+    <string name="dia_nibp">Diastolic NIBP</string>
+    <string name="p_wave_amp">P Wave Amplitude</string>
+    <string name="p_wave_dur">P Wave Duration</string>
+    <string name="p_wave_start_time">P Wave Start Time</string>
+    <string name="q_wave_dur">Q Wave Duration</string>
+    <string name="q_wave_start_time">Q Wave Start Time</string>
+    <string name="q_wave_amp">Q Wave Amplitude</string>
+    <string name="qrs_dur">QRS Duration</string>
+    <string name="qrs_start_time">QRS Start Time</string>
+    <string name="qrs_amp" translatable="false">QRS Amplitude</string>
+    <string name="qrs_amp_offset">QRS Amplitude Offset</string>
+    <string name="s_wave_dur">S Wave Duration</string>
+    <string name="s_wave_start_time">S Wave Start Time</string>
+    <string name="s_wave_amp">S Wave Amplitude</string>
+    <string name="t_wave_dur">T Wave Duration</string>
+    <string name="t_wave_start_time">T Wave Start Time</string>
+    <string name="t_wave_amp">T Wave Amplitude</string>
+    <string name="st_wave_sep_dur">ST Wave Separation Duration</string>
+    <string name="u_wave_amp">U Wave Amplitude</string>
+    <string name="u_wave_dur">U Wave Duration</string>
+    <string name="u_wave_start_time">U Wave Start Time</string>
+    <string name="x_val_offset" translatable="false">X Val Offset</string>
+    <string name="noise">Noise</string>
+    <string name="show_pacer_module">SHOW PACER\nMODULE</string>
+    <string name="show_defi_module">SHOW DEFI\nMODULE</string>
+    <string name="no_endpoint_restart_necessary">No Endpoint, restart necessary.</string>
+    <string name="found_desc">Found: </string>
+    <string name="lost_desc">Lost: </string>
+    <string name="connected_to_desc">Connected to: </string>
+    <string name="disconnected_from_desc">Disconnected from: </string>
+    <string name="waiting_for_desc">Waiting for: </string>
+    <string name="unknown_endpoint_desc">Unknown Endpoint: </string>
+    <string name="not_connected_to_any_endpoint">Not connected to any endpoint.</string>
+    <string name="bt_error_occured">Bluetooth Error Occurred</string>
+    <string name="try_restart_desc">Please try to restart both devices before reconnecting.</string>
+    <string name="no_connection">No Connection.</string>
+    <string name="update_impossible">Update impossible.</string>
+    <string name="sending_update_impossible_desc">Sending update impossible: </string>
+    <string name="hr_upper_limit">HR Upper Limit</string>
+    <string name="hr_lower_limit">HR Lower Limit</string>
+    <string name="spo2_lower_limit">SpO2 Lower Limit</string>
+    <string name="etco2_upper_limit">etCO2 Upper Limit</string>
+    <string name="etco2_lower_limit">etCO2 Lower Limit</string>
+    <string name="resp_rate_upper_limit">Resp Rate Upper Limit</string>
+    <string name="resp_rate_lower_limit">Resp Rate Lower Limit</string>
+    <string name="sys_upper_limit">Systolic Upper Limit</string>
+    <string name="sys_lower_limit">Systolic Lower Limit</string>
+    <string name="dia_upper_limit">Diastolic Upper Limit</string>
+    <string name="dia_lower_limit">Diastolic  Lower Limit</string>
+    <string name="starting_up_device">Starting up device…</string>
+    <string name="self_testing">Self testing…</string>
+    <string name="searching_stopped">Searching stopped.</string>
+    <string name="save_pathology">SAVE</string>
+    <string name="show_periods">PERIODS</string>
+    <string name="cpr" translatable="false">CPR</string>
+    <string name="copd" translatable="false">COPD</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="ecg_ii">ECG II</string>
+    <string name="heart_rate_n_bpm">Heart Rate\n(bpm)</string>
+    <string name="pacer_energy_thresh_n_ma">Pacer Energy Thresh.\n(mA)</string>
+    <string name="spo2_n_percent" translatable="false">SpO2\n(%)</string>
+    <string name="defi_energy_threshold_n_ma">Defi Energy Threshold\n(mA)</string>
+    <string name="systolic_nibp_n_mmhg">Systolic NIBP\n(mmHg)</string>
+    <string name="diastolic_nibp_n_mmhg">Diastolic NIBP\n(mmHg)</string>
+    <string name="resp_rate_n_bpm">Resp. Rate\n(bpm)</string>
+    <string name="etco2_n_mmhg">etCO2\n(mmHg)</string>
+    <string name="capno">Capno</string>
+    <string name="resimulate_powered" translatable="false">ReSimulate: Powered by BauerApps</string>
+    <string name="shutdown_simulator">Shutdown Simulator?</string>
+    <string name="no">NO</string>
+    <string name="yes">YES</string>
+    <string name="alarm_levels">Alarm Levels</string>
+    <string name="nibp_repetition_time">NIBP Repetition Time</string>
+    <string name="min_2" translatable="false">2 MIN</string>
+    <string name="min_5" translatable="false">5 MIN</string>
+    <string name="device_name">Device Name</string>
+    <string name="device_id">Device ID</string>
+    <string name="connect">CONNECT</string>
+    <string name="settings">Settings</string>
+    <string name="param_change_duration">Param. Change Duration</string>
+    <string name="post_shock_pathology_config">Post Shock Pathology Config</string>
+    <string name="defi_charge">Defi Charge</string>
+    <string name="shock_btn">SHOCK {fa_bolt}</string>
+    <string name="discharge">DISCHARGE</string>
+    <string name="disconnect">DISCONNECT</string>
+    <string name="current_pathology">Current\nPathology</string>
+    <string name="patient_configuration">Patient Configuration</string>
+    <string name="post_shock_n_scenario">Post Shock\nScenario</string>
+    <string name="use_solo">SOLO\nMODE</string>
+    <string name="sim_config" translatable="false">SIM CONFIG</string>
+    <string name="oxy_noise">Oxy Noise</string>
+    <string name="cap_noise">Cap Noise</string>
+    <string name="save_scenario">Save Scenario</string>
+    <string name="please_define_a_name">Please define a name for the new scenario.</string>
+    <string name="scenario_name">Scenario Name</string>
+    <string name="scenario_name_already_found">The name: %1$s already exists. Please specify another name.</string>
+    <string name="scenario_saved">Scenario saved.</string>
+    <string name="publish_desc">Your scenario is published on resimulate.de</string>
+    <string name="upload_name_desc">Do you want to specify your name?</string>
+    <string name="creator_name">Name</string>
+    <string name="cancel">Cancel</string>
+    <string name="creator_name_desc">Enter your Name:</string>
+    <string name="scenario_name_desc">Enter descriptive name for the scenario:</string>
+    <string name="scenario_overview">Scenario Overview</string>
+    <string name="upload">Upload</string>
+    <string name="scenario_upload">Scenario Upload</string>
+    <string name="already_uploaded">Scenario already shared</string>
+    <string name="already_shared_desc">You already shared this scenario. Thank you.</string>
+    <string name="authentication_failed">Authentication failed.</string>
+    <string name="upload_successfull">Upload Successful.</string>
+    <string name="thanks_for_sharing">Thanks for sharing.</string>
+    <string name="upload_failed">Upload Failed.</string>
+    <string name="management">Scenario\nManagement</string>
+    <string name="scenario">Scenario</string>
+    <string name="designer">Scenario\nDesigner</string>
+    <string name="download">Scenario\nDownload</string>
+    <string name="save_local">Save</string>
+    <string name="scenario_download_header">Scenario Download Overview</string>
+    <string name="scenario_download_desc">These Scenarios were created by other users. You can download and use them in your own trainings.</string>
+    <string name="author_placeholder">Author: Anonymous</string>
+    <string name="author">Created by: %1$s</string>
+    <string name="anonymous">Anonymous</string>
+    <string name="preview">Preview</string>
+    <string name="no_downloadable_scenarios">No new scenarios available.</string>
+    <string name="scenario_save_header_desc">The scenario is saved and you can use it for training.</string>
+    <string name="doublicate_name_give_other">The name %1$s already exists. Please give another name to save the scenario.</string>
+    <string name="rename_scenario">Rename Scenario</string>
+    <string name="delete_scenario_desc">Do you want to delete this Scenario?</string>
+    <string name="delete_scenario_header">Delete Scenario</string>
+    <string name="more">More</string>
+    <string name="sim_ended_header">Simulation ended</string>
+    <string name="sim_ended_desc">The Simulation was ended by the Trainer.</string>
+
+</resources>

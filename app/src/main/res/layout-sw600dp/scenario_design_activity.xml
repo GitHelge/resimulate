@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_whole"
+    android:background="@android:color/black"
+    tools:context=".ScenarioDesignActivity">
+
+    <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0px"
+        android:layout_height="0px"/>
+
+    <LinearLayout
+        android:id="@+id/ll_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bootstrap_gray_dark"
+        android:orientation="horizontal">
+
+        <de.bauerapps.resimulate.views.ESBootstrapButton
+            android:id="@+id/b_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:bootstrapSize="lg"
+            app:fontAwesomeIcon="fa_chevron_left"
+            app:isDarkGray="true" />
+
+        <ImageView
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="50dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_esicon" />
+
+
+        <de.bauerapps.resimulate.views.ESTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/pathology_designer"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textStyle="bold"
+            app:simTextViewType="none" />
+        
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <de.bauerapps.resimulate.views.ESDropdown
+            android:id="@+id/dd_pathologies"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textStyle="bold"
+            android:layout_margin="2dp"
+            android:minWidth="100dp"
+            app:bootstrapSize="lg"
+            app:bootstrapText="@string/sinus_rhythm"
+            app:dropdownResource="@array/pathologyArray"
+            app:layout_constraintBottom_toBottomOf="@+id/b_zero_indicator"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/b_zero_indicator"
+            app:roundedCorners="true" />
+        
+        <de.bauerapps.resimulate.views.ESBootstrapButton
+            android:text="@string/save_pathology"
+            android:id="@+id/b_save_scenario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:textStyle="bold"
+            app:bootstrapSize="lg"
+            app:roundedCorners="true"
+            app:showOutline="true"
+            app:esBrand="regular"/>
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:background="@color/bootstrap_gray_dark"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:baselineAligned="false">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:minHeight="50dp"
+                android:background="@drawable/layout_bg"
+                android:orientation="horizontal">
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    app:roundedCorners="true"
+                    android:id="@+id/b_ecg_toggle"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    android:text="@string/ecg_ii"
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"/>
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    app:roundedCorners="true"
+                    android:id="@+id/b_oxy_toggle"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    android:text="@string/oxy"
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"/>
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    app:roundedCorners="true"
+                    android:id="@+id/b_cap_toggle"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    android:text="@string/capno"
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"/>
+
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    app:roundedCorners="true"
+                    android:id="@+id/b_ok"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    android:text="@string/ok"
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"/>
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    app:bootstrapSize="lg"
+                    app:fontAwesomeIcon="fa_clock_o"
+                    android:id="@+id/b_dynchange_config"
+                    android:layout_margin="2dp"
+                    app:roundedCorners="true"
+                    app:hasWhiteBackground="true"
+                    android:minWidth="60dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_parameters"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:listitem="@layout/vital_param_list_item" />
+            
+        </LinearLayout>
+        
+        <ScrollView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+    
+                <FrameLayout
+                    android:layout_margin="2dp"
+                    android:background="@drawable/layout_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+    
+                    <de.bauerapps.resimulate.views.ESSurfaceView
+                        android:id="@+id/vsg_ecg"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_margin="2dp" />
+    
+                </FrameLayout>
+    
+                <FrameLayout
+                    android:layout_margin="2dp"
+                    android:background="@drawable/layout_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+    
+                    <de.bauerapps.resimulate.views.ESSurfaceView
+                        android:id="@+id/vsg_oxy"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_margin="2dp" />
+    
+                </FrameLayout>
+    
+                <FrameLayout
+                    android:layout_margin="2dp"
+                    android:background="@drawable/layout_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+    
+                    <de.bauerapps.resimulate.views.ESSurfaceView
+                        android:id="@+id/vsg_cap"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_margin="2dp" />
+    
+                </FrameLayout>
+                
+                <FrameLayout
+                    android:layout_margin="2dp"
+                    android:background="@drawable/layout_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    
+                    <de.bauerapps.resimulate.views.ESBootstrapButton
+                        android:id="@+id/b_zero_indicator"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:textStyle="bold"
+                        android:text="@string/show_periods"
+                        app:bootstrapSize="lg"
+                        app:layout_constraintEnd_toStartOf="@+id/dd_pathologies"
+                        app:layout_constraintTop_toBottomOf="@+id/ll_header"
+                        app:roundedCorners="true" />
+                
+                </FrameLayout>
+
+            </LinearLayout>
+            
+        </ScrollView>
+
+    </LinearLayout>
+
+</LinearLayout>

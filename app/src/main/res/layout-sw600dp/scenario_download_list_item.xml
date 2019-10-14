@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:id="@+id/ll_scenario_download_item"
+    android:background="@color/bootstrap_gray_dark">
+
+    <LinearLayout
+        android:baselineAligned="false"
+        android:layout_margin="2dp"
+        android:minHeight="100dp"
+        android:orientation="horizontal"
+        android:background="@drawable/layout_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <de.bauerapps.resimulate.views.ESTextView
+                android:id="@+id/tw_scenario_name"
+                android:text="@string/sinus_rhythm"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <de.bauerapps.resimulate.views.ESTextView
+                android:layout_width="match_parent"
+                android:paddingLeft="8dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:id="@+id/tw_author_name"
+                android:paddingRight="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/author_placeholder"
+                android:layout_height="wrap_content"/>
+
+            <de.bauerapps.resimulate.views.ESTextView
+                android:layout_width="match_parent"
+                android:paddingLeft="8dp"
+                android:id="@+id/tw_timestamp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:paddingRight="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                android:text="Today?!"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_margin="8dp"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <!--<de.bauerapps.resimulate.views.ESBootstrapButton
+                android:layout_width="wrap_content"
+                android:minWidth="60dp"
+                android:id="@+id/b_preview"
+                app:fontAwesomeIcon="fa_eye"
+                android:layout_gravity="center_vertical"
+                app:bootstrapSize="lg"
+                app:roundedCorners="true"
+                android:layout_margin="2dp"
+                android:layout_height="wrap_content" />-->
+
+            <de.bauerapps.resimulate.views.ESBootstrapButton
+                android:layout_width="wrap_content"
+                android:minWidth="60dp"
+                android:id="@+id/b_download"
+                android:layout_gravity="center_vertical"
+                app:fontAwesomeIcon="fa_cloud_download"
+                app:bootstrapSize="lg"
+                app:roundedCorners="true"
+                android:layout_margin="2dp"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:background="@color/bootstrap_gray_dark">
+
+    <TextView
+        android:background="@drawable/layout_bg"
+        android:id="@+id/tw_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:gravity="center"
+        android:text="@string/settings"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_margin="2dp"
+        android:baselineAligned="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bootstrap_gray_dark"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:background="@drawable/layout_bg"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/tw_settings_header"
+                    android:textStyle="bold"
+                    android:gravity="start"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/white"
+                    android:text="@string/param_change_duration"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/tw_dyn_change_value"
+                    android:text="15s"
+                    android:minWidth="60dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/tw_dyn_change_min"
+                    android:text="1s"
+                    android:minWidth="60dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:layout_height="match_parent" />
+
+                <androidx.appcompat.widget.AppCompatSeekBar
+                    android:max="119"
+                    android:progress="15"
+                    android:id="@+id/sb_change_duration"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:progressDrawable="@drawable/custom_seekbar_progress_track"
+                    android:splitTrack="false"
+                    android:thumb="@drawable/custom_thumb_colored"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/tw_dyn_change_max"
+                    android:text="120s"
+                    android:minWidth="60dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--<LinearLayout
+            android:layout_margin="2dp"
+            android:background="@drawable/layout_bg"
+            android:id="@+id/ll_manual_change"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <resimulatemulate.views.ESTextView
+                android:id="@+id/tw_slider_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="Change Duration: 30s"
+                android:textStyle="bold"
+                app:simTextViewType="none" />
+
+
+            <android.support.v7.widget.AppCompatSeekBar
+                android:max="120"
+                android:progress="30"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:id="@+id/sb_change_duration"
+                android:progressDrawable="@drawable/custom_seekbar_progress_track"
+                android:splitTrack="false"
+                android:thumb="@drawable/custom_thumb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <resimulatemulate.views.ESTextView
+                    android:text="0s"
+                    android:layout_marginStart="5dp"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent" />
+
+                <resimulatemulate.views.ESTextView
+                    android:text="120s"
+                    android:layout_marginEnd="5dp"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>-->
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:background="@drawable/layout_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:minHeight="50dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <de.bauerapps.resimulate.views.ESBootstrapButton
+            android:id="@+id/b_cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="2dp"
+            app:bootstrapSize="lg"
+            app:fontAwesomeIcon="fa_times"
+            app:hasWhiteBackground="true"
+            app:roundedCorners="true"
+            app:useCustomTextColor="@color/bootstrap_brand_danger" />
+
+        <de.bauerapps.resimulate.views.ESBootstrapButton
+            android:id="@+id/b_check"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="2dp"
+            app:bootstrapSize="lg"
+            app:fontAwesomeIcon="fa_check"
+            app:hasWhiteBackground="true"
+            app:roundedCorners="true"
+            app:useCustomTextColor="@color/bootstrap_brand_success" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

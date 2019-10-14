@@ -1,0 +1,725 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:background="@color/bootstrap_gray_dark">
+
+    <TextView
+        android:background="@drawable/layout_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:gravity="center"
+        android:text="@string/patient_configuration"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:minHeight="50dp"
+                android:background="@drawable/layout_bg"
+                android:orientation="horizontal">
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    app:roundedCorners="true"
+                    android:id="@+id/b_ecg_toggle"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    android:text="@string/ecg_ii"
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"/>
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    app:roundedCorners="true"
+                    android:id="@+id/b_oxy_toggle"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    android:text="@string/oxy"
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"/>
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    app:roundedCorners="true"
+                    android:id="@+id/b_cap_toggle"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    android:text="@string/capno"
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"/>
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    app:roundedCorners="true"
+                    android:id="@+id/b_nibp_toggle"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    android:text="@string/nibp"
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:minHeight="50dp"
+                android:background="@drawable/layout_bg"
+                android:orientation="horizontal">
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    app:roundedCorners="true"
+                    android:id="@+id/b_cpr"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    android:text="@string/cpr"
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"/>
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    app:roundedCorners="true"
+                    android:id="@+id/b_copd"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    android:text="@string/copd"
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:minHeight="50dp"
+                android:background="@drawable/layout_bg"
+                android:orientation="horizontal">
+
+                <de.bauerapps.resimulate.views.ESTextView
+                    android:text="@string/current_pathology"
+                    android:gravity="center|start"
+                    android:layout_marginStart="4dp"
+                    android:layout_width="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_height="match_parent"/>
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <de.bauerapps.resimulate.views.ESDropdown
+                    android:id="@+id/esd_pathology"
+                    app:roundedCorners="true"
+                    app:bootstrapText="@string/sinus_rhythm"
+                    app:dropdownResource="@array/pathologyArray"
+                    app:bootstrapSize="lg"
+                    android:layout_margin="2dp"
+                    android:textStyle="bold"
+                    android:minWidth="100dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    app:bootstrapSize="lg"
+                    app:fontAwesomeIcon="fa_clock_o"
+                    android:id="@+id/b_dynchange_config"
+                    android:layout_margin="2dp"
+                    android:minWidth="50dp"
+                    app:roundedCorners="true"
+                    app:hasWhiteBackground="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:minHeight="50dp"
+                android:background="@drawable/layout_bg"
+                android:orientation="horizontal">
+
+
+                <de.bauerapps.resimulate.views.ESTextView
+                    android:text="@string/post_shock_n_scenario"
+                    android:gravity="center|start"
+                    android:layout_marginStart="4dp"
+                    android:layout_width="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_height="match_parent"/>
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <de.bauerapps.resimulate.views.ESDropdown
+                    android:id="@+id/esd_defi_pathology"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="2dp"
+                    android:minWidth="100dp"
+                    android:textStyle="bold"
+                    app:bootstrapSize="lg"
+                    app:bootstrapText="@string/sinus_rhythm"
+                    app:dropdownResource="@array/pathologyArray"
+                    app:roundedCorners="true" />
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_ps_pathology_config"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:minWidth="50dp"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    app:fontAwesomeIcon="fa_cog"
+                    app:hasWhiteBackground="true"
+                    app:roundedCorners="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_margin="2dp"
+                android:background="@drawable/layout_bg"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <de.bauerapps.resimulate.views.ESTextView
+                    android:id="@+id/tw_hr_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center|start"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/heart_rate_n_bpm"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:simTextViewType="hr" />
+
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_hr_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:minWidth="50dp"
+                    app:bootstrapSize="lg"
+                    app:useXLText="true"
+                    app:fontAwesomeIcon="fa_minus"
+                    app:roundedCorners="true" />
+
+
+                <de.bauerapps.resimulate.views.ESTextView
+                    android:id="@+id/tw_hr_config_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:minWidth="@dimen/config_label_min_width"
+                    android:text="60"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:simTextViewType="none" />
+
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_hr_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:useXLText="true"
+                    android:minWidth="50dp"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    app:fontAwesomeIcon="fa_plus"
+                    app:roundedCorners="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_margin="2dp"
+                android:background="@drawable/layout_bg"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false">
+
+                <de.bauerapps.resimulate.views.ESTextView
+                    android:id="@+id/tw_pacer_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center|start"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/pacer_energy_thresh_n_ma"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:simTextViewType="hr" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_pacer_thres_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    android:minWidth="50dp"
+                    app:useXLText="true"
+                    app:fontAwesomeIcon="fa_minus"
+                    app:roundedCorners="true" />
+
+
+                <de.bauerapps.resimulate.views.ESTextView
+                    android:id="@+id/tw_pacer_thres_config_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:minWidth="@dimen/config_label_min_width"
+                    android:text="60"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:simTextViewType="none" />
+
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_pacer_thres_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:useXLText="true"
+                    android:layout_margin="2dp"
+                    android:minWidth="50dp"
+                    app:bootstrapSize="lg"
+                    app:fontAwesomeIcon="fa_plus"
+                    app:roundedCorners="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_margin="2dp"
+                android:background="@drawable/layout_bg"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <de.bauerapps.resimulate.views.ESTextView
+                    android:id="@+id/tw_spo2_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center|start"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/spo2_n_percent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:simTextViewType="spo2" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_spo2_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    android:minWidth="50dp"
+                    app:useXLText="true"
+                    app:fontAwesomeIcon="fa_minus"
+                    app:roundedCorners="true" />
+
+
+                <de.bauerapps.resimulate.views.ESTextView
+                    android:id="@+id/tw_spo2_config_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:minWidth="@dimen/config_label_min_width"
+                    android:text="60"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:simTextViewType="none" />
+
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_spo2_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:useXLText="true"
+                    android:minWidth="50dp"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    app:fontAwesomeIcon="fa_plus"
+                    app:roundedCorners="true" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_margin="2dp"
+                android:background="@drawable/layout_bg"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <de.bauerapps.resimulate.views.ESTextView
+                    android:id="@+id/tw_etco2_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center|start"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/etco2_n_mmhg"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:simTextViewType="etco2" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_etco2_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="50dp"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    app:useXLText="true"
+                    app:fontAwesomeIcon="fa_minus"
+                    app:roundedCorners="true" />
+
+
+                <de.bauerapps.resimulate.views.ESTextView
+                    android:id="@+id/tw_etco2_config_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:minWidth="@dimen/config_label_min_width"
+                    android:text="60"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:simTextViewType="none" />
+
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_etco2_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:useXLText="true"
+                    android:layout_margin="2dp"
+                    android:minWidth="50dp"
+                    app:bootstrapSize="lg"
+                    app:fontAwesomeIcon="fa_plus"
+                    app:roundedCorners="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_margin="2dp"
+                android:background="@drawable/layout_bg"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <de.bauerapps.resimulate.views.ESTextView
+                    android:id="@+id/tw_resp_rate_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center|start"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/resp_rate_n_bpm"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:simTextViewType="respRate" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_resp_rate_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:minWidth="50dp"
+                    app:bootstrapSize="lg"
+                    app:useXLText="true"
+                    app:fontAwesomeIcon="fa_minus"
+                    app:roundedCorners="true" />
+
+
+                <de.bauerapps.resimulate.views.ESTextView
+                    android:id="@+id/tw_resp_rate_config_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:minWidth="@dimen/config_label_min_width"
+                    android:text="60"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:simTextViewType="none" />
+
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_resp_rate_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="50dp"
+                    app:useXLText="true"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    app:fontAwesomeIcon="fa_plus"
+                    app:roundedCorners="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_margin="2dp"
+                android:background="@drawable/layout_bg"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <de.bauerapps.resimulate.views.ESTextView
+                    android:id="@+id/tw_sys_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center|start"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/systolic_nibp_n_mmhg"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:simTextViewType="bp" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_sys_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    android:minWidth="50dp"
+                    app:useXLText="true"
+                    app:fontAwesomeIcon="fa_minus"
+                    app:roundedCorners="true" />
+
+
+                <de.bauerapps.resimulate.views.ESTextView
+                    android:id="@+id/tw_sys_config_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:minWidth="@dimen/config_label_min_width"
+                    android:text="60"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:simTextViewType="none" />
+
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_sys_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:useXLText="true"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    android:minWidth="50dp"
+                    app:fontAwesomeIcon="fa_plus"
+                    app:roundedCorners="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_margin="2dp"
+                android:background="@drawable/layout_bg"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <de.bauerapps.resimulate.views.ESTextView
+                    android:id="@+id/tw_dia_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center|start"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/diastolic_nibp_n_mmhg"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:simTextViewType="bp" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_dia_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    android:minWidth="50dp"
+                    app:useXLText="true"
+                    app:fontAwesomeIcon="fa_minus"
+                    app:roundedCorners="true" />
+
+
+                <de.bauerapps.resimulate.views.ESTextView
+                    android:id="@+id/tw_dia_config_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:minWidth="@dimen/config_label_min_width"
+                    android:text="60"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:simTextViewType="none" />
+
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_dia_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:useXLText="true"
+                    android:layout_margin="2dp"
+                    android:minWidth="50dp"
+                    app:bootstrapSize="lg"
+                    app:fontAwesomeIcon="fa_plus"
+                    app:roundedCorners="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_margin="2dp"
+                android:background="@drawable/layout_bg"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+
+                <de.bauerapps.resimulate.views.ESTextView
+                    android:id="@+id/tw_defi_energy_thres_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center|start"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/defi_energy_threshold_n_ma"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:simTextViewType="hr" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_defi_energy_thres_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    app:useXLText="true"
+                    android:minWidth="50dp"
+                    app:fontAwesomeIcon="fa_minus"
+                    app:roundedCorners="true" />
+
+
+                <de.bauerapps.resimulate.views.ESTextView
+                    android:id="@+id/tw_defi_energy_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:minWidth="@dimen/config_label_min_width"
+                    android:text="60"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:simTextViewType="none" />
+
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_defi_energy_thres_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:useXLText="true"
+                    android:layout_margin="2dp"
+                    android:minWidth="50dp"
+                    app:bootstrapSize="lg"
+                    app:fontAwesomeIcon="fa_plus"
+                    app:roundedCorners="true" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:background="@drawable/layout_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:minHeight="50dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <de.bauerapps.resimulate.views.ESBootstrapButton
+            android:id="@+id/b_cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            app:bootstrapSize="xl"
+            app:fontAwesomeIcon="fa_times"
+            app:hasWhiteBackground="true"
+            app:roundedCorners="true"
+            app:useCustomTextColor="@color/bootstrap_brand_danger" />
+
+        <de.bauerapps.resimulate.views.ESBootstrapButton
+            android:id="@+id/b_check"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            app:bootstrapSize="xl"
+            android:layout_weight="1"
+            app:fontAwesomeIcon="fa_check"
+            app:hasWhiteBackground="true"
+            app:roundedCorners="true"
+            app:useCustomTextColor="@color/bootstrap_brand_success" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

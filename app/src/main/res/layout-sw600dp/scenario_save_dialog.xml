@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:background="@color/bootstrap_gray_dark">
+
+    <LinearLayout
+        android:layout_margin="2dp"
+        android:background="@drawable/layout_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tw_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:gravity="center"
+            android:text="@string/save_scenario"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <de.bauerapps.resimulate.views.ESTextView
+            android:id="@+id/tw_header_desc"
+            android:text="@string/scenario_save_header_desc"
+            android:padding="8dp"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_margin="2dp"
+        android:background="@drawable/layout_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <de.bauerapps.resimulate.views.ESTextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:id="@+id/tw_scenario_save_description"
+            android:text="@string/please_define_a_name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="2dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:background="@drawable/layout_bg"
+            android:gravity="center"
+            android:layout_height="wrap_content" />
+
+        <com.beardedhen.androidbootstrap.BootstrapEditText
+            android:id="@+id/et_scenario_name"
+            app:roundedCorners="true"
+            app:bootstrapSize="lg"
+            android:layout_margin="2dp"
+            android:inputType="text"
+            android:maxLength="30"
+            android:maxLines="1"
+            android:hint="@string/scenario_name"
+            android:minHeight="60dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="16dp"/>
+
+    <LinearLayout
+        android:background="@drawable/layout_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <de.bauerapps.resimulate.views.ESBootstrapButton
+            android:id="@+id/b_cancel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            app:bootstrapSize="xl"
+            android:minWidth="60dp"
+            app:fontAwesomeIcon="fa_times"
+            app:hasWhiteBackground="true"
+            app:roundedCorners="true"
+            app:useCustomTextColor="@color/bootstrap_brand_danger" />
+
+        <de.bauerapps.resimulate.views.ESBootstrapButton
+            android:id="@+id/b_check"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            app:bootstrapSize="xl"
+            android:minWidth="60dp"
+            app:fontAwesomeIcon="fa_check"
+            app:hasWhiteBackground="true"
+            app:roundedCorners="true"
+            app:useCustomTextColor="@color/bootstrap_brand_success" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="2dp"
+    android:background="@color/bootstrap_gray_dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <de.bauerapps.resimulate.views.ESTextView
+            android:background="@drawable/layout_bg"
+            android:id="@+id/tw_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:gravity="center"
+            android:text="@string/defi_charge"
+            android:textStyle="bold"
+            app:simTextViewType="none" />
+
+        <LinearLayout
+            android:baselineAligned="false"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/bootstrap_gray_dark"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_margin="2dp"
+                android:background="@drawable/layout_bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <de.bauerapps.resimulate.views.ESDefiChargeBar
+                    android:id="@+id/pb_defi_charge"
+                    android:layout_gravity="center"
+                    app:animated="true"
+                    app:bootstrapMaxProgress="100"
+                    app:bootstrapBrand="danger"
+                    app:roundedCorners="true"
+                    app:bootstrapProgress="0"
+                    android:layout_margin="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

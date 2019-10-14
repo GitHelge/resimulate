@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:background="@color/bootstrap_gray_dark">
+
+    <LinearLayout
+        android:background="@drawable/layout_bg"
+        android:layout_margin="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <de.bauerapps.resimulate.views.ESTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:gravity="center"
+            android:text="@string/scenario_download_header"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <de.bauerapps.resimulate.views.ESTextView
+            android:text="@string/scenario_download_desc"
+            android:padding="8dp"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:baselineAligned="false">
+
+        <FrameLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <de.bauerapps.resimulate.views.ESTextView
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:id="@+id/tw_no_downloadable_scenarios"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:gravity="center"
+                android:visibility="invisible"
+                android:text="@string/no_downloadable_scenarios"
+                android:layout_height="wrap_content"/>
+
+            <com.pnikosis.materialishprogress.ProgressWheel
+                android:layout_width="match_parent"
+                android:id="@+id/pw_scenarios_loading"
+                app:matProg_barColor="@color/white"
+                app:matProg_progressIndeterminate="true"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_scenario_download"
+                android:visibility="invisible"
+                tools:listitem="@layout/scenario_download_list_item"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_margin="2dp"
+                android:background="@drawable/layout_bg">
+
+                <de.bauerapps.resimulate.views.ESSurfaceView
+                    android:id="@+id/vsg_ecg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="2dp" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="2dp"
+                android:background="@drawable/layout_bg">
+
+                <de.bauerapps.resimulate.views.ESSurfaceView
+                    android:id="@+id/vsg_oxy"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="2dp" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="2dp"
+                android:background="@drawable/layout_bg">
+
+                <de.bauerapps.resimulate.views.ESSurfaceView
+                    android:id="@+id/vsg_cap"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="2dp" />
+
+            </FrameLayout>
+
+            <Space
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"/>
+
+            <LinearLayout
+                android:background="@drawable/layout_bg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <!--<de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_cancel"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    app:fontAwesomeIcon="fa_times"
+                    app:hasWhiteBackground="true"
+                    app:roundedCorners="true"
+                    app:useCustomTextColor="@color/bootstrap_brand_danger" />-->
+
+                <de.bauerapps.resimulate.views.ESBootstrapButton
+                    android:id="@+id/b_check"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    app:bootstrapSize="lg"
+                    app:fontAwesomeIcon="fa_check"
+                    app:hasWhiteBackground="true"
+                    app:roundedCorners="true"
+                    app:useCustomTextColor="@color/bootstrap_brand_success" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

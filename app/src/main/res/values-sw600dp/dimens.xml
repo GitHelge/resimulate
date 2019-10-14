@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="curveLabelMinWidth">60dp</dimen>
+    <dimen name="config_label_min_width">50dp</dimen>
+
+    <bool name="is600dp">true</bool>
+</resources>

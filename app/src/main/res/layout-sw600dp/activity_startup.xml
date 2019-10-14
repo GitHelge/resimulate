@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/CL_whole"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/blue_background">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+        <ImageView
+            android:id="@+id/iv_appicon"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/es_icon"
+            app:srcCompat="@drawable/ic_resimulate_white" />
+        <TextView
+            android:id="@+id/tw_powered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/resimulate_powered"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_margin="6dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <de.bauerapps.resimulate.views.ESBootstrapButton
+            android:id="@+id/b_scenarios"
+            android:layout_margin="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:bootstrapSize="lg"
+            app:showOutline="true"
+            app:roundedCorners="true"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:text="@string/more" />
+
+        <LinearLayout
+            android:visibility="invisible"
+            android:id="@+id/ll_scenario_view_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <de.bauerapps.resimulate.views.ESBootstrapButton
+                android:id="@+id/b_single_mode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:textStyle="bold"
+                app:roundedCorners="true"
+                app:showOutline="true"
+                app:bootstrapBrand="regular"
+                android:text="@string/use_solo"
+                app:bootstrapSize="lg"/>
+
+            <de.bauerapps.resimulate.views.ESBootstrapButton
+                android:id="@+id/b_scenario_designer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                app:roundedCorners="true"
+                app:showOutline="true"
+                android:layout_margin="2dp"
+                app:bootstrapBrand="regular"
+                android:textAllCaps="true"
+                android:text="@string/designer"
+                app:bootstrapSize="lg"/>
+
+            <de.bauerapps.resimulate.views.ESBootstrapButton
+                android:id="@+id/b_scenario_overview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minWidth="40dp"
+                app:bootstrapBrand="regular"
+                android:layout_margin="2dp"
+                app:bootstrapSize="lg"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:text="@string/management"
+                app:roundedCorners="true"
+                app:showOutline="true" />
+
+            <de.bauerapps.resimulate.views.ESBootstrapButton
+                android:id="@+id/b_scenario_get_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:minWidth="40dp"
+                app:bootstrapBrand="regular"
+                app:bootstrapSize="lg"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:text="@string/download"
+                app:roundedCorners="true"
+                app:showOutline="true" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--<de.bauerapps.resimulate.views.ESTextView
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:id="@+id/tw_scenario"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="@string/scenario" />
+
+    <de.bauerapps.resimulate.views.ESBootstrapButton
+        android:id="@+id/b_scenario_design"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tw_scenario"
+        app:roundedCorners="true"
+        app:showOutline="true"
+        app:bootstrapBrand="regular"
+        android:textAllCaps="true"
+        android:text="@string/designer"
+        app:bootstrapSize="lg"/>
+
+    <de.bauerapps.resimulate.views.ESBootstrapButton
+        android:id="@+id/b_scenario_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:minWidth="40dp"
+        app:bootstrapBrand="regular"
+        app:bootstrapSize="lg"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:text="@string/overview"
+        app:layout_constraintTop_toBottomOf="@+id/b_scenario_design"
+        app:layout_constraintStart_toStartOf="parent"
+        app:roundedCorners="true"
+        app:showOutline="true" />
+
+    <de.bauerapps.resimulate.views.ESBootstrapButton
+        android:id="@+id/b_scenario_get_more"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:minWidth="40dp"
+        app:bootstrapBrand="regular"
+        app:bootstrapSize="lg"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:text="@string/download"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/b_scenario_setting"
+        app:roundedCorners="true"
+        app:showOutline="true" />-->
+
+    <!--<de.bauerapps.resimulate.views.ESBootstrapButton
+        android:id="@+id/b_scenario_design"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:roundedCorners="true"
+        app:showOutline="true"
+        app:bootstrapBrand="regular"
+        android:textAllCaps="true"
+        android:text="@string/pathology_designer"
+        app:bootstrapSize="lg"/>
+
+    <de.bauerapps.resimulate.views.ESBootstrapButton
+        android:id="@+id/b_scenario_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:minWidth="50dp"
+        app:bootstrapBrand="regular"
+        app:bootstrapSize="lg"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:text="@string/overview"
+        app:layout_constraintBottom_toBottomOf="@+id/b_scenario_design"
+        app:layout_constraintStart_toEndOf="@+id/b_scenario_design"
+        app:layout_constraintTop_toTopOf="@+id/b_scenario_design"
+        android:layout_marginStart="8dp"
+        app:roundedCorners="true"
+        app:showOutline="true" />-->
+
+        <androidx.cardview.widget.CardView
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="420dp"
+            android:layout_height="wrap_content"
+            app:cardElevation="4dp"
+            android:layout_gravity="center"
+            app:cardBackgroundColor="@color/blueish_white"
+            app:cardCornerRadius="16dp"
+            app:cardPreventCornerOverlap="true"
+            app:contentPadding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:text="@string/emergency_simulator"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/use_as"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="4dp"
+                    android:layout_height="wrap_content">
+
+                    <com.beardedhen.androidbootstrap.BootstrapButtonGroup
+                        android:id="@+id/bg_usertype"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        app:bootstrapBrand="primary"
+                        app:bootstrapSize="lg"
+                        app:buttonMode="radio"
+                        app:roundedCorners="true">
+
+                        <de.bauerapps.resimulate.views.ESBootstrapButton
+                            android:id="@+id/b_trainer_choice"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:bootstrapText="Trainer" />
+
+                        <de.bauerapps.resimulate.views.ESBootstrapButton
+                            android:id="@+id/b_trainee_choice"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:bootstrapText="Trainee" />
+
+                    </com.beardedhen.androidbootstrap.BootstrapButtonGroup>
+
+                    <de.bauerapps.resimulate.views.ESBootstrapButton
+                        android:id="@+id/b_restart"
+                        app:hasBlueishWhiteBackground="true"
+                        android:visibility="gone"
+                        app:bootstrapSize="lg"
+                        android:layout_marginStart="4dp"
+                        app:roundedCorners="true"
+                        app:fontAwesomeIcon="fa_times"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"/>
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/ll_trainee_name_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <com.beardedhen.androidbootstrap.BootstrapEditText
+                        android:id="@+id/et_trainee_name"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:hint="@string/name"
+                        android:inputType="text"
+                        android:maxLength="10"
+                        app:roundedCorners="true"
+                        android:layout_gravity="center"
+                        android:maxLines="1"
+                        app:bootstrapBrand="primary"
+                        app:bootstrapSize="lg" />
+
+                    <de.bauerapps.resimulate.views.ESBootstrapButton
+                        android:id="@+id/b_trainee_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="4dp"
+                        android:enabled="false"
+                        android:layout_gravity="center"
+                        android:minWidth="60dp"
+                        app:bootstrapSize="lg"
+                        app:fontAwesomeIcon="fa_check"
+                        app:roundedCorners="true" />
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/ll_trainer_devices"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+
+                    <FrameLayout
+                        android:visibility="gone"
+                        android:id="@+id/ll_trainer_searching"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="8dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ProgressBar
+                            android:id="@+id/pb_trainer_searching"
+                            android:layout_width="wrap_content"
+                            android:layout_height="28dp"
+                            android:layout_gravity="center_vertical"
+                            android:indeterminate="true" />
+
+                        <TextView
+                            android:id="@+id/tw_trainer_search"
+                            android:layout_width="match_parent"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/searching_for_trainee"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                        <!--<de.bauerapps.resimulate.views.ESBootstrapButton
+                            android:id="@+id/b_trainer_search"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:bootstrapSize="lg"
+                            android:visibility="invisible"
+                            app:fontAwesomeIcon="fa_times"
+                            app:hasBlueishWhiteBackground="true" />-->
+
+                    </FrameLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rw_nearby_devices"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/connection_list_item" />
+
+                </LinearLayout>
+
+                <FrameLayout
+                    android:visibility="gone"
+                    android:layout_marginTop="8dp"
+                    android:id="@+id/ll_trainee_waiting_for_trainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ProgressBar
+                        android:id="@+id/pb_trainee_searching"
+                        android:layout_width="wrap_content"
+                        android:layout_height="28dp"
+                        android:layout_gravity="center_vertical"
+                        android:indeterminate="true" />
+
+                    <TextView
+                        android:id="@+id/tw_trainee_search"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:gravity="center"
+                        android:text="@string/searching_for_trainer"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                    <!--<de.bauerapps.resimulate.views.ESBootstrapButton
+                        android:visibility="invisible"
+                        android:id="@+id/b_trainee_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:bootstrapSize="lg"
+                        app:fontAwesomeIcon="fa_times"
+                        app:hasBlueishWhiteBackground="true" />-->
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/ll_permission_request"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                        <com.beardedhen.androidbootstrap.AwesomeTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            app:fontAwesomeIcon="fa_wifi"/>
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:padding="4dp"
+                        android:layout_weight="1"
+                        android:text="@string/coarse_location_description"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                        <de.bauerapps.resimulate.views.ESBootstrapButton
+                            android:id="@+id/b_give_permission"
+                            android:layout_width="wrap_content"
+                            android:minWidth="60dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            app:useCustomTextColor="@color/black"
+                            android:text="@string/ok"
+                            android:textStyle="bold"
+                            app:esBrand="warning"
+                            app:bootstrapSize="md"
+                            app:roundedCorners="true" />
+
+                    </FrameLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

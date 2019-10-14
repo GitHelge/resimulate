@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="fa_brand_bt" translatable="false">&#xf293;</string>
+
+    <string name="fa_solid_check" translatable="false">&#xf00c;</string>
+    <string name="fa_solid_wifi" translatable="false">&#xf1eb;</string>
+    <string name="fa_solid_wifi_slash" translatable="false">&#xf6ac;</string>
+    <string name="fa_solid_chevron_left" translatable="false">&#xf053;</string>
+
+</resources>

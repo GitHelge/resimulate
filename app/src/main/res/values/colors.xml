@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/primary</color>
+    <color name="colorPrimaryDark">@color/bootstrap_gray_dark</color>
+    <color name="colorAccent">@color/primary</color>
+
+    <color name="danger">#dc3545</color>
+    <color name="warning">#ffc107</color>
+    <color name="primary">#007bff</color>
+    <color name="secondary">#6c757d</color>
+    <color name="success">#28a745</color>
+    <color name="info">#17a2b8</color>
+
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="primaryTint">#4E9EE4</color>
+
+    <!-- Simulation Colors -->
+    <color name="bpColor">#E40505</color>
+    <color name="hrColor">#29EB29</color>
+    <color name="spo2Color">#E6D861</color>
+    <color name="respRateColor">#2C4AF1</color>
+    <color name="etco2Color">#1BD5EE</color>
+    <color name="my_dark_gray">@color/bootstrap_gray_light</color>
+    <color name="blueish_white">#F5FAFD</color>
+
+
+</resources>

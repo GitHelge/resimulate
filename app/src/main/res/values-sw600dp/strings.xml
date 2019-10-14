@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hr_bpm_oxy">HR (Oxy)\n[bpm]</string>
+    <string name="hr_bpm">HR\n[bpm]</string>
+    <string name="spo2_percent">SpO2\n[%]</string>
+    <string name="etco2_mmhg">etCO2\n[mmHG]</string>
+    <string name="resp_rate_bpm">resp rate\n[bpm]</string>
+    <string name="defi_energy_default" translatable="false">150\nJ</string>
+    <string name="pacer_energy_default" translatable="false">10\nmA</string>
+    <string name="pacer_frequenc_default" translatable="false">60\nbpm</string>
+</resources>

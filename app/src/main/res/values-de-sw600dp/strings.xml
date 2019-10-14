@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hr_bpm">HF\n[bpm]</string>
+    <string name="hr_bpm_oxy">HF (Oxy)\nbpm]</string>
+    <string name="resp_rate_bpm">Atemfreq.\n[bpm]</string>
+</resources>

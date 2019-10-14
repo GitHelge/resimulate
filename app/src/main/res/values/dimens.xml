@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="headerHeight">45dp</dimen>
+    <dimen name="footerHeight">60dp</dimen>
+    <dimen name="custom_button_hori_padding">18dp</dimen>
+    <dimen name="custom_button_vert_padding">10dp</dimen>
+    <dimen name="curveLabelMinWidth">50dp</dimen>
+    <dimen name="config_label_min_width">40dp</dimen>
+
+    <bool name="forceLandscape">true</bool>
+
+    <bool name="is600dp">false</bool>
+
+</resources>
