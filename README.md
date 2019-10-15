@@ -70,7 +70,7 @@ At the moment, I have no plan to further extend the features of the App. It migh
 If you want to contribute to the project, send me a pm. :-)
 
 ## Licence
-Distributed under the MIT License. See LICENSE for more information.
+Distributed under the MIT License. See [`LICENCE`](./LICENSE.txt) for more information.
 
 ## Contact
 
