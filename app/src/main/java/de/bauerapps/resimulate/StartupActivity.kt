@@ -520,7 +520,7 @@ class StartupActivity : AppCompatActivity(),
     }
 
     Dexter.withActivity(this)
-      .withPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+      .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
       .withListener(dialogPermissionListener).check()
 
   }
