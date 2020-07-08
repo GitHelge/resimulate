@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import de.bauerapps.resimulate.helper.isZero
 import de.bauerapps.resimulate.threads.PlayToneThread
+import kotlin.IllegalStateException
 import kotlin.math.roundToInt
 
 
@@ -73,40 +74,69 @@ class Sound(private val context: AppCompatActivity) {
   }
 
   private fun nibp() {
-    if (!nibp.isPlaying && !nibpShort.isPlaying) {
-      if (Math.random() < 0.5) nibp.start() else nibpShort.start()
+    try {
+      if (!nibp.isPlaying && !nibpShort.isPlaying) {
+        if (Math.random() < 0.5) nibp.start() else nibpShort.start()
+      }
+    } catch (e: IllegalStateException) {
+      e.printStackTrace()
     }
   }
 
   private fun alarm() {
-    if (alarm.isPlaying && !alarmSingle.isPlaying) {
-      alarmSingle.start()
-    } else {
-      alarm.isLooping = true
-      alarm.start()
+    try {
+      if (alarm.isPlaying && !alarmSingle.isPlaying) {
+        alarmSingle.start()
+      } else {
+        alarm.isLooping = true
+        alarm.start()
+      }
+    } catch (e: IllegalStateException) {
+      e.printStackTrace()
     }
+
   }
 
   fun toggleAlarm() {
-    if (alarm.isPlaying) stopAlarm() else alarm()
+    try {
+      if (alarm.isPlaying) stopAlarm() else alarm()
+    } catch (e: IllegalStateException) {
+      e.printStackTrace()
+    }
   }
 
   val isAlarmLooping get() = alarm.isLooping
 
   fun stopAlarm() {
-    alarm.isLooping = false
+    try {
+      alarm.isLooping = false
+    } catch (e: IllegalStateException) {
+      e.printStackTrace()
+    }
   }
 
   private fun warning() {
-    warning.start()
+    try {
+      warning.start()
+    } catch (e: IllegalStateException) {
+      e.printStackTrace()
+    }
   }
 
   private fun charging() {
-    charge.start()
+    try {
+      charge.start()
+    } catch (e: IllegalStateException) {
+      e.printStackTrace()
+    }
   }
 
   private fun shock() {
-    shock.start()
+    try {
+      shock.start()
+    } catch (e: IllegalStateException) {
+      e.printStackTrace()
+    }
   }
 
   private fun peakSoundVolumeUp() {
@@ -151,12 +181,12 @@ class Sound(private val context: AppCompatActivity) {
   }
 
   fun clearAllSounds() {
-    val list = listOf(charge, shock, warning, nibp, nibpShort, alarm, alarmSingle)
+    val list = mutableListOf(charge, shock, warning, nibp, nibpShort, alarm, alarmSingle)
     for (sound in list) {
       try {
         if (sound.isPlaying) sound.stop()
         sound.release()
-      } catch (e: Exception) {
+      } catch (e: IllegalStateException) {
         e.printStackTrace()
       }
     }
