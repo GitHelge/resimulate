@@ -425,13 +425,30 @@ class NearbyConnectionService : Service() {
   }
 
   fun needPermissions(): Boolean {
-    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !hasCoarseLocationPermission()
+    return when {
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> {
+        !hasCoarseLocationPermission()
+      }
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
+        !hasFineLocationPermission()
+      }
+      else -> {
+        true
+      }
+    }
   }
 
   @TargetApi(Build.VERSION_CODES.M)
   fun hasCoarseLocationPermission(): Boolean {
 
     val location = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+    return location == PackageManager.PERMISSION_GRANTED
+  }
+
+  @TargetApi(Build.VERSION_CODES.Q)
+  fun hasFineLocationPermission(): Boolean {
+
+    val location = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     return location == PackageManager.PERMISSION_GRANTED
   }
 

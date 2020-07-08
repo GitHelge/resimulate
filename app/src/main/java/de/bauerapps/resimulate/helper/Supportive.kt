@@ -56,5 +56,15 @@ class Const {
     const val UI_ANIMATION_DELAY = 300
     const val SHOCK_ID = "SHOCK"
     const val SIM_STOPPED = "SIM_STOPPED"
+    /*const val TIMER_RESET = "TIMER_RESET"
+    const val TIMER_STOP = "TIMER_STOP"
+    const val TIMER_START = "TIMER_START"*/
   }
 }
+
+/*fun getAttributeDrawable(context: Context, attributeId: Int): Drawable? {
+    val typedValue = TypedValue()
+    context.theme.resolveAttribute(attributeId, typedValue, true)
+    val drawableRes = typedValue.resourceId
+    return ContextCompat.getDrawable(context, drawableRes)
+}*/

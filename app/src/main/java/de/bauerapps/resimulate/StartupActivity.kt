@@ -13,6 +13,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.net.Uri
+import android.os.Build
 import android.os.IBinder
 import android.provider.Settings
 import com.google.android.material.snackbar.Snackbar
@@ -93,6 +94,12 @@ class StartupActivity : AppCompatActivity(),
     b_scenarios.setOnClickListener(this)
     b_scenario_get_more.setOnClickListener(this)
 
+    tw_location_description.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      getString(R.string.fine_location_description)
+    } else {
+      getString(R.string.coarse_location_description)
+    }
+
     et_trainee_name.setOnEditorActionListener { view, _, event ->
       if (event != null &&
         event.keyCode == EditorInfo.IME_ACTION_DONE &&
@@ -128,8 +135,12 @@ class StartupActivity : AppCompatActivity(),
       b_trainee_login -> {
         if (ncService == null) return
         if (ncService!!.needPermissions()) {
-          Snackbar.make(view, getString(R.string.coarse_location_description), Snackbar.LENGTH_LONG)
-            .show()
+          val desc = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            getString(R.string.fine_location_description)
+          } else {
+            getString(R.string.coarse_location_description)
+          }
+          Snackbar.make(view, desc, Snackbar.LENGTH_LONG).show()
         } else {
           require(et_trainee_name.text != null) { "Trainee Name is null" }
           ncService?.updateUser(UserType.Trainee, et_trainee_name.text.toString())
@@ -494,17 +505,21 @@ class StartupActivity : AppCompatActivity(),
       }
 
       override fun onPermissionDenied(response: PermissionDeniedResponse) {
-        val snack =
-          Snackbar.make(view, getString(R.string.coarse_location_description), Snackbar.LENGTH_LONG)
-            .setAction("Settings") {
-              val myAppSettings = Intent(
-                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                Uri.parse("package:" + this@StartupActivity.packageName)
-              )
-              myAppSettings.addCategory(Intent.CATEGORY_DEFAULT)
-              myAppSettings.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-              this@StartupActivity.startActivity(myAppSettings)
-            }
+        val desc = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+          getString(R.string.fine_location_description)
+        } else {
+          getString(R.string.coarse_location_description)
+        }
+        val snack = Snackbar.make(view, desc, Snackbar.LENGTH_LONG)
+          .setAction("Settings") {
+            val myAppSettings = Intent(
+              Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+              Uri.parse("package:" + this@StartupActivity.packageName)
+            )
+            myAppSettings.addCategory(Intent.CATEGORY_DEFAULT)
+            myAppSettings.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            this@StartupActivity.startActivity(myAppSettings)
+          }
         val tw = snack.view.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
         tw.maxLines = 3
         tw.maxWidth = 600
@@ -519,10 +534,15 @@ class StartupActivity : AppCompatActivity(),
       }
     }
 
-    Dexter.withActivity(this)
-      .withPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-      .withListener(dialogPermissionListener).check()
-
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      Dexter.withActivity(this)
+        .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+        .withListener(dialogPermissionListener).check()
+    } else {
+      Dexter.withActivity(this)
+        .withPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+        .withListener(dialogPermissionListener).check()
+    }
   }
 
   override fun onPostCreate(savedInstanceState: Bundle?) {

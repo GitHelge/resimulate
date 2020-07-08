@@ -41,9 +41,7 @@ class TraineeActivity : AppCompatActivity(),
   Sound.SoundCallback,
   Measurement.MeasurementCallback,
   ECGCalculation.Callback,
-  NIBPConfig.NIBPConfigCallback,
-  AlarmConfig.AlarmConfigCallback,
-  OnOffConfig.Callback {
+  NIBPConfig.NIBPConfigCallback, AlarmConfig.AlarmConfigCallback, OnOffConfig.Callback {
 
 
   companion object {
@@ -147,6 +145,9 @@ class TraineeActivity : AppCompatActivity(),
       )
 
     }
+
+
+    //countUpTimer.start()
 
     if (NCS.chosenEndpoint?.endpointState == NCSEndpointState.CONNECTED)
       b_connection_status.bootstrapBrand =
