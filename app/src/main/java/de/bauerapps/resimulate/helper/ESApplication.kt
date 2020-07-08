@@ -156,7 +156,7 @@ class ESApplication : Application() {
       try {
         customScenarioFile.writeText(Gson().toJson(saveMap))
       } catch (e: Exception) {
-        Log.i(TAG, e.localizedMessage)
+        Log.i(TAG, e.localizedMessage ?: "")
       }
     }
 
@@ -189,7 +189,7 @@ class ESApplication : Application() {
       try {
         activeFile.writeText(Gson().toJson(activeMap))
       } catch (e: Exception) {
-        Log.i(TAG, e.localizedMessage)
+        Log.i(TAG, e.localizedMessage ?: "")
       }
 
     }

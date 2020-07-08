@@ -227,9 +227,9 @@ class NearbyConnectionService : Service() {
 
     connectionsClient?.requestConnection(user.name, endpointId, connectionLifecycleCallback)
       ?.addOnFailureListener {
-        Log.i(TAG, it.localizedMessage)
+        Log.i(TAG, it.localizedMessage ?: "")
 
-        if (it.localizedMessage.contains(
+        if ((it.localizedMessage ?: "").contains(
             ConnectionsStatusCodes.getStatusCodeString(
               ConnectionsStatusCodes.STATUS_BLUETOOTH_ERROR
             )
@@ -385,7 +385,7 @@ class NearbyConnectionService : Service() {
     connectionsClient?.startDiscovery(
       packageName, endpointDiscoveryCallback,
       DiscoveryOptions.Builder().setStrategy(STRATEGY).build()
-    )?.addOnFailureListener { e -> Log.e(TAG, e.message) }
+    )?.addOnFailureListener { e -> Log.e(TAG, e.message ?: "") }
   }
 
   private fun startAdvertising() {
@@ -393,7 +393,7 @@ class NearbyConnectionService : Service() {
     connectionsClient?.startAdvertising(
       user.name, packageName, connectionLifecycleCallback,
       AdvertisingOptions.Builder().setStrategy(STRATEGY).build()
-    )?.addOnFailureListener { e -> Log.e(TAG, e.message) }
+    )?.addOnFailureListener { e -> Log.e(TAG, e.message ?: "") }
   }
 
   fun sendSomething(something: String) {
