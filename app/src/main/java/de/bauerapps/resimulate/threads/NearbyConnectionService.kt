@@ -433,7 +433,7 @@ class NearbyConnectionService : Service() {
         !hasFineLocationPermission()
       }
       else -> {
-        true
+        false
       }
     }
   }
