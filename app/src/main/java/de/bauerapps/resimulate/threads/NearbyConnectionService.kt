@@ -426,10 +426,10 @@ class NearbyConnectionService : Service() {
 
   fun needPermissions(): Boolean {
     return when {
-      Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> {
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
         !hasCoarseLocationPermission()
       }
-      Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> {
         !hasFineLocationPermission()
       }
       else -> {
