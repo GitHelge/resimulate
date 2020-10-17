@@ -193,7 +193,7 @@ class DefiConfig(val context: Activity, private val sound: Sound?, var simConfig
       .inflate(R.layout.defi_charge_dialog, null)
 
     defiChargeDialogView.pb_defi_charge.apply {
-      updateAnimationDuration = (sound?.chargeSoundDuration!! * 0.9).roundToLong()
+      updateAnimationDuration = ((sound?.chargeSoundDuration ?: 2000) * 0.9).roundToLong()
       progress = 100
 
       setOnProgressAnimationEndedListener { defiChargeDialog?.dismiss() }

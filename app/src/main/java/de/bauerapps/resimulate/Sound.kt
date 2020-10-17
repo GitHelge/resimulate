@@ -20,13 +20,13 @@ class Sound(private val context: AppCompatActivity) {
     //fun onStart(type: SoundType)
   }
 
-  private lateinit var charge: MediaPlayer
-  private lateinit var shock: MediaPlayer
-  private lateinit var warning: MediaPlayer
-  private lateinit var nibp: MediaPlayer
-  private lateinit var nibpShort: MediaPlayer
-  private lateinit var alarm: MediaPlayer
-  private lateinit var alarmSingle: MediaPlayer
+  private var charge: MediaPlayer? = null
+  private var shock: MediaPlayer? = null
+  private var warning: MediaPlayer? = null
+  private var nibp: MediaPlayer? = null
+  private var nibpShort: MediaPlayer? = null
+  private var alarm: MediaPlayer? = null
+  private var alarmSingle: MediaPlayer? = null
 
   private var spo2Value = 90
 
@@ -37,7 +37,7 @@ class Sound(private val context: AppCompatActivity) {
     PlayToneThread(400 + 10 * (spo2Value - 90), peakSoundVolume.toFloat()).start()
   }
 
-  val chargeSoundDuration get() = charge.duration
+  val chargeSoundDuration get() = charge?.duration
 
   var soundCallback: SoundCallback? = null
 
@@ -73,40 +73,44 @@ class Sound(private val context: AppCompatActivity) {
   }
 
   private fun nibp() {
-    if (!nibp.isPlaying && !nibpShort.isPlaying) {
-      if (Math.random() < 0.5) nibp.start() else nibpShort.start()
+    if (nibp != null && nibpShort != null) {
+      if (!nibp!!.isPlaying &&  !nibpShort!!.isPlaying) {
+        if (Math.random() < 0.5) nibp!!.start() else nibpShort!!.start()
+      }
     }
   }
 
   private fun alarm() {
-    if (alarm.isPlaying && !alarmSingle.isPlaying) {
-      alarmSingle.start()
-    } else {
-      alarm.isLooping = true
-      alarm.start()
+    if (alarm != null && alarmSingle != null) {
+      if (alarm!!.isPlaying && !alarmSingle!!.isPlaying) {
+        alarmSingle!!.start()
+      } else {
+        alarm!!.isLooping = true
+        alarm!!.start()
+      }
     }
   }
 
   fun toggleAlarm() {
-    if (alarm.isPlaying) stopAlarm() else alarm()
+    if (alarm?.isPlaying == true) stopAlarm() else alarm()
   }
 
-  val isAlarmLooping get() = alarm.isLooping
+  val isAlarmLooping get() = alarm?.isLooping ?: false
 
   fun stopAlarm() {
-    alarm.isLooping = false
+    alarm?.isLooping = false
   }
 
   private fun warning() {
-    warning.start()
+    warning?.start()
   }
 
   private fun charging() {
-    charge.start()
+    charge?.start()
   }
 
   private fun shock() {
-    shock.start()
+    shock?.start()
   }
 
   private fun peakSoundVolumeUp() {
@@ -136,26 +140,29 @@ class Sound(private val context: AppCompatActivity) {
     alarm = MediaPlayer.create(context, R.raw.ding_sound)
     alarmSingle = MediaPlayer.create(context, R.raw.ding_sound)
 
-    charge.isLooping = false
-    warning.isLooping = false
-    shock.isLooping = false
-    nibp.isLooping = false
-    nibpShort.isLooping = false
-    alarmSingle.isLooping = false
+    charge!!.isLooping = false
+    warning!!.isLooping = false
+    shock!!.isLooping = false
+    nibp!!.isLooping = false
+    nibpShort!!.isLooping = false
+    alarmSingle!!.isLooping = false
 
-    charge.setOnCompletionListener { soundCallback?.onFinish(SoundType.Charging) }
-    warning.setOnCompletionListener { soundCallback?.onFinish(SoundType.Warning) }
-    shock.setOnCompletionListener { soundCallback?.onFinish(SoundType.Shock) }
-    nibp.setOnCompletionListener { soundCallback?.onFinish(SoundType.NIBP) }
-    nibpShort.setOnCompletionListener { soundCallback?.onFinish(SoundType.NIBP) }
+    charge!!.setOnCompletionListener { soundCallback?.onFinish(SoundType.Charging) }
+    warning!!.setOnCompletionListener { soundCallback?.onFinish(SoundType.Warning) }
+    shock!!.setOnCompletionListener { soundCallback?.onFinish(SoundType.Shock) }
+    nibp!!.setOnCompletionListener { soundCallback?.onFinish(SoundType.NIBP) }
+    nibpShort!!.setOnCompletionListener { soundCallback?.onFinish(SoundType.NIBP) }
   }
 
   fun clearAllSounds() {
-    val list = listOf(charge, shock, warning, nibp, nibpShort, alarm, alarmSingle)
-    for (sound in list) {
+    val list = mutableListOf(charge, shock, warning, nibp, nibpShort, alarm, alarmSingle)
+
+    for ((index, sound) in list.withIndex()) {
       try {
-        if (sound.isPlaying) sound.stop()
-        sound.release()
+        if (sound?.isLooping == true) sound.isLooping = false
+        if (sound?.isPlaying == true) sound.stop()
+        sound?.release()
+        list[index] = null
       } catch (e: Exception) {
         e.printStackTrace()
       }
