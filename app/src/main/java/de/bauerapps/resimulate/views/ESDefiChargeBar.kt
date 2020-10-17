@@ -134,9 +134,9 @@ class ESDefiChargeBar : View, ProgressView, BootstrapBrandView, RoundableView, B
   }
 
   public override fun onRestoreInstanceState(state: Parcelable?) {
-    var state = state
-    if (state is Bundle) {
-      val bundle = state as Bundle?
+    var mutableState = state
+    if (mutableState is Bundle) {
+      val bundle = mutableState as Bundle?
 
       val brand = bundle!!.getSerializable(BootstrapBrand.KEY)
 
@@ -151,9 +151,9 @@ class ESDefiChargeBar : View, ProgressView, BootstrapBrandView, RoundableView, B
       this.rounded = bundle.getBoolean(RoundableView.KEY)
       this.bootstrapSize = bundle.getFloat(BootstrapSizeView.KEY)
 
-      state = bundle.getParcelable(TAG)
+      mutableState = bundle.getParcelable(TAG)
     }
-    super.onRestoreInstanceState(state)
+    super.onRestoreInstanceState(mutableState)
     updateBootstrapState()
     progress = userProgress
   }

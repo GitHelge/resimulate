@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
@@ -263,6 +262,29 @@ class ScenarioDownloadDialog(val context: AppCompatActivity) :
     setVitalSignView(ESViewType.PLETH, !isActive)
     setVitalSignView(ESViewType.CAP, !isActive)
   }
+
+  /*private var prevButton: ESBootstrapButton? = null
+  override fun onPreviewClick(btn: ESBootstrapButton?,  item: DownloadPathology) {
+      // TODO: Start preview
+
+      if (prevButton!=null && prevButton != btn)
+          prevButton?.setActiveBackground(false)
+
+      prevButton = btn
+
+      val vs = Gson().fromJson(item.vs, VitalSigns::class.java)
+
+      val isActive = btn?.isActive
+
+      isActive?.let {
+          if (!it) simConfig.vitalSigns = vs
+
+          btn.setActiveBackground(!it)
+          setVitalSignView(ESViewType.ECG, !it)
+          setVitalSignView(ESViewType.PLETH, !it)
+          setVitalSignView(ESViewType.CAP, !it)
+      }
+  }*/
 
   fun openDialog() {
 

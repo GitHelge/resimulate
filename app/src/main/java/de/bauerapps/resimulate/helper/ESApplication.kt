@@ -18,8 +18,14 @@ class ESApplication : Application() {
   companion object {
 
     const val TAG = "ESApplication"
+
+    //const val VITALSIGNS = "vs"
     const val AUTHOR_ID = "id"
     const val AUTHOR_NAME = "name"
+    /*const val AUTHOR = "author"
+    const val ISUPLOADED = "isUploaded"
+    const val APPVERSION = "appVersion"
+    const val TIMESTAMP = "timeStamp"*/
 
     var esFilesDir: File? = null
     private lateinit var res: Resources
@@ -62,10 +68,50 @@ class ESApplication : Application() {
       Log.i(TAG, "saveMap contains: $saveMap")
     }
 
+    /*fun updateSavedMap(scenario: Pathology, vitalSigns: VitalSigns) {
+
+        if (!saveMap.containsKey(scenario.name))
+            saveMap[scenario.name] = mutableMapOf<String, Any>()
+
+        saveMap[scenario.name]?.apply {
+            this[VITALSIGNS] = vitalSigns
+            this[ISUPLOADED] = false
+            this[APPVERSION] = BuildConfig.VERSION_CODE
+        }
+
+        writeSaveMap()
+        Log.i(TAG, "saveMap contains: $saveMap")
+    }*/
+
     fun updateSavedMap(pathology: DownloadPathology) {
 
+      //if (!saveMap.containsKey(pathology.name))
       saveMap[pathology.name] = pathology
+
+      /*saveMap[pathology.name]?.apply {
+          name = pathology.name
+          vs = pathology.vs
+          id = scenarioId
+          author = pathology.author
+          //this[ISUPLOADED] = true
+          timeStamp = pathology.timeStamp
+      }*/
     }
+
+    /*fun updateSavedMap(scenarioId: String, pathology: DownloadPathology) {
+
+        if (!saveMap.containsKey(pathology.name))
+            saveMap[pathology.name] = mutableMapOf<String, Any>()
+
+        saveMap[pathology.name]?.apply {
+            this[AUTHOR_NAME] = pathology.name
+            this[VITALSIGNS] = Gson().fromJson(pathology.vs, VitalSigns::class.java)
+            this[AUTHOR_ID] = scenarioId
+            this[AUTHOR] = pathology.author
+            this[ISUPLOADED] = true
+            this[TIMESTAMP] = pathology.timeStamp
+        }
+    }*/
 
     fun getDownloads(): List<String> {
 
@@ -85,12 +131,32 @@ class ESApplication : Application() {
 
     }
 
+    /*fun getDownloads(): List<String> {
+
+        val user = FirebaseAuth.getInstance().currentUser
+
+        val downloads = mutableListOf<String>()
+
+        for (scenario in saveMap) {
+            if (!scenario.value.containsKey(AUTHOR)) continue
+            val author = scenario.value[AUTHOR] as Map<*, *>
+            if (author[AUTHOR_ID] != user) {
+                // Is download
+                downloads.add(scenario.value[NAME] as String)
+            }
+        }
+
+        Log.i(TAG, "Found Download: $downloads")
+        return downloads
+
+    }*/
+
     private fun writeSaveMap() {
       val customScenarioFile = File(esFilesDir, "custom_scenarios.txt")
       try {
         customScenarioFile.writeText(Gson().toJson(saveMap))
       } catch (e: Exception) {
-        Log.i(TAG, e.localizedMessage)
+        Log.i(TAG, e.localizedMessage ?: "")
       }
     }
 
@@ -123,7 +189,7 @@ class ESApplication : Application() {
       try {
         activeFile.writeText(Gson().toJson(activeMap))
       } catch (e: Exception) {
-        Log.i(TAG, e.localizedMessage)
+        Log.i(TAG, e.localizedMessage ?: "")
       }
 
     }

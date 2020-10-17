@@ -86,7 +86,7 @@ class SingleModeActivity : AppCompatActivity(),
     onOffConfig = OnOffConfig(this)
     alarmConfig = AlarmConfig(this, sound)
     nibpConfig = NIBPConfig(this)
-    singleModeConsole = SingleModeConsole(this, simConfig);
+    singleModeConsole = SingleModeConsole(this, simConfig)
 
     onOffConfig?.callback = this
     singleModeConsole?.callback = this

@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import de.bauerapps.resimulate.helper.isZero
 import de.bauerapps.resimulate.threads.PlayToneThread
+import kotlin.IllegalStateException
 import kotlin.math.roundToInt
 
 
@@ -73,44 +74,72 @@ class Sound(private val context: AppCompatActivity) {
   }
 
   private fun nibp() {
+    try {
     if (nibp != null && nibpShort != null) {
-      if (!nibp!!.isPlaying &&  !nibpShort!!.isPlaying) {
+      if (!nibp!!.isPlaying && !nibpShort!!.isPlaying) {
         if (Math.random() < 0.5) nibp!!.start() else nibpShort!!.start()
       }
+    }
+    } catch (e: IllegalStateException) {
+      e.printStackTrace()
     }
   }
 
   private fun alarm() {
-    if (alarm != null && alarmSingle != null) {
-      if (alarm!!.isPlaying && !alarmSingle!!.isPlaying) {
-        alarmSingle!!.start()
-      } else {
-        alarm!!.isLooping = true
-        alarm!!.start()
+    try {
+      if (alarm != null && alarmSingle != null) {
+        if (alarm!!.isPlaying && !alarmSingle!!.isPlaying) {
+          alarmSingle!!.start()
+        } else {
+          alarm!!.isLooping = true
+          alarm!!.start()
+        }
       }
+    } catch (e: IllegalStateException) {
+      e.printStackTrace()
     }
   }
 
   fun toggleAlarm() {
-    if (alarm?.isPlaying == true) stopAlarm() else alarm()
+    try {
+      if (alarm?.isPlaying == true) stopAlarm() else alarm()
+    } catch (e: IllegalStateException) {
+      e.printStackTrace()
+    }
   }
 
   val isAlarmLooping get() = alarm?.isLooping ?: false
 
   fun stopAlarm() {
-    alarm?.isLooping = false
+    try {
+      alarm?.isLooping = false
+    } catch (e: IllegalStateException) {
+      e.printStackTrace()
+    }
   }
 
   private fun warning() {
-    warning?.start()
+    try {
+      warning?.start()
+    } catch (e: IllegalStateException) {
+      e.printStackTrace()
+    }
   }
 
   private fun charging() {
-    charge?.start()
+    try {
+      charge?.start()
+    } catch (e: IllegalStateException) {
+      e.printStackTrace()
+    }
   }
 
   private fun shock() {
-    shock?.start()
+    try {
+      shock?.start()
+    } catch (e: IllegalStateException) {
+      e.printStackTrace()
+    }
   }
 
   private fun peakSoundVolumeUp() {

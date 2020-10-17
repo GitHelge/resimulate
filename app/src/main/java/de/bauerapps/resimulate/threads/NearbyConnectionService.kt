@@ -227,9 +227,9 @@ class NearbyConnectionService : Service() {
 
     connectionsClient?.requestConnection(user.name, endpointId, connectionLifecycleCallback)
       ?.addOnFailureListener {
-        Log.i(TAG, it.localizedMessage)
+        Log.i(TAG, it.localizedMessage ?: "")
 
-        if (it.localizedMessage.contains(
+        if ((it.localizedMessage ?: "").contains(
             ConnectionsStatusCodes.getStatusCodeString(
               ConnectionsStatusCodes.STATUS_BLUETOOTH_ERROR
             )
@@ -385,7 +385,7 @@ class NearbyConnectionService : Service() {
     connectionsClient?.startDiscovery(
       packageName, endpointDiscoveryCallback,
       DiscoveryOptions.Builder().setStrategy(STRATEGY).build()
-    )?.addOnFailureListener { e -> Log.e(TAG, e.message) }
+    )?.addOnFailureListener { e -> Log.e(TAG, e.message ?: "") }
   }
 
   private fun startAdvertising() {
@@ -393,7 +393,7 @@ class NearbyConnectionService : Service() {
     connectionsClient?.startAdvertising(
       user.name, packageName, connectionLifecycleCallback,
       AdvertisingOptions.Builder().setStrategy(STRATEGY).build()
-    )?.addOnFailureListener { e -> Log.e(TAG, e.message) }
+    )?.addOnFailureListener { e -> Log.e(TAG, e.message ?: "") }
   }
 
   fun sendSomething(something: String) {
@@ -425,13 +425,30 @@ class NearbyConnectionService : Service() {
   }
 
   fun needPermissions(): Boolean {
-    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !hasCoarseLocationPermission()
+    return when {
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
+        !hasCoarseLocationPermission()
+      }
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> {
+        !hasFineLocationPermission()
+      }
+      else -> {
+        false
+      }
+    }
   }
 
   @TargetApi(Build.VERSION_CODES.M)
   fun hasCoarseLocationPermission(): Boolean {
 
     val location = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+    return location == PackageManager.PERMISSION_GRANTED
+  }
+
+  @TargetApi(Build.VERSION_CODES.Q)
+  fun hasFineLocationPermission(): Boolean {
+
+    val location = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     return location == PackageManager.PERMISSION_GRANTED
   }
 
