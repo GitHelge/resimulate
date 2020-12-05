@@ -398,7 +398,7 @@ class TraineeActivity : AppCompatActivity(),
         val sysText = if (sysVal > 20) "$sysVal" else "--"
         val diaText = if (diaVal > 20) "$diaVal" else "--"
         val avgText =
-          if (sysVal > 20 && diaVal > 20) (diaVal + 0.5 * (sysVal - diaVal)).roundToInt() else "--"
+          if (sysVal > 20 && diaVal > 20) "${(diaVal + 0.5 * (sysVal - diaVal)).roundToInt()}" else "--"
         tw_bp_sys_dia_value.text = "$sysText/$diaText"
         tw_bp_avg_value.text = "($avgText)"
 
@@ -418,6 +418,7 @@ class TraineeActivity : AppCompatActivity(),
     vsv_ecg.simulationStarted = false
     vsv_oxy.simulationStarted = false
     vsv_cap.simulationStarted = false
+    sound?.clearAllSounds()
   }
 
   override fun updateAlarms() {
@@ -439,6 +440,9 @@ class TraineeActivity : AppCompatActivity(),
   }
 
   override fun startDevice() {
+    sound?.createAllSounds()
+    nibpConfig?.audioFinished()
+    nibpConfig?.resetRepeatedMeasurement()
     vsv_ecg.simulationStarted = true
     vsv_oxy.simulationStarted = true
     vsv_cap.simulationStarted = true

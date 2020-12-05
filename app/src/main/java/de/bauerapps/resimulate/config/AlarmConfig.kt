@@ -175,7 +175,12 @@ class AlarmConfig(private val context: AppCompatActivity, private val sound: Sou
   }
 
   private fun updateCountDown() {
-    val isAlarmLooping = sound?.isAlarmLooping ?: return
+    val isAlarmLooping = try {
+      sound?.isAlarmLooping ?: return
+    } catch (e: IllegalStateException) {
+      e.printStackTrace()
+      false
+    }
 
     when {
       isAlarmLooping || currentAlarmCount == 0 -> stopCountDown()

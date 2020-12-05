@@ -28,6 +28,7 @@ class Sound(private val context: AppCompatActivity) {
   private var nibpShort: MediaPlayer? = null
   private var alarm: MediaPlayer? = null
   private var alarmSingle: MediaPlayer? = null
+  private var isSoundInitialized = false
 
   private var spo2Value = 90
 
@@ -181,20 +182,24 @@ class Sound(private val context: AppCompatActivity) {
     shock!!.setOnCompletionListener { soundCallback?.onFinish(SoundType.Shock) }
     nibp!!.setOnCompletionListener { soundCallback?.onFinish(SoundType.NIBP) }
     nibpShort!!.setOnCompletionListener { soundCallback?.onFinish(SoundType.NIBP) }
+    isSoundInitialized = true
   }
 
   fun clearAllSounds() {
+    if (!isSoundInitialized) return
     val list = mutableListOf(charge, shock, warning, nibp, nibpShort, alarm, alarmSingle)
 
     for ((index, sound) in list.withIndex()) {
       try {
         if (sound?.isLooping == true) sound.isLooping = false
         if (sound?.isPlaying == true) sound.stop()
+        sound?.reset()
         sound?.release()
         list[index] = null
       } catch (e: Exception) {
         e.printStackTrace()
       }
     }
+    isSoundInitialized = false
   }
 }

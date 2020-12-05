@@ -192,8 +192,15 @@ class DefiConfig(val context: Activity, private val sound: Sound?, var simConfig
     val defiChargeDialogView = LayoutInflater.from(context)
       .inflate(R.layout.defi_charge_dialog, null)
 
+    val chargeDuration = try {
+      sound?.chargeSoundDuration ?: 2000
+    } catch(e: IllegalStateException) {
+      e.printStackTrace()
+      2000
+    }
+
     defiChargeDialogView.pb_defi_charge.apply {
-      updateAnimationDuration = ((sound?.chargeSoundDuration ?: 2000) * 0.9).roundToLong()
+      updateAnimationDuration = ((chargeDuration) * 0.9).roundToLong()
       progress = 100
 
       setOnProgressAnimationEndedListener { defiChargeDialog?.dismiss() }

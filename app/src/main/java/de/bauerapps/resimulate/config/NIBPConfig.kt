@@ -99,6 +99,10 @@ class NIBPConfig(private val context: AppCompatActivity) {
     stopCountDown()
   }
 
+  fun resetRepeatedMeasurement() {
+    setState(NIBPState.Idle)
+  }
+
   fun audioFinished() {
     if (state == NIBPState.MeasuringSingle) {
       setState(NIBPState.Idle)
