@@ -6,11 +6,11 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import de.bauerapps.resimulate.R
+import de.bauerapps.resimulate.databinding.DefiChargeDialogBinding
+import de.bauerapps.resimulate.databinding.StopSimDialogBinding
 import de.bauerapps.resimulate.helper.ESBrandStyle
 import de.bauerapps.resimulate.views.ESBootstrapButton
 import de.bauerapps.resimulate.views.ESDialog
-import kotlinx.android.synthetic.main.defi_charge_dialog.view.*
-import kotlinx.android.synthetic.main.stop_sim_dialog.view.*
 
 class OnOffConfig(private val context: AppCompatActivity) {
 
@@ -53,11 +53,10 @@ class OnOffConfig(private val context: AppCompatActivity) {
   @SuppressLint("InflateParams")
   private fun openStartDialog() {
     startDeviceDialog = ESDialog(context, R.style.NoAnimDialog)
-    val startDeviceDialogView = LayoutInflater.from(context)
-      .inflate(R.layout.defi_charge_dialog, null)
+    val startDeviceDialogView = DefiChargeDialogBinding.inflate(context.layoutInflater)
 
-    startDeviceDialogView.tw_header.text = context.getString(R.string.starting_up_device)
-    startDeviceDialogView.pb_defi_charge.apply {
+    startDeviceDialogView.twHeader.text = context.getString(R.string.starting_up_device)
+    startDeviceDialogView.pbDefiCharge.apply {
       updateAnimationDuration = 5000
       bootstrapBrand = ESBrandStyle(R.color.white, R.color.black)
       progress = 100
@@ -74,14 +73,14 @@ class OnOffConfig(private val context: AppCompatActivity) {
 
       setOnProgressAnimationUpdateListener { percent ->
         if (percent == 50) {
-          startDeviceDialogView.tw_header.text = context.getString(R.string.self_testing)
+          startDeviceDialogView.twHeader.text = context.getString(R.string.self_testing)
         }
       }
 
     }
 
     startDeviceDialog?.apply {
-      setContentView(startDeviceDialogView)
+      setContentView(startDeviceDialogView.root)
       //setOnDismissListener { callback?.hideStatusBar() }
       show()
     }
@@ -90,11 +89,10 @@ class OnOffConfig(private val context: AppCompatActivity) {
   @SuppressLint("InflateParams")
   fun openStopDialog(stopSimulation: Boolean = false) {
     stopDeviceDialog = ESDialog(context, R.style.NoAnimDialog)
-    val stopDeviceDialogView = LayoutInflater.from(context)
-      .inflate(R.layout.stop_sim_dialog, null)
+    val stopDeviceDialogView = StopSimDialogBinding.inflate(context.layoutInflater)
 
     stopDeviceDialogView.apply {
-      b_check.setOnClickListener {
+      bCheck.setOnClickListener {
 
         if (stopSimulation) {
           callback?.stopSimulation()
@@ -107,13 +105,13 @@ class OnOffConfig(private val context: AppCompatActivity) {
           stopDeviceDialog?.dismiss()
         }
       }
-      b_cancel.setOnClickListener {
+      bCancel.setOnClickListener {
         stopDeviceDialog?.dismiss()
       }
     }
 
     stopDeviceDialog?.apply {
-      setContentView(stopDeviceDialogView)
+      setContentView(stopDeviceDialogView.root)
       //setOnDismissListener { callback?.hideStatusBar() }
       show()
     }

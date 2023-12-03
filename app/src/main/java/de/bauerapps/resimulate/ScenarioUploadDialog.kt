@@ -7,9 +7,9 @@ import cn.pedant.SweetAlert.SweetAlertDialog
 //import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import de.bauerapps.resimulate.views.ESDialog
-import kotlinx.android.synthetic.main.scenario_upload_dialog.view.*
 import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
+import de.bauerapps.resimulate.databinding.ScenarioUploadDialogBinding
 import de.bauerapps.resimulate.helper.ESApplication
 import kotlin.math.roundToInt
 
@@ -23,8 +23,7 @@ class ScenarioUploadDialog(val scenarioOverviewDialog: ScenarioOverviewDialog) {
   private var dialog: ESDialog = ESDialog(scenarioOverviewDialog.context, R.style.NoAnimDialog)
   private lateinit var scenario: Pathology
 
-  private var dialogView: View = LayoutInflater.from(scenarioOverviewDialog.context)
-    .inflate(R.layout.scenario_upload_dialog, null)
+  private var dialogView = ScenarioUploadDialogBinding.inflate(scenarioOverviewDialog.context.layoutInflater)
 
   private var auth: FirebaseAuth? = null
   private var database: FirebaseDatabase? = null
@@ -37,10 +36,10 @@ class ScenarioUploadDialog(val scenarioOverviewDialog: ScenarioOverviewDialog) {
 
     dialogView.apply {
 
-      b_check.setOnClickListener {
+      bCheck.setOnClickListener {
 
-        if (et_scenario_name.text.isEmpty()) return@setOnClickListener
-        if (b_with_name.isSelected && et_user_name.text.isEmpty()) return@setOnClickListener
+        if (etScenarioName.text.isEmpty()) return@setOnClickListener
+        if (bWithName.isSelected && etUserName.text.isEmpty()) return@setOnClickListener
 
         if (auth == null) auth = FirebaseAuth.getInstance()
         if (database == null) database = FirebaseDatabase.getInstance()
@@ -66,23 +65,23 @@ class ScenarioUploadDialog(val scenarioOverviewDialog: ScenarioOverviewDialog) {
 
       }
 
-      b_anonymous.setOnCheckedChangedListener { _, isChecked ->
+      bAnonymous.setOnCheckedChangedListener { _, isChecked ->
         if (isChecked) {
-          et_user_name.setText("")
-          ll_uploader_name.visibility = View.GONE
+          etUserName.setText("")
+          llUploaderName.visibility = View.GONE
         }
       }
 
-      b_with_name.setOnCheckedChangedListener { _, isChecked ->
+      bWithName.setOnCheckedChangedListener { _, isChecked ->
         if (isChecked) {
-          ll_uploader_name.visibility = View.VISIBLE
+          llUploaderName.visibility = View.VISIBLE
         }
       }
 
-      b_cancel.setOnClickListener { dialog.dismiss() }
+      bCancel.setOnClickListener { dialog.dismiss() }
     }
 
-    dialog.setContentView(dialogView)
+    dialog.setContentView(dialogView.root)
   }
 
   private fun startUpload() {
@@ -116,14 +115,14 @@ class ScenarioUploadDialog(val scenarioOverviewDialog: ScenarioOverviewDialog) {
     val user = auth?.currentUser
 
     val author = mutableMapOf(ESApplication.AUTHOR_ID to user?.uid)
-    if (dialogView.b_with_name.isSelected)
-      author[ESApplication.AUTHOR_NAME] = dialogView.et_user_name.text.toString()
+    if (dialogView.bWithName.isSelected)
+      author[ESApplication.AUTHOR_NAME] = dialogView.etUserName.text.toString()
 
     val appVersion = ESApplication.saveMap[scenario.name]?.appVersion ?: 0
 
     return DownloadPathology(
       id,
-      dialogView.et_scenario_name.text.toString(),
+      dialogView.etScenarioName.text.toString(),
       Gson().toJson(DVS.fromPathology(scenario)),
       appVersion, author, System.currentTimeMillis(), true
     )
@@ -137,7 +136,7 @@ class ScenarioUploadDialog(val scenarioOverviewDialog: ScenarioOverviewDialog) {
       dialog.window?.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT)
     }
 
-    dialogView.et_scenario_name.setText(scenario.name)
+    dialogView.etScenarioName.setText(scenario.name)
     dialog.show()
   }
 }

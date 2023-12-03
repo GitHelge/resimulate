@@ -3,14 +3,15 @@ package de.bauerapps.resimulate.config
 import android.annotation.SuppressLint
 import android.os.CountDownTimer
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import de.bauerapps.resimulate.R
 import de.bauerapps.resimulate.SoundType
+import de.bauerapps.resimulate.databinding.NibpRepeatDialogBinding
 import de.bauerapps.resimulate.views.ESBootstrapButton
 import de.bauerapps.resimulate.views.ESDialog
-import kotlinx.android.synthetic.main.nibp_repeat_dialog.view.*
 
 enum class NIBPState {
   Idle, MeasuringSingle, MeasuringRepeated, Pending
@@ -43,7 +44,7 @@ class NIBPConfig(private val context: AppCompatActivity) {
       if (!isEnabled) {
         if (esButton.isWarning) return@setOnClickListener
         esButton.setWarningBackground(true)
-        Handler().postDelayed({ esButton.setWarningBackground(false) }, 1000)
+        Handler(Looper.getMainLooper()).postDelayed({ esButton.setWarningBackground(false) }, 1000)
         return@setOnClickListener
       }
 
@@ -60,7 +61,7 @@ class NIBPConfig(private val context: AppCompatActivity) {
       if (!isEnabled) {
         if (esButton.isWarning) return@setOnClickListener
         esButton.setWarningBackground(true)
-        Handler().postDelayed({ esButton.setWarningBackground(false) }, 1000)
+        Handler(Looper.getMainLooper()).postDelayed({ esButton.setWarningBackground(false) }, 1000)
         return@setOnClickListener
       }
 
@@ -89,7 +90,7 @@ class NIBPConfig(private val context: AppCompatActivity) {
 
   var isEnabled = false
 
-  private var repetitionHandler = Handler()
+  private var repetitionHandler = Handler(Looper.getMainLooper())
   private var repetitionRunnable = Runnable {
     setState(NIBPState.MeasuringRepeated)
   }
@@ -165,16 +166,16 @@ class NIBPConfig(private val context: AppCompatActivity) {
   @SuppressLint("InflateParams")
   private fun openNIBPRepeatDialog() {
     nibpRepeatDialog = ESDialog(context, R.style.NoAnimDialog, backgroundDim = false)
-    val nibpRepeatDialogView = LayoutInflater.from(context)
-      .inflate(R.layout.nibp_repeat_dialog, null)
+    val nibpRepeatDialogView = NibpRepeatDialogBinding.inflate(context.layoutInflater)
+
 
     nibpRepeatDialogView.apply {
-      b_2min.setOnClickListener {
+      b2min.setOnClickListener {
         repeatDuration = RepeatDuration.REPEAT_2MIN
         setState(NIBPState.MeasuringRepeated)
         nibpRepeatDialog?.dismiss()
       }
-      b_5min.setOnClickListener {
+      b5min.setOnClickListener {
         repeatDuration = RepeatDuration.REPEAT_5MIN
         setState(NIBPState.MeasuringRepeated)
         nibpRepeatDialog?.dismiss()
@@ -182,7 +183,7 @@ class NIBPConfig(private val context: AppCompatActivity) {
     }
 
     nibpRepeatDialog?.apply {
-      setContentView(nibpRepeatDialogView)
+      setContentView(nibpRepeatDialogView.root)
       show()
     }
   }

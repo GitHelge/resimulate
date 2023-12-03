@@ -7,10 +7,10 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.bauerapps.resimulate.adapters.ScenarioOverviewAdapter
+import de.bauerapps.resimulate.databinding.ScenarioOverviewDialogBinding
 import de.bauerapps.resimulate.helper.ESApplication
 import de.bauerapps.resimulate.helper.getScenarioArrayList
 import de.bauerapps.resimulate.views.ESDialog
-import kotlinx.android.synthetic.main.scenario_overview_dialog.view.*
 import kotlin.math.roundToInt
 
 @SuppressLint("SetTextI18n", "InflateParams")
@@ -18,8 +18,7 @@ class ScenarioOverviewDialog(val context: AppCompatActivity) : ScenarioUploadDia
 
   private var dialog: ESDialog = ESDialog(context, R.style.NoAnimDialog)
 
-  private var dialogView: View = LayoutInflater.from(context)
-    .inflate(R.layout.scenario_overview_dialog, null)
+  private var dialogView = ScenarioOverviewDialogBinding.inflate(context.layoutInflater)
 
   private var scenarioUploadDialog = ScenarioUploadDialog(this)
   private var adapter: ScenarioOverviewAdapter = ScenarioOverviewAdapter(
@@ -32,10 +31,10 @@ class ScenarioOverviewDialog(val context: AppCompatActivity) : ScenarioUploadDia
 
     dialogView.apply {
 
-      rv_scenarios.layoutManager = layoutManager
-      rv_scenarios.adapter = adapter
+      rvScenarios.layoutManager = layoutManager
+      rvScenarios.adapter = adapter
 
-      b_check.setOnClickListener {
+      bCheck.setOnClickListener {
 
         for (scenario in adapter.scenarios)
           ESApplication.updateActiveMap(scenario.name, scenario.isUsed)
@@ -46,10 +45,10 @@ class ScenarioOverviewDialog(val context: AppCompatActivity) : ScenarioUploadDia
         dialog.dismiss()
       }
 
-      b_cancel.setOnClickListener { dialog.dismiss() }
+      bCancel.setOnClickListener { dialog.dismiss() }
     }
 
-    dialog.setContentView(dialogView)
+    dialog.setContentView(dialogView.root)
 
     scenarioUploadDialog.callback = this
 
@@ -65,7 +64,7 @@ class ScenarioOverviewDialog(val context: AppCompatActivity) : ScenarioUploadDia
 
     if (!ESApplication.getBoolean(R.bool.is600dp)) {
       val width = (context.resources.displayMetrics.widthPixels * 0.90).roundToInt()
-      dialog.window?.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT)
+      dialog.window?.setLayout(width, LinearLayout.LayoutParams.MATCH_PARENT)
     }
     dialog.show()
   }

@@ -1,20 +1,22 @@
 package de.bauerapps.resimulate
 
 import android.content.pm.ActivityInfo
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.bauerapps.resimulate.adapters.ECGParam
 import de.bauerapps.resimulate.adapters.ECGParamAdapter
+import de.bauerapps.resimulate.databinding.ScenarioDesignActivityBinding
 import de.bauerapps.resimulate.helper.FullscreenHelper
 import de.bauerapps.resimulate.helper.VSConfigType
 import de.bauerapps.resimulate.simulations.*
 import de.bauerapps.resimulate.views.ESColor
 import de.bauerapps.resimulate.views.ESSurfaceView
 import de.bauerapps.resimulate.views.ESViewType
-import kotlinx.android.synthetic.main.scenario_design_activity.*
 import kotlin.math.roundToInt
 
 class ScenarioDesignActivity : AppCompatActivity(),
@@ -42,10 +44,13 @@ class ScenarioDesignActivity : AppCompatActivity(),
     OxyCalculation(simConfig, CPRCalculation(CPRType.SPO2), ecgCalculation)
   private var capCalculation = CAPCalculation(simConfig, CPRCalculation(CPRType.ETCO2))
 
+  private lateinit var binding: ScenarioDesignActivityBinding;
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.scenario_design_activity)
+
+    binding = ScenarioDesignActivityBinding.inflate(layoutInflater)
+    setContentView(binding.root)
 
     ecgParamAdapter = ECGParamAdapter()
     ecgParamAdapter?.callback = this
@@ -57,18 +62,22 @@ class ScenarioDesignActivity : AppCompatActivity(),
     dynChangeConfig = DynChangeConfig(this, tempConfig)
     dynChangeConfig?.callback = this
 
-    fullscreenHelper = FullscreenHelper(ll_whole)
-    fullscreenHelper?.delayedHide(100)
+    fullscreenHelper = FullscreenHelper(binding.llWhole)
+    fullscreenHelper?.hide()
 
     // Sets interface to portrait or landscape
     if (resources.getBoolean(R.bool.forceLandscape)) {
       requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
     }
 
-    window?.setFlags(
-      WindowManager.LayoutParams.FLAG_FULLSCREEN,
-      WindowManager.LayoutParams.FLAG_FULLSCREEN
-    )
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      window.insetsController?.hide(WindowInsets.Type.statusBars())
+    } else {
+      window.setFlags(
+        WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        WindowManager.LayoutParams.FLAG_FULLSCREEN
+      )
+    }
 
 
     //initVitalSignView()
@@ -77,62 +86,58 @@ class ScenarioDesignActivity : AppCompatActivity(),
     initPathologyDropdown()
 
     simConfig.simState.changeDuration = 20
-
-    b_zero_indicator.setOnClickListener {
-      val active = vsg_ecg.hasZeroIndicator
-      b_zero_indicator.setActiveBackground(!active)
-      vsg_ecg.hasZeroIndicator = !active
-    }
-
-    b_ok.setOnClickListener {
-      if (b_ok.isWarning) {
-        simConfig = tempConfig
-        b_ok.setWarningBackground(false)
+    
+    binding.apply {
+      bZeroIndicator.setOnClickListener {
+        val active = vsgEcg.hasZeroIndicator
+        bZeroIndicator.setActiveBackground(!active)
+        vsgEcg.hasZeroIndicator = !active
       }
-    }
 
-    b_ecg_toggle.setOnClickListener {
-      val isActive = b_ecg_toggle.isActive
-      //setVitalSignView(ESViewType.ECG, !isActive)
-      ecgParamAdapter?.updateParams(mapOf("ecg" to !isActive))
-      b_ecg_toggle.setActiveBackground(!isActive)
-    }
-    b_oxy_toggle.setOnClickListener {
-      val isActive = b_oxy_toggle.isActive
-      //setVitalSignView(ESViewType.PLETH, !isActive)
-      ecgParamAdapter?.updateParams(mapOf("oxy" to !isActive))
-      b_oxy_toggle.setActiveBackground(!isActive)
-    }
-    b_cap_toggle.setOnClickListener {
-      val isActive = b_cap_toggle.isActive
-      //setVitalSignView(ESViewType.CAP, !isActive)
-      ecgParamAdapter?.updateParams(mapOf("cap" to !isActive))
-      b_cap_toggle.setActiveBackground(!isActive)
-    }
+      bOk.setOnClickListener {
+        if (bOk.isWarning) {
+          simConfig = tempConfig
+          bOk.setWarningBackground(false)
+        }
+      }
 
-    b_save_scenario.setOnClickListener {
-      scenarioSaveDialog?.openDialog(simConfig.vitalSigns)
-    }
+      bEcgToggle.setOnClickListener {
+        val isActive = bEcgToggle.isActive
+        //setVitalSignView(ESViewType.ECG, !isActive)
+        ecgParamAdapter?.updateParams(mapOf("ecg" to !isActive))
+        bEcgToggle.setActiveBackground(!isActive)
+      }
+      bOxyToggle.setOnClickListener {
+        val isActive = bOxyToggle.isActive
+        //setVitalSignView(ESViewType.PLETH, !isActive)
+        ecgParamAdapter?.updateParams(mapOf("oxy" to !isActive))
+        bOxyToggle.setActiveBackground(!isActive)
+      }
+      bCapToggle.setOnClickListener {
+        val isActive = bCapToggle.isActive
+        //setVitalSignView(ESViewType.CAP, !isActive)
+        ecgParamAdapter?.updateParams(mapOf("cap" to !isActive))
+        bCapToggle.setActiveBackground(!isActive)
+      }
 
-    b_back.setOnClickListener {
-      onBackPressed()
-    }
+      bSaveScenario.setOnClickListener {
+        scenarioSaveDialog?.openDialog(simConfig.vitalSigns)
+      }
 
-    b_dynchange_config.setOnClickListener {
-      dynChangeConfig?.openDialog(simConfig)
-    }
+      bBack.setOnClickListener {
+        onBackPressed()
+      }
 
-    b_ecg_toggle.setActiveBackground(true)
+      bDynchangeConfig.setOnClickListener {
+        dynChangeConfig?.openDialog(simConfig)
+      }
+
+      bEcgToggle.setActiveBackground(true)
+    }
+    
     setVitalSignView(ESViewType.ECG, true)
     setVitalSignView(ESViewType.PLETH, true)
     setVitalSignView(ESViewType.CAP, true)
-
-    /*fullscreenHelper = FullscreenHelper(ll_whole)
-    if (currentFocus != null) {
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-        fullscreenHelper?.delayedHide(0)
-    }*/
   }
 
 
@@ -147,40 +152,40 @@ class ScenarioDesignActivity : AppCompatActivity(),
 
     when (type) {
       ESViewType.ECG -> {
-        vsg_ecg.isToggledOn = isChecked
-        if (isChecked) vsg_ecg.restart() else vsg_ecg.clearStop()
+        binding.vsgEcg.isToggledOn = isChecked
+        if (isChecked) binding.vsgEcg.restart() else binding.vsgEcg.clearStop()
       }
       ESViewType.PLETH -> {
-        vsg_oxy.isToggledOn = isChecked
-        if (isChecked) vsg_oxy.restart() else vsg_oxy.clearStop()
+        binding.vsgOxy.isToggledOn = isChecked
+        if (isChecked) binding.vsgOxy.restart() else binding.vsgOxy.clearStop()
       }
       ESViewType.CAP -> {
-        vsg_cap.isToggledOn = isChecked
-        if (isChecked) vsg_cap.restart() else vsg_cap.clearStop()
+        binding.vsgCap.isToggledOn = isChecked
+        if (isChecked) binding.vsgCap.restart() else binding.vsgCap.clearStop()
       }
     }
   }
 
   private fun initGraphs() {
 
-    vsg_ecg.callback = this
-    vsg_oxy.callback = this
-    vsg_cap.callback = this
+    binding.vsgEcg.callback = this
+    binding.vsgOxy.callback = this
+    binding.vsgCap.callback = this
     ecgCalculation.currentHR = simConfig.vitalSigns.ecg.hr
     oxyCalculation.currentNIBP = NIBP(simConfig.vitalSigns.nibp.sys, simConfig.vitalSigns.nibp.dia)
 
-    vsg_ecg.setup(ESViewType.ECG, ESColor.HR, 2.0, -2.0, true)
-    vsg_oxy.setup(ESViewType.PLETH, ESColor.SPO2, 150.0, 50.0, true)
-    vsg_cap.setup(ESViewType.CAP, ESColor.ETCO2, 50.0, -5.0, true)
+    binding.vsgEcg.setup(ESViewType.ECG, ESColor.HR, 2.0, -2.0, true)
+    binding.vsgOxy.setup(ESViewType.PLETH, ESColor.SPO2, 150.0, 50.0, true)
+    binding.vsgCap.setup(ESViewType.CAP, ESColor.ETCO2, 50.0, -5.0, true)
   }
 
   override fun drawZeroIndicator() {
-    vsg_ecg.drawZeroIndicator = true
+    binding.vsgEcg.drawZeroIndicator = true
   }
 
   private fun initParamList() {
 
-    rv_parameters.layoutManager = LinearLayoutManager(this)
+    binding.rvParameters.layoutManager = LinearLayoutManager(this)
     /*
     * rv_parameters.layoutManager = GridLayoutManager(
         this,
@@ -188,20 +193,20 @@ class ScenarioDesignActivity : AppCompatActivity(),
     )
     * */
 
-    rv_parameters.adapter = ecgParamAdapter
+    binding.rvParameters.adapter = ecgParamAdapter
   }
 
   private fun initPathologyDropdown() {
 
-    dd_pathologies.text = PType.SinusRhythm.pname
+    binding.ddPathologies.text = PType.SinusRhythm.pname
 
-    dd_pathologies.setOnDropDownItemClickListener { _, v, _ ->
+    binding.ddPathologies.setOnDropDownItemClickListener { _, v, _ ->
 
       val tempConfig = simConfig.deepCopy()
       val pathology = Pathology((v as TextView).text.toString())
       val defaultVS = DefaultVitalSigns.fromPathology(pathology)
       tempConfig.vitalSigns = defaultVS
-      dd_pathologies.text = pathology.name
+      binding.ddPathologies.text = pathology.name
 
       val bounds = pathology.getSpecificBounds()
 
@@ -269,7 +274,7 @@ class ScenarioDesignActivity : AppCompatActivity(),
 
       ecgParamAdapter?.notifyDataSetChanged()
       this.tempConfig = tempConfig
-      b_ok.setWarningBackground(true)
+      binding.bOk.setWarningBackground(true)
     }
   }
 
@@ -321,7 +326,7 @@ class ScenarioDesignActivity : AppCompatActivity(),
     }
 
     this.tempConfig = tempConfig
-    b_ok.setWarningBackground(true)
+    binding.bOk.setWarningBackground(true)
   }
 
   override fun updateSimConfig(simConfig: SimConfig) {
@@ -329,7 +334,7 @@ class ScenarioDesignActivity : AppCompatActivity(),
   }
 
   override fun reloadDropdown(downloadPathology: DownloadPathology?) {
-    dd_pathologies.updateDropdownData()
+    binding.ddPathologies.updateDropdownData()
   }
 
   override fun pullValue(type: ESViewType, timestep: Double): Double {
@@ -342,8 +347,8 @@ class ScenarioDesignActivity : AppCompatActivity(),
   }
 
   override fun requestSync() {
-    //if (!b_oxy_toggle.isActive) return
-    vsg_oxy.performECGSync()
+    //if (!bOxyToggle.isActive) return
+    binding.vsgOxy.performECGSync()
   }
 
   override fun onPause() {
@@ -353,7 +358,7 @@ class ScenarioDesignActivity : AppCompatActivity(),
 
   override fun onResume() {
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    fullscreenHelper?.delayedHide(100)
+    fullscreenHelper?.hide()
     super.onResume()
   }
 

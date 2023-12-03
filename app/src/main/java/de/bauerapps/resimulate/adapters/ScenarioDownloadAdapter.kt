@@ -1,5 +1,6 @@
 package de.bauerapps.resimulate.adapters
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -7,14 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import de.bauerapps.resimulate.DownloadPathology
-import de.bauerapps.resimulate.Pathology
 import de.bauerapps.resimulate.helper.ESApplication
-import de.bauerapps.resimulate.helper.inflate
 import de.bauerapps.resimulate.views.ESBootstrapButton
 import de.bauerapps.resimulate.views.ESTextView
-import kotlinx.android.synthetic.main.scenario_download_list_item.view.*
 import de.bauerapps.resimulate.R
-import de.bauerapps.resimulate.helper.formatTime
+import de.bauerapps.resimulate.databinding.ScenarioDownloadListItemBinding
 import de.bauerapps.resimulate.helper.toDate
 
 
@@ -34,8 +32,8 @@ class ScenarioDownloadAdapter(
   var callback: Callback? = null
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScenarioDownloadViewHolder {
-    val inflatedView = parent.inflate(R.layout.scenario_download_list_item, false)
-    return ScenarioDownloadViewHolder(inflatedView)
+    val binding = ScenarioDownloadListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    return ScenarioDownloadViewHolder(binding)
   }
 
   override fun getItemCount(): Int {
@@ -85,7 +83,7 @@ class ScenarioDownloadAdapter(
   }
 
 
-  inner class ScenarioDownloadViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+  inner class ScenarioDownloadViewHolder(v: ScenarioDownloadListItemBinding) : RecyclerView.ViewHolder(v.root) {
 
     private var twScenarioName: ESTextView? = null
     private var twAuthorName: ESTextView? = null
@@ -95,12 +93,12 @@ class ScenarioDownloadAdapter(
     private var llPreview: LinearLayout? = null
 
     init {
-      twScenarioName = v.tw_scenario_name
-      twAuthorName = v.tw_author_name
-      twTimestamp = v.tw_timestamp
-      llPreview = v.ll_scenario_download_item
+      twScenarioName = v.twScenarioName
+      twAuthorName = v.twAuthorName
+      twTimestamp = v.twTimestamp
+      llPreview = v.llScenarioDownloadItem
       //bPreview = v.b_preview
-      bDownload = v.b_download
+      bDownload = v.bDownload
     }
 
     fun bind(pathology: DownloadPathology) {

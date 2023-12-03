@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.ActivityInfo
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -13,8 +14,8 @@ import android.os.IBinder
 import android.os.Looper
 import com.google.android.material.snackbar.Snackbar
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.TextView
 import de.bauerapps.resimulate.config.VitalSignConfig
@@ -29,8 +30,8 @@ import de.bauerapps.resimulate.views.ESDialog
 import de.bauerapps.resimulate.views.ESSurfaceView
 import de.bauerapps.resimulate.views.ESViewType
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_trainer_view.*
-import kotlinx.android.synthetic.main.stop_sim_dialog.view.*
+import de.bauerapps.resimulate.databinding.ActivityTrainerViewBinding
+import de.bauerapps.resimulate.databinding.StopSimDialogBinding
 
 class TrainerActivity : AppCompatActivity(),
   NearbyConnectionService.NCSCallback,
@@ -70,6 +71,8 @@ class TrainerActivity : AppCompatActivity(),
     OxyCalculation(simConfig, CPRCalculation(CPRType.SPO2), ecgCalculation)
   private var capCalculation = CAPCalculation(simConfig, CPRCalculation(CPRType.ETCO2))
   private var shockReceived = false
+  
+  private lateinit var binding: ActivityTrainerViewBinding;
 
   private fun onUpdateSimConfig(oldValue: SimConfig, newValue: SimConfig) {
 
@@ -105,74 +108,80 @@ class TrainerActivity : AppCompatActivity(),
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_trainer_view)
+    binding = ActivityTrainerViewBinding.inflate(layoutInflater)
+    setContentView(binding.root)
 
     // Sets interface to portrait or landscape
     if (resources.getBoolean(R.bool.forceLandscape))
       requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 
-    window?.setFlags(
-      WindowManager.LayoutParams.FLAG_FULLSCREEN,
-      WindowManager.LayoutParams.FLAG_FULLSCREEN
-    )
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      window.insetsController?.hide(WindowInsets.Type.statusBars())
+    } else {
+      window.setFlags(
+        WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        WindowManager.LayoutParams.FLAG_FULLSCREEN
+      )
+    }
 
     initVitalSignGraphs()
 
-    b_back.setOnClickListener(this)
-    b_ok.setOnClickListener(this)
+    binding.bBack.setOnClickListener(this)
+    binding.bOk.setOnClickListener(this)
 
     dynChangeConfig = DynChangeConfig(this, simConfig)
     dynChangeConfig?.callback = this
-    b_dynchange_config.setOnClickListener(this)
+    binding.bDynchangeConfig.setOnClickListener(this)
 
     psConfig = PostShockConfig(this, simConfig)
     psConfig?.callback = this
-    b_ps_pathology_config.setOnClickListener(this)
+    binding.bPsPathologyConfig.setOnClickListener(this)
 
     initUI()
 
     ecgCalculation.callback = this
 
     // Initially send the current config:
-    Handler().postDelayed({
+    Handler(Looper.getMainLooper()).postDelayed({
       ncService?.sendSomething(Gson().toJson(simConfig))
     }, 500)
   }
 
   private fun initUI() {
-
-    vsConfigs[VSConfigType.HR] = VitalSignConfig(
-      60,
-      b_hr_up, b_hr_down, tw_hr_config_label
-    )
-    vsConfigs[VSConfigType.PACER_THRES] = VitalSignConfig(
-      20,
-      b_pacer_thres_up, b_pacer_thres_down, tw_pacer_thres_config_label, 10
-    )
-    vsConfigs[VSConfigType.SPO2] = VitalSignConfig(
-      97,
-      b_spo2_up, b_spo2_down, tw_spo2_config_label
-    )
-    vsConfigs[VSConfigType.ETCO2] = VitalSignConfig(
-      35,
-      b_etco2_up, b_etco2_down, tw_etco2_config_label
-    )
-    vsConfigs[VSConfigType.RESP_RATE] = VitalSignConfig(
-      12,
-      b_resp_rate_up, b_resp_rate_down, tw_resp_rate_config_label
-    )
-    vsConfigs[VSConfigType.SYS] = VitalSignConfig(
-      120,
-      b_sys_up, b_sys_down, tw_sys_config_label
-    )
-    vsConfigs[VSConfigType.DIA] = VitalSignConfig(
-      80,
-      b_dia_up, b_dia_down, tw_dia_config_label
-    )
-    vsConfigs[VSConfigType.SHOCK_THRES] = VitalSignConfig(
-      150,
-      b_defi_energy_thres_up, b_defi_energy_thres_down, tw_defi_energy_value, 50
-    )
+    binding.apply { 
+      vsConfigs[VSConfigType.HR] = VitalSignConfig(
+        60,
+        bHrUp, bHrDown, twHrConfigLabel
+      )
+      vsConfigs[VSConfigType.PACER_THRES] = VitalSignConfig(
+        20,
+        bPacerThresUp, bPacerThresDown, twPacerThresConfigLabel, 10
+      )
+      vsConfigs[VSConfigType.SPO2] = VitalSignConfig(
+        97,
+        bSpo2Up, bSpo2Down, twSpo2ConfigLabel
+      )
+      vsConfigs[VSConfigType.ETCO2] = VitalSignConfig(
+        35,
+        bEtco2Up, bEtco2Down, twEtco2ConfigLabel
+      )
+      vsConfigs[VSConfigType.RESP_RATE] = VitalSignConfig(
+        12,
+        bRespRateUp, bRespRateDown, twRespRateConfigLabel
+      )
+      vsConfigs[VSConfigType.SYS] = VitalSignConfig(
+        120,
+        bSysUp, bSysDown, twSysConfigLabel
+      )
+      vsConfigs[VSConfigType.DIA] = VitalSignConfig(
+        80,
+        bDiaUp, bDiaDown, twDiaConfigLabel
+      )
+      vsConfigs[VSConfigType.SHOCK_THRES] = VitalSignConfig(
+        150,
+        bDefiEnergyThresUp, bDefiEnergyThresDown, twDefiEnergyValue, 50
+      )
+    }
 
     vsConfigs.forEach { it.value.callback = this }
 
@@ -180,101 +189,103 @@ class TrainerActivity : AppCompatActivity(),
 
     val simState = simConfig.simState
     val vitalSigns = simConfig.vitalSigns
-
-    setVitalSignView(ESViewType.ECG, simState.ecgEnabled)
-    b_ecg_toggle.setActiveBackground(simState.ecgEnabled)
-
-    setVitalSignView(ESViewType.PLETH, simState.oxyEnabled)
-    b_oxy_toggle.setActiveBackground(simState.oxyEnabled)
-
-    setVitalSignView(ESViewType.CAP, simState.capEnabled)
-    b_cap_toggle.setActiveBackground(simState.capEnabled)
-
-    b_nibp_toggle.setActiveBackground(simState.nibpEnabled)
-
-    b_ecg_toggle.setOnClickListener {
-      val ecgEnabled = simConfig.simState.ecgEnabled
-      simConfig.simState.ecgEnabled = !ecgEnabled
-      setVitalSignView(ESViewType.ECG, !ecgEnabled)
-      b_ecg_toggle.setActiveBackground(!ecgEnabled)
+    
+    binding.apply { 
+      setVitalSignView(ESViewType.ECG, simState.ecgEnabled)
+      bEcgToggle.setActiveBackground(simState.ecgEnabled)
+  
+      setVitalSignView(ESViewType.PLETH, simState.oxyEnabled)
+      bOxyToggle.setActiveBackground(simState.oxyEnabled)
+  
+      setVitalSignView(ESViewType.CAP, simState.capEnabled)
+      bCapToggle.setActiveBackground(simState.capEnabled)
+  
+      bNibpToggle.setActiveBackground(simState.nibpEnabled)
+  
+      bEcgToggle.setOnClickListener {
+        val ecgEnabled = simConfig.simState.ecgEnabled
+        simConfig.simState.ecgEnabled = !ecgEnabled
+        setVitalSignView(ESViewType.ECG, !ecgEnabled)
+        bEcgToggle.setActiveBackground(!ecgEnabled)
+      }
+  
+      bOxyToggle.setOnClickListener {
+        val oxyEnabled = simConfig.simState.oxyEnabled
+        simConfig.simState.oxyEnabled = !oxyEnabled
+        setVitalSignView(ESViewType.PLETH, !oxyEnabled)
+        bOxyToggle.setActiveBackground(!oxyEnabled)
+      }
+  
+      bCapToggle.setOnClickListener {
+        val capEnabled = simConfig.simState.capEnabled
+        simConfig.simState.capEnabled = !capEnabled
+        setVitalSignView(ESViewType.CAP, !capEnabled)
+        bCapToggle.setActiveBackground(!capEnabled)
+      }
+  
+      bNibpToggle.setOnClickListener {
+        simConfig.simState.nibpEnabled = !bNibpToggle.isActive
+        ncService?.sendSomething(Gson().toJson(simConfig))
+        bNibpToggle.setActiveBackground(!bNibpToggle.isActive)
+      }
+  
+      bCopd.setOnClickListener {
+        simConfig.simState.hasCOPD = !bCopd.isActive
+        ncService?.sendSomething(Gson().toJson(simConfig))
+        bCopd.setActiveBackground(!bCopd.isActive)
+      }
+  
+      bCpr.setOnClickListener {
+        simConfig.simState.hasCPR = !bCpr.isActive
+        ncService?.sendSomething(Gson().toJson(simConfig))
+        bCpr.setActiveBackground(!bCpr.isActive)
+      }
+  
+      vsConfigs[VSConfigType.HR]?.update(vitalSigns.ecg.hr)
+      vsConfigs[VSConfigType.PACER_THRES]?.update(simState.pacer.energyThreshold)
+      vsConfigs[VSConfigType.SPO2]?.update(vitalSigns.oxy.spo2)
+      vsConfigs[VSConfigType.ETCO2]?.update(vitalSigns.cap.etco2)
+      vsConfigs[VSConfigType.RESP_RATE]?.update(vitalSigns.cap.respRate)
+      vsConfigs[VSConfigType.SYS]?.update(vitalSigns.nibp.sys)
+      vsConfigs[VSConfigType.DIA]?.update(vitalSigns.nibp.dia)
+      vsConfigs[VSConfigType.SHOCK_THRES]?.update(simState.defi.energyThreshold)
+  
+      esdPathology.setOnDropDownItemClickListener { _, v, _ ->
+        val pathology = Pathology((v as TextView).text.toString())
+        val defaultVS = DefaultVitalSigns.fromPathology(pathology)
+        updateVitalSignConfigs(pathology, defaultVS)
+        notifyRequireConfigPush()
+  
+        fullscreenHelper?.hide()
+      }
+  
+      esdDefiPathology.setOnDropDownItemClickListener { _, v, _ ->
+        val pathology = Pathology((v as TextView).text.toString())
+        val defaultVS = DefaultVitalSigns.fromPathology(pathology)
+        esdDefiPathology.text = pathology.name
+  
+        simConfig.simState.defi.vitalSigns = defaultVS.deepCopy()
+        notifyRequireConfigPush()
+        //ncService?.sendSomething(Gson().toJson(simConfig.simState.defi))
+  
+        fullscreenHelper?.hide()
+      }
     }
 
-    b_oxy_toggle.setOnClickListener {
-      val oxyEnabled = simConfig.simState.oxyEnabled
-      simConfig.simState.oxyEnabled = !oxyEnabled
-      setVitalSignView(ESViewType.PLETH, !oxyEnabled)
-      b_oxy_toggle.setActiveBackground(!oxyEnabled)
-    }
-
-    b_cap_toggle.setOnClickListener {
-      val capEnabled = simConfig.simState.capEnabled
-      simConfig.simState.capEnabled = !capEnabled
-      setVitalSignView(ESViewType.CAP, !capEnabled)
-      b_cap_toggle.setActiveBackground(!capEnabled)
-    }
-
-    b_nibp_toggle.setOnClickListener {
-      simConfig.simState.nibpEnabled = !b_nibp_toggle.isActive
-      ncService?.sendSomething(Gson().toJson(simConfig))
-      b_nibp_toggle.setActiveBackground(!b_nibp_toggle.isActive)
-    }
-
-    b_copd.setOnClickListener {
-      simConfig.simState.hasCOPD = !b_copd.isActive
-      ncService?.sendSomething(Gson().toJson(simConfig))
-      b_copd.setActiveBackground(!b_copd.isActive)
-    }
-
-    b_cpr.setOnClickListener {
-      simConfig.simState.hasCPR = !b_cpr.isActive
-      ncService?.sendSomething(Gson().toJson(simConfig))
-      b_cpr.setActiveBackground(!b_cpr.isActive)
-    }
-
-    vsConfigs[VSConfigType.HR]?.update(vitalSigns.ecg.hr)
-    vsConfigs[VSConfigType.PACER_THRES]?.update(simState.pacer.energyThreshold)
-    vsConfigs[VSConfigType.SPO2]?.update(vitalSigns.oxy.spo2)
-    vsConfigs[VSConfigType.ETCO2]?.update(vitalSigns.cap.etco2)
-    vsConfigs[VSConfigType.RESP_RATE]?.update(vitalSigns.cap.respRate)
-    vsConfigs[VSConfigType.SYS]?.update(vitalSigns.nibp.sys)
-    vsConfigs[VSConfigType.DIA]?.update(vitalSigns.nibp.dia)
-    vsConfigs[VSConfigType.SHOCK_THRES]?.update(simState.defi.energyThreshold)
-
-    esd_pathology.setOnDropDownItemClickListener { _, v, _ ->
-      val pathology = Pathology((v as TextView).text.toString())
-      val defaultVS = DefaultVitalSigns.fromPathology(pathology)
-      updateVitalSignConfigs(pathology, defaultVS)
-      notifyRequireConfigPush()
-
-      fullscreenHelper?.delayedHide(0)
-    }
-
-    esd_defi_pathology.setOnDropDownItemClickListener { _, v, _ ->
-      val pathology = Pathology((v as TextView).text.toString())
-      val defaultVS = DefaultVitalSigns.fromPathology(pathology)
-      esd_defi_pathology.text = pathology.name
-
-      simConfig.simState.defi.vitalSigns = defaultVS.deepCopy()
-      notifyRequireConfigPush()
-      //ncService?.sendSomething(Gson().toJson(simConfig.simState.defi))
-
-      fullscreenHelper?.delayedHide(0)
-    }
-
-    esd_pathology.setOnDismissListener { fullscreenHelper?.delayedHide(0) }
+    binding.esdPathology.setOnDismissListener { fullscreenHelper?.hide() }
 
     if (NCS.chosenEndpoint?.endpointState == NCSEndpointState.CONNECTED)
-      b_connection_status.bootstrapBrand =
+      binding.bConnectionStatus.bootstrapBrand =
         ESBrandStyle(R.color.bootstrap_gray_dark, R.color.success)
   }
 
   private fun notifyRequireConfigPush() {
-    if (!b_ok.isWarning)
-      b_ok.setWarningBackground(true)
+    if (!binding.bOk.isWarning)
+      binding.bOk.setWarningBackground(true)
   }
 
   private fun updateVitalSignConfigs(pathology: Pathology, vs: VitalSigns) {
-    esd_pathology.text = pathology.name
+    binding.esdPathology.text = pathology.name
 
     setBoundsByPathology(vsConfigs, pathology)
     vsConfigs[VSConfigType.HR]?.update(vs.ecg.hr)
@@ -289,16 +300,16 @@ class TrainerActivity : AppCompatActivity(),
 
     when (type) {
       ESViewType.ECG -> {
-        vsg_ecg.isToggledOn = isChecked
-        if (isChecked) vsg_ecg.restart() else vsg_ecg.clearStop()
+        binding.vsgEcg.isToggledOn = isChecked
+        if (isChecked) binding.vsgEcg.restart() else binding.vsgEcg.clearStop()
       }
       ESViewType.PLETH -> {
-        vsg_oxy.isToggledOn = isChecked
-        if (isChecked) vsg_oxy.restart() else vsg_oxy.clearStop()
+        binding.vsgOxy.isToggledOn = isChecked
+        if (isChecked) binding.vsgOxy.restart() else binding.vsgOxy.clearStop()
       }
       ESViewType.CAP -> {
-        vsg_cap.isToggledOn = isChecked
-        if (isChecked) vsg_cap.restart() else vsg_cap.clearStop()
+        binding.vsgCap.isToggledOn = isChecked
+        if (isChecked) binding.vsgCap.restart() else binding.vsgCap.clearStop()
       }
     }
 
@@ -307,10 +318,10 @@ class TrainerActivity : AppCompatActivity(),
 
   override fun onClick(v: View?) {
     when (v) {
-      b_back -> onBackPressed()
-      b_ok -> performConfigUpdateAndSend()
-      b_dynchange_config -> dynChangeConfig?.openDialog(simConfig)
-      b_ps_pathology_config -> psConfig?.openDialog(simConfig)
+      binding.bBack -> onBackPressed()
+      binding.bOk -> performConfigUpdateAndSend()
+      binding.bDynchangeConfig -> dynChangeConfig?.openDialog(simConfig)
+      binding.bPsPathologyConfig -> psConfig?.openDialog(simConfig)
     }
   }
 
@@ -324,10 +335,10 @@ class TrainerActivity : AppCompatActivity(),
 
   private fun performConfigUpdateAndSend() {
 
-    b_ok.setWarningBackground(false)
+    binding.bOk.setWarningBackground(false)
 
     val tempConfig: SimConfig = simConfig.deepCopy()
-    val pathology = esd_pathology.text.toString()
+    val pathology = binding.esdPathology.text.toString()
 
     tempConfig.apply {
       if (pathology != vitalSigns.pathology.name)
@@ -352,21 +363,21 @@ class TrainerActivity : AppCompatActivity(),
   override fun onPostCreate(savedInstanceState: Bundle?) {
     super.onPostCreate(savedInstanceState)
 
-    fullscreenHelper = FullscreenHelper(CL_whole)
-    fullscreenHelper?.delayedHide(200)
+    fullscreenHelper = FullscreenHelper(binding.CLWhole)
+    fullscreenHelper?.hide()
   }
 
   private fun initVitalSignGraphs() {
 
-    vsg_ecg.callback = this
-    vsg_oxy.callback = this
-    vsg_cap.callback = this
+    binding.vsgEcg.callback = this
+    binding.vsgOxy.callback = this
+    binding.vsgCap.callback = this
     ecgCalculation.currentHR = simConfig.vitalSigns.ecg.hr
     oxyCalculation.currentNIBP = NIBP(simConfig.vitalSigns.nibp.sys, simConfig.vitalSigns.nibp.dia)
 
-    vsg_ecg.setup(ESViewType.ECG, ESColor.HR, 2.0, -2.0, true)
-    vsg_oxy.setup(ESViewType.PLETH, ESColor.SPO2, 150.0, 50.0, true)
-    vsg_cap.setup(ESViewType.CAP, ESColor.ETCO2, 50.0, -5.0, true)
+    binding.vsgEcg.setup(ESViewType.ECG, ESColor.HR, 2.0, -2.0, true)
+    binding.vsgOxy.setup(ESViewType.PLETH, ESColor.SPO2, 150.0, 50.0, true)
+    binding.vsgCap.setup(ESViewType.CAP, ESColor.ETCO2, 50.0, -5.0, true)
   }
 
   override fun pullValue(type: ESViewType, timestep: Double): Double {
@@ -383,8 +394,8 @@ class TrainerActivity : AppCompatActivity(),
             pacedDeltaX = 0.0
             if (!isThresholdReached || simConfig.vitalSigns.ecg.hr >= pacer.frequency) {
 
-              vsg_ecg.pacerEnergy = pacer.energy
-              vsg_ecg.drawPacerPeak = true
+              binding.vsgEcg.pacerEnergy = pacer.energy
+              binding.vsgEcg.drawPacerPeak = true
             }
           }
         }
@@ -408,13 +419,13 @@ class TrainerActivity : AppCompatActivity(),
 
   override fun requestSync() {
     if (!simConfig.simState.oxyEnabled) return
-    vsg_oxy.performECGSync()
+    binding.vsgOxy.performECGSync()
   }
 
   override fun drawPacerPeak() {
 
-    vsg_ecg.pacerEnergy = simConfig.simState.pacer.energy
-    vsg_ecg.drawPacerPeak = true
+    binding.vsgEcg.pacerEnergy = simConfig.simState.pacer.energy
+    binding.vsgEcg.drawPacerPeak = true
   }
 
   override fun wasUpdated() {
@@ -433,7 +444,7 @@ class TrainerActivity : AppCompatActivity(),
       ncService?.ncsEndpointCallback = this@TrainerActivity
       bound = true
 
-      tw_connection_indicator.text = NCSEndpointState.getDesc(NCS.chosenEndpoint)
+      binding.twConnectionIndicator.text = NCSEndpointState.getDesc(NCS.chosenEndpoint)
     }
 
     override fun onServiceDisconnected(className: ComponentName) {
@@ -488,7 +499,7 @@ class TrainerActivity : AppCompatActivity(),
             color = R.color.warning
           }
           NCS.chosenEndpoint?.endpointState != NCSEndpointState.CONNECTED -> {
-            tw_connection_indicator.text = getString(R.string.no_endpoint_restart_necessary)
+            binding.twConnectionIndicator.text = getString(R.string.no_endpoint_restart_necessary)
             color = R.color.danger
           }
           else -> return
@@ -496,7 +507,7 @@ class TrainerActivity : AppCompatActivity(),
       }
       NCSEndpointState.LOST, NCSEndpointState.WAITING -> color = R.color.warning
       NCSEndpointState.CONNECTED -> {
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
           ncService?.sendSomething(Gson().toJson(simConfig))
         }, 500)
         color = R.color.success
@@ -508,8 +519,8 @@ class TrainerActivity : AppCompatActivity(),
       }
     }
 
-    b_connection_status.bootstrapBrand = ESBrandStyle(R.color.colorPrimaryDark, color)
-    tw_connection_indicator.text = NCSEndpointState.getDesc(NCS.chosenEndpoint) + appendText
+    binding.bConnectionStatus.bootstrapBrand = ESBrandStyle(R.color.colorPrimaryDark, color)
+    binding.twConnectionIndicator.text = NCSEndpointState.getDesc(NCS.chosenEndpoint) + appendText
   }
 
   override fun onStateUpdate() {
@@ -518,7 +529,7 @@ class TrainerActivity : AppCompatActivity(),
 
     val isActive = NCS.ncsState == NCSState.SEARCHING
 
-    tw_connection_indicator.text =
+    binding.twConnectionIndicator.text =
       if (isActive) "Searching for Trainee..." else "Searching stopped."
   }
 
@@ -558,11 +569,10 @@ class TrainerActivity : AppCompatActivity(),
   @SuppressLint("InflateParams")
   private fun openStopDialog() {
     stopSimulationDialog = ESDialog(this, R.style.NoAnimDialog)
-    val stopSimulationDialogView = LayoutInflater.from(this)
-      .inflate(R.layout.stop_sim_dialog, null)
+    val stopSimulationDialogView = StopSimDialogBinding.inflate(this.layoutInflater)
 
     stopSimulationDialogView.apply {
-      b_check.setOnClickListener {
+      bCheck.setOnClickListener {
 
         ncService?.sendSomething(Const.SIM_STOPPED)
         ncService?.updateState(NCSState.IDLE)
@@ -575,36 +585,37 @@ class TrainerActivity : AppCompatActivity(),
         stopSimulationDialog?.dismiss()
         super.onBackPressed()
       }
-      b_cancel.setOnClickListener {
+      bCancel.setOnClickListener {
         stopSimulationDialog?.dismiss()
       }
     }
 
     stopSimulationDialog?.apply {
-      setContentView(stopSimulationDialogView)
+      setContentView(stopSimulationDialogView.root)
       //setOnDismissListener { callback?.hideStatusBar() }
       show()
     }
   }
 
+  @Deprecated("Deprecated in Java")
   override fun onBackPressed() {
     openStopDialog()
   }
 
   override fun onResume() {
-    fullscreenHelper?.delayedHide(200)
-    vsg_ecg.resume()
-    vsg_oxy.resume()
-    vsg_cap.resume()
+    fullscreenHelper?.hide()
+    binding.vsgEcg.resume()
+    binding.vsgOxy.resume()
+    binding.vsgCap.resume()
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    fullscreenHelper?.delayedHide(100)
+    fullscreenHelper?.hide()
     super.onResume()
   }
 
   override fun onPause() {
-    vsg_ecg.pause()
-    vsg_oxy.pause()
-    vsg_cap.pause()
+    binding.vsgEcg.pause()
+    binding.vsgOxy.pause()
+    binding.vsgCap.pause()
     window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     super.onPause()
   }

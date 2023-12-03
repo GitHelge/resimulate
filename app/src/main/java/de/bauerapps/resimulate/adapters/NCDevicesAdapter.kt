@@ -1,6 +1,7 @@
 package de.bauerapps.resimulate.adapters
 
 import android.content.Context
+import android.view.LayoutInflater
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import android.view.View
@@ -11,7 +12,7 @@ import de.bauerapps.resimulate.helper.ESBrand
 import de.bauerapps.resimulate.helper.inflate
 import de.bauerapps.resimulate.views.ESBootstrapButton
 import com.beardedhen.androidbootstrap.AwesomeTextView
-import kotlinx.android.synthetic.main.connection_list_item.view.*
+import de.bauerapps.resimulate.databinding.ConnectionListItemBinding
 
 
 data class NCListDevice(var name: String, var id: String, var isConnected: Boolean = false)
@@ -84,9 +85,9 @@ class NCDevicesAdapter(
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NCDevicesViewHolder {
-    val inflatedView = parent.inflate(R.layout.connection_list_item, false)
+    val binding = ConnectionListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     context = parent.context
-    return NCDevicesViewHolder(inflatedView)
+    return NCDevicesViewHolder(binding)
   }
 
   override fun getItemCount() = ncDevices.size
@@ -95,7 +96,7 @@ class NCDevicesAdapter(
     holder.bindDevice(ncDevices[position])
   }
 
-  inner class NCDevicesViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+  inner class NCDevicesViewHolder(v: ConnectionListItemBinding) : RecyclerView.ViewHolder(v.root) {
 
     private var twEndpointName: TextView? = null
     private var twConnectionIcon: AwesomeTextView? = null
@@ -103,10 +104,10 @@ class NCDevicesAdapter(
     private var bConnectionToggle: ESBootstrapButton? = null
 
     init {
-      this.twEndpointName = v.tw_endpoint_name
-      this.twConnectionIcon = v.tw_connection_icon
-      this.twEndpointID = v.tw_endpoint_id
-      this.bConnectionToggle = v.b_connection_toggle
+      this.twEndpointName = v.twEndpointName
+      this.twConnectionIcon = v.twConnectionIcon
+      this.twEndpointID = v.twEndpointId
+      this.bConnectionToggle = v.bConnectionToggle
     }
 
     fun bindDevice(ncListDevice: NCListDevice) {

@@ -1,5 +1,6 @@
 package de.bauerapps.resimulate.adapters
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,11 +9,11 @@ import de.bauerapps.resimulate.PType
 import de.bauerapps.resimulate.Pathology
 import de.bauerapps.resimulate.R
 import de.bauerapps.resimulate.ScenarioUploadDialog
+import de.bauerapps.resimulate.databinding.ScenarioOverviewListItemBinding
 import de.bauerapps.resimulate.helper.ESApplication
 import de.bauerapps.resimulate.helper.inflate
 import de.bauerapps.resimulate.views.ESBootstrapButton
 import de.bauerapps.resimulate.views.ESTextView
-import kotlinx.android.synthetic.main.scenario_overview_list_item.view.*
 
 class ScenarioOverviewAdapter(
   val dialog: ScenarioUploadDialog?,
@@ -21,8 +22,8 @@ class ScenarioOverviewAdapter(
   RecyclerView.Adapter<ScenarioOverviewAdapter.ScenarioEditViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScenarioEditViewHolder {
-    val inflatedView = parent.inflate(R.layout.scenario_overview_list_item, false)
-    return ScenarioEditViewHolder(inflatedView)
+    val binding = ScenarioOverviewListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    return ScenarioEditViewHolder(binding)
   }
 
   override fun getItemCount(): Int {
@@ -45,7 +46,7 @@ class ScenarioOverviewAdapter(
     ESApplication.deleteScenario(scenario)
   }
 
-  inner class ScenarioEditViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+  inner class ScenarioEditViewHolder(v: ScenarioOverviewListItemBinding) : RecyclerView.ViewHolder(v.root) {
 
     private var twScenarioName: ESTextView? = null
     private var bDelete: ESBootstrapButton? = null
@@ -53,10 +54,10 @@ class ScenarioOverviewAdapter(
     private var bShare: ESBootstrapButton? = null
 
     init {
-      twScenarioName = v.tw_scenario_name
-      bDelete = v.b_delete_scenario
-      bUse = v.b_use_scenario
-      bShare = v.b_share_scenario
+      twScenarioName = v.twScenarioName
+      bDelete = v.bDeleteScenario
+      bUse = v.bUseScenario
+      bShare = v.bShareScenario
     }
 
     fun bind(scenario: Pathology) {

@@ -5,9 +5,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.gson.Gson
+import de.bauerapps.resimulate.databinding.ScenarioSaveDialogBinding
 import de.bauerapps.resimulate.helper.ESApplication
 import de.bauerapps.resimulate.views.ESDialog
-import kotlinx.android.synthetic.main.scenario_save_dialog.view.*
 
 class ScenarioSaveDialog(val context: AppCompatActivity) {
 
@@ -15,8 +15,7 @@ class ScenarioSaveDialog(val context: AppCompatActivity) {
     fun reloadDropdown(downloadPathology: DownloadPathology? = null)
   }
 
-  private val dialogView: View = LayoutInflater.from(context)
-    .inflate(R.layout.scenario_save_dialog, null)
+  private val dialogView = ScenarioSaveDialogBinding.inflate(context.layoutInflater)
   private val dialog: ESDialog = ESDialog(context, R.style.NoAnimDialog)
 
   private var knownScenarioNames = getScenarioNames()
@@ -26,7 +25,7 @@ class ScenarioSaveDialog(val context: AppCompatActivity) {
 
   private fun getScenarioNames(): List<String> {
     val list = mutableListOf<String>()
-    list.addAll(PType.values().map { it.pname })
+    list.addAll(PType.entries.map { it.pname })
     list.addAll(ESApplication.saveMap.keys.toList())
     return list
   }
@@ -36,21 +35,20 @@ class ScenarioSaveDialog(val context: AppCompatActivity) {
   init {
 
     dialogView.apply {
-
-      b_check.setOnClickListener {
+      bCheck.setOnClickListener {
 
         when {
-          et_scenario_name.text.isEmpty() -> {
-            tw_scenario_save_description.blinkWarning()
+          etScenarioName.text.isEmpty() -> {
+            twScenarioSaveDescription.blinkWarning()
             return@setOnClickListener
           }
-          knownScenarioNames.contains(et_scenario_name.text.toString()) -> {
+          knownScenarioNames.contains(etScenarioName.text.toString()) -> {
 
             SweetAlertDialog(this@ScenarioSaveDialog.context, SweetAlertDialog.ERROR_TYPE)
               .setTitleText(
                 context.getString(
                   R.string.scenario_name_already_found,
-                  et_scenario_name.text
+                  etScenarioName.text
                 )
               )
               .show()
@@ -60,12 +58,12 @@ class ScenarioSaveDialog(val context: AppCompatActivity) {
           else -> {
 
             if (downloadPathology != null) {
-              downloadPathology!!.name = et_scenario_name.text.toString()
+              downloadPathology!!.name = etScenarioName.text.toString()
               ESApplication.updateSavedMap(downloadPathology!!)
               ESApplication.saveScenarios(this@ScenarioSaveDialog.context)
 
             } else {
-              tempVS.pathology.name = et_scenario_name.text.toString()
+              tempVS.pathology.name = etScenarioName.text.toString()
               ESApplication.updateSavedMap(tempVS.pathology, tempVS)
               ESApplication.saveScenarios(this@ScenarioSaveDialog.context)
             }
@@ -78,9 +76,9 @@ class ScenarioSaveDialog(val context: AppCompatActivity) {
         dialog.dismiss()
       }
 
-      b_cancel.setOnClickListener { dialog.dismiss() }
+      bCancel.setOnClickListener { dialog.dismiss() }
 
-      dialog.setContentView(dialogView)
+      dialog.setContentView(dialogView.root)
     }
   }
 
@@ -89,10 +87,10 @@ class ScenarioSaveDialog(val context: AppCompatActivity) {
     this.downloadPathology = downloadPathology
     tempVS = Gson().fromJson(downloadPathology.vs, VitalSigns::class.java)
 
-    dialogView.tw_header.text = context.getString(R.string.rename_scenario)
-    dialogView.tw_header_desc.text =
+    dialogView.twHeader.text = context.getString(R.string.rename_scenario)
+    dialogView.twHeaderDesc.text =
       context.getString(R.string.doublicate_name_give_other, downloadPathology.name)
-    dialogView.et_scenario_name.setText(downloadPathology.name)
+    dialogView.etScenarioName.setText(downloadPathology.name)
 
     dialog.show()
   }

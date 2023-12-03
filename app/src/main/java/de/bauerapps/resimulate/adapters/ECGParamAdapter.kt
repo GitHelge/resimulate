@@ -4,20 +4,19 @@ import android.content.Context
 import androidx.appcompat.widget.AppCompatSeekBar
 import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
-import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.SeekBar
 import de.bauerapps.resimulate.DVS
 import de.bauerapps.resimulate.R
-import de.bauerapps.resimulate.helper.inflate
 import com.beardedhen.androidbootstrap.BootstrapEditText
-import kotlinx.android.synthetic.main.vital_param_list_item.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 import android.view.inputmethod.InputMethodManager
 import de.bauerapps.resimulate.adapters.ECGParam.Companion.TAG
+import de.bauerapps.resimulate.databinding.VitalParamListItemBinding
 import de.bauerapps.resimulate.helper.ESApplication
 import de.bauerapps.resimulate.views.ESTextView
 
@@ -170,15 +169,11 @@ enum class ECGParam(
 
   companion object {
 
-    fun getParams(): ArrayList<ECGParam> {
-      return values().toCollection(ArrayList())
-    }
-
     fun getParamsFor(types: List<String>): ArrayList<ECGParam> {
 
       val params = ArrayList<ECGParam>()
       for (type in types) {
-        params.addAll(values().filter {
+        params.addAll(entries.filter {
           it.types.contains(type) or (it.types.contains("all") and !params.contains(it))
         })
       }
@@ -203,9 +198,9 @@ class ECGParamAdapter(var ecgParams: ArrayList<ECGParam> = ECGParam.getParamsFor
   private var context: Context? = null
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ECGParamViewHolder {
-    val inflatedView = parent.inflate(R.layout.vital_param_list_item, false)
+    val binding = VitalParamListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     context = parent.context
-    return ECGParamViewHolder(inflatedView)
+    return ECGParamViewHolder(binding)
   }
 
   override fun getItemCount(): Int {
@@ -228,7 +223,7 @@ class ECGParamAdapter(var ecgParams: ArrayList<ECGParam> = ECGParam.getParamsFor
     "ecg" to true, "oxy" to false, "cap" to false
   )
 
-  inner class ECGParamViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+  inner class ECGParamViewHolder(v: VitalParamListItemBinding) : RecyclerView.ViewHolder(v.root) {
 
     private var twParamName: ESTextView? = null
     private var twParamValue: BootstrapEditText? = null
@@ -242,11 +237,11 @@ class ECGParamAdapter(var ecgParams: ArrayList<ECGParam> = ECGParam.getParamsFor
     )
 
     init {
-      this.twParamName = v.tw_param_name
-      this.twParamValue = v.tw_param_value
-      this.twParamMin = v.tw_param_min
-      this.twParamMax = v.tw_param_max
-      this.sbParamChange = v.sb_param_change
+      this.twParamName = v.twParamName
+      this.twParamValue = v.twParamValue
+      this.twParamMin = v.twParamMin
+      this.twParamMax = v.twParamMax
+      this.sbParamChange = v.sbParamChange
     }
 
 

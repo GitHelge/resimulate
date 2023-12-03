@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import com.google.gson.Gson
 import de.bauerapps.resimulate.adapters.ScenarioDownloadAdapter
+import de.bauerapps.resimulate.databinding.ScenarioDownloadOverviewDialogBinding
 import de.bauerapps.resimulate.helper.ESApplication
 import de.bauerapps.resimulate.simulations.*
 import de.bauerapps.resimulate.views.*
-import kotlinx.android.synthetic.main.scenario_download_overview_dialog.view.*
 import kotlin.math.roundToInt
 
 class ScenarioDownloadDialog(val context: AppCompatActivity) :
@@ -21,8 +21,7 @@ class ScenarioDownloadDialog(val context: AppCompatActivity) :
 
   private var dialog: ESDialog = ESDialog(context, R.style.NoAnimDialog)
 
-  private var dialogView: View = LayoutInflater.from(context)
-    .inflate(R.layout.scenario_download_overview_dialog, null)
+  private var dialogView =  ScenarioDownloadOverviewDialogBinding.inflate(context.layoutInflater)
 
   private var adapter: ScenarioDownloadAdapter
 
@@ -42,7 +41,7 @@ class ScenarioDownloadDialog(val context: AppCompatActivity) :
   val downloadPathologies = mutableMapOf<String, DownloadPathology>()
 
   private var layoutManager = LinearLayoutManager(context)
-  private var scenarioCount = 6
+  private var scenarioCount = 20
 
   init {
     scenarioSaveDialog.callback = this
@@ -50,22 +49,22 @@ class ScenarioDownloadDialog(val context: AppCompatActivity) :
     adapter.callback = this
 
     dialogView.apply {
-      rv_scenario_download.layoutManager = layoutManager
-      rv_scenario_download.adapter = adapter
-      rv_scenario_download.setHasFixedSize(true)
-      //rv_scenario_download.addOnScrollListener(scrollListener)
+      rvScenarioDownload.layoutManager = layoutManager
+      rvScenarioDownload.adapter = adapter
+      rvScenarioDownload.setHasFixedSize(true)
+      //rvScenarioDownload.addOnScrollListener(scrollListener)
 
-      rv_scenario_download.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+      rvScenarioDownload.addOnScrollListener(object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
           super.onScrolled(recyclerView, dx, dy)
           val id = layoutManager.findLastCompletelyVisibleItemPosition()
-          if (id >= scenarioCount - 3) {
+          if (id >= scenarioCount - 10) {
             addNewScenario(adapter.getLastScenarioId())
           }
         }
       })
 
-      b_check.setOnClickListener {
+      bCheck.setOnClickListener {
         // TODO: Necessary?
         setVitalSignView(ESViewType.ECG, false)
         setVitalSignView(ESViewType.PLETH, false)
@@ -74,7 +73,7 @@ class ScenarioDownloadDialog(val context: AppCompatActivity) :
       }
     }
 
-    dialog.setContentView(dialogView)
+    dialog.setContentView(dialogView.root)
 
     simConfig.simState.changeDuration = 1
 
@@ -89,7 +88,7 @@ class ScenarioDownloadDialog(val context: AppCompatActivity) :
       //.orderByChild("date")
       .orderByKey()
       .startAt(id)
-      .limitToFirst(3)
+      .limitToFirst(20)
 
     ref.addListenerForSingleValueEvent(object : ValueEventListener {
       override fun onCancelled(p0: DatabaseError) {}
@@ -122,9 +121,9 @@ class ScenarioDownloadDialog(val context: AppCompatActivity) :
       //.orderByChild("date")
       .limitToFirst(mPosts)
 
-    dialogView.tw_no_downloadable_scenarios.visibility = View.INVISIBLE
-    dialogView.rv_scenario_download.visibility = View.INVISIBLE
-    dialogView.pw_scenarios_loading.visibility = View.VISIBLE
+    dialogView.twNoDownloadableScenarios.visibility = View.INVISIBLE
+    dialogView.rvScenarioDownload.visibility = View.INVISIBLE
+    dialogView.pwScenariosLoading.visibility = View.VISIBLE
 
     ref.addListenerForSingleValueEvent(object : ValueEventListener {
       override fun onCancelled(p0: DatabaseError) {}
@@ -141,8 +140,8 @@ class ScenarioDownloadDialog(val context: AppCompatActivity) :
                 adapter.pathologies.add(scenario)
                 adapter.notifyItemInserted(adapter.itemCount - 1)
 
-                dialogView.rv_scenario_download.visibility = View.VISIBLE
-                dialogView.pw_scenarios_loading.visibility = View.INVISIBLE
+                dialogView.rvScenarioDownload.visibility = View.VISIBLE
+                dialogView.pwScenariosLoading.visibility = View.INVISIBLE
               }
             }
           }
@@ -150,10 +149,10 @@ class ScenarioDownloadDialog(val context: AppCompatActivity) :
 
         if (downloadPathologies.values.isEmpty()) {
           // Already downloaded all available Scenarios
-          dialogView.tw_no_downloadable_scenarios.visibility = View.VISIBLE
-          dialogView.pw_scenarios_loading.visibility = View.INVISIBLE
+          dialogView.twNoDownloadableScenarios.visibility = View.VISIBLE
+          dialogView.pwScenariosLoading.visibility = View.INVISIBLE
         } else {
-          dialogView.tw_no_downloadable_scenarios.visibility = View.INVISIBLE
+          dialogView.twNoDownloadableScenarios.visibility = View.INVISIBLE
         }
       }
 
@@ -170,20 +169,20 @@ class ScenarioDownloadDialog(val context: AppCompatActivity) :
   private fun initGraphs() {
 
     dialogView.apply {
-      vsg_ecg.callback = this@ScenarioDownloadDialog
-      vsg_oxy.callback = this@ScenarioDownloadDialog
-      vsg_cap.callback = this@ScenarioDownloadDialog
+      vsgEcg.callback = this@ScenarioDownloadDialog
+      vsgOxy.callback = this@ScenarioDownloadDialog
+      vsgCap.callback = this@ScenarioDownloadDialog
 
       ecgCalculation.currentHR = simConfig.vitalSigns.ecg.hr
       oxyCalculation.currentNIBP =
         NIBP(simConfig.vitalSigns.nibp.sys, simConfig.vitalSigns.nibp.dia)
 
-      vsg_ecg.setup(ESViewType.ECG, ESColor.HR, 2.0, -2.0, true)
-      vsg_ecg.setZOrderOnTop(true)
-      vsg_oxy.setup(ESViewType.PLETH, ESColor.SPO2, 150.0, 50.0, true)
-      vsg_oxy.setZOrderOnTop(true)
-      vsg_cap.setup(ESViewType.CAP, ESColor.ETCO2, 50.0, -5.0, true)
-      vsg_cap.setZOrderOnTop(true)
+      vsgEcg.setup(ESViewType.ECG, ESColor.HR, 2.0, -2.0, true)
+      vsgEcg.setZOrderOnTop(true)
+      vsgOxy.setup(ESViewType.PLETH, ESColor.SPO2, 150.0, 50.0, true)
+      vsgOxy.setZOrderOnTop(true)
+      vsgCap.setup(ESViewType.CAP, ESColor.ETCO2, 50.0, -5.0, true)
+      vsgCap.setZOrderOnTop(true)
     }
   }
 
@@ -191,16 +190,16 @@ class ScenarioDownloadDialog(val context: AppCompatActivity) :
     dialogView.apply {
       when (type) {
         ESViewType.ECG -> {
-          vsg_ecg.isToggledOn = isChecked
-          if (isChecked) vsg_ecg.restart() else vsg_ecg.clearStop()
+          vsgEcg.isToggledOn = isChecked
+          if (isChecked) vsgEcg.restart() else vsgEcg.clearStop()
         }
         ESViewType.PLETH -> {
-          vsg_oxy.isToggledOn = isChecked
-          if (isChecked) vsg_oxy.restart() else vsg_oxy.clearStop()
+          vsgOxy.isToggledOn = isChecked
+          if (isChecked) vsgOxy.restart() else vsgOxy.clearStop()
         }
         ESViewType.CAP -> {
-          vsg_cap.isToggledOn = isChecked
-          if (isChecked) vsg_cap.restart() else vsg_cap.clearStop()
+          vsgCap.isToggledOn = isChecked
+          if (isChecked) vsgCap.restart() else vsgCap.clearStop()
         }
       }
     }
@@ -224,12 +223,12 @@ class ScenarioDownloadDialog(val context: AppCompatActivity) :
     adapter.notifyItemRangeChanged(index, adapter.pathologies.size)
 
     if (adapter.pathologies.isEmpty()) {
-      dialogView.tw_no_downloadable_scenarios.visibility = View.VISIBLE
+      dialogView.twNoDownloadableScenarios.visibility = View.VISIBLE
     }
   }
 
   override fun requestSync() {
-    dialogView.vsg_oxy.performECGSync()
+    dialogView.vsgOxy.performECGSync()
   }
 
   override fun onDownloadClick(item: DownloadPathology) {

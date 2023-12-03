@@ -38,6 +38,7 @@
             <de.bauerapps.resimulate.views.ESTextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
+
                 android:id="@+id/tw_param_name"
                 android:textStyle="bold"
                 android:gravity="start|center"
