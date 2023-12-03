@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
+import de.bauerapps.resimulate.databinding.ChangeDurationDialogBinding
 import de.bauerapps.resimulate.views.ESDialog
-import kotlinx.android.synthetic.main.change_duration_dialog.view.*
 
 @SuppressLint("SetTextI18n", "InflateParams")
 class DynChangeConfig(context: AppCompatActivity, simConfig: SimConfig) {
@@ -19,20 +19,18 @@ class DynChangeConfig(context: AppCompatActivity, simConfig: SimConfig) {
 
   private var dynChangeDialog: ESDialog = ESDialog(context, R.style.NoAnimDialog)
 
-  private var dialogView: View = LayoutInflater.from(context)
-    .inflate(R.layout.change_duration_dialog, null)
+  private var dialogView = ChangeDurationDialogBinding.inflate(context.layoutInflater)
 
-  private var slider: SeekBar
+  private var slider: SeekBar = dialogView.sbChangeDuration.apply {
+    max = 119
+  }
 
   var callback: Callback? = null
 
   init {
-    slider = dialogView.sb_change_duration.apply {
-      max = 119
-    }
 
     dialogView.apply {
-      b_check.setOnClickListener {
+      bCheck.setOnClickListener {
 
         tempConfig.simState.changeDuration = slider.progress + 1
 
@@ -41,19 +39,19 @@ class DynChangeConfig(context: AppCompatActivity, simConfig: SimConfig) {
         dynChangeDialog.dismiss()
       }
 
-      b_cancel.setOnClickListener { dynChangeDialog.dismiss() }
+      bCancel.setOnClickListener { dynChangeDialog.dismiss() }
     }
 
     slider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
       override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-        dialogView.tw_dyn_change_value.text = "${p1 + 1}s"
+        dialogView.twDynChangeValue.text = "${p1 + 1}s"
       }
 
       override fun onStartTrackingTouch(p0: SeekBar?) {}
       override fun onStopTrackingTouch(p0: SeekBar?) {}
     })
 
-    dynChangeDialog.setContentView(dialogView)
+    dynChangeDialog.setContentView(dialogView.root)
   }
 
   fun openDialog(simConfig: SimConfig) {
@@ -61,7 +59,7 @@ class DynChangeConfig(context: AppCompatActivity, simConfig: SimConfig) {
 
     slider.progress = tempConfig.simState.changeDuration - 1
 
-    dialogView.tw_dyn_change_value.text = "${slider.progress + 1}s"
+    dialogView.twDynChangeValue.text = "${slider.progress + 1}s"
 
     dynChangeDialog.show()
   }

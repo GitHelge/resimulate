@@ -8,9 +8,9 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import de.bauerapps.resimulate.config.VitalSignConfig
+import de.bauerapps.resimulate.databinding.SingleModeConsoleDialogBinding
 import de.bauerapps.resimulate.helper.VSConfigType
 import de.bauerapps.resimulate.views.ESDialog
-import kotlinx.android.synthetic.main.single_mode_console_dialog.view.*
 import kotlin.math.roundToInt
 
 
@@ -28,8 +28,7 @@ class SingleModeConsole(context: SingleModeActivity, simConfig: SimConfig) :
 
   private var dialog: ESDialog = ESDialog(context, R.style.NoAnimDialog)
 
-  private var dialogView: View = LayoutInflater.from(context)
-    .inflate(R.layout.single_mode_console_dialog, null)
+  private var dialogView = SingleModeConsoleDialogBinding.inflate(context.layoutInflater)
 
   private var vsConfigs = mutableMapOf<VSConfigType, VitalSignConfig>()
   private var dynChangeConfig: DynChangeConfig
@@ -39,7 +38,7 @@ class SingleModeConsole(context: SingleModeActivity, simConfig: SimConfig) :
   var callback: Callback? = null
 
   init {
-    initSingleModeConsole(dialogView)
+    initSingleModeConsole(dialogView.root)
     dynChangeConfig = DynChangeConfig(context, tempConfig)
     dynChangeConfig.callback = this
     psConfig = PostShockConfig(context, tempConfig)
@@ -53,7 +52,7 @@ class SingleModeConsole(context: SingleModeActivity, simConfig: SimConfig) :
 
     dialog.apply {
 
-      setContentView(dialogView)
+      setContentView(dialogView.root)
       val width = (context.resources.displayMetrics.widthPixels * 0.90).roundToInt()
       dialog.window?.setLayout(width, LinearLayout.LayoutParams.MATCH_PARENT)
       show()
@@ -67,18 +66,18 @@ class SingleModeConsole(context: SingleModeActivity, simConfig: SimConfig) :
     val vitalSigns = tempConfig.vitalSigns
 
     dialogView.apply {
-      esd_pathology.text = vitalSigns.pathology.name
-      esd_defi_pathology.text = simState.defi.vitalSigns.pathology.name
+      esdPathology.text = vitalSigns.pathology.name
+      esdDefiPathology.text = simState.defi.vitalSigns.pathology.name
       setBoundsByPathology(vsConfigs, vitalSigns.pathology)
 
 
 
-      b_ecg_toggle.setActiveBackground(simState.ecgEnabled)
-      b_oxy_toggle.setActiveBackground(simState.oxyEnabled)
-      b_cap_toggle.setActiveBackground(simState.capEnabled)
-      b_nibp_toggle.setActiveBackground(simState.nibpEnabled)
-      b_cpr.setActiveBackground(simState.hasCPR)
-      b_copd.setActiveBackground(simState.hasCOPD)
+      bEcgToggle.setActiveBackground(simState.ecgEnabled)
+      bOxyToggle.setActiveBackground(simState.oxyEnabled)
+      bCapToggle.setActiveBackground(simState.capEnabled)
+      bNibpToggle.setActiveBackground(simState.nibpEnabled)
+      bCpr.setActiveBackground(simState.hasCPR)
+      bCopd.setActiveBackground(simState.hasCOPD)
     }
 
     vsConfigs[VSConfigType.HR]?.update(vitalSigns.ecg.hr)
@@ -100,7 +99,7 @@ class SingleModeConsole(context: SingleModeActivity, simConfig: SimConfig) :
   }
 
   private fun updateVitalSignConfigs(pathology: Pathology, vs: VitalSigns) {
-    dialogView.esd_pathology.text = pathology.name
+    dialogView.esdPathology.text = pathology.name
 
     setBoundsByPathology(vsConfigs, pathology)
     vsConfigs[VSConfigType.HR]?.update(vs.ecg.hr)
@@ -112,145 +111,146 @@ class SingleModeConsole(context: SingleModeActivity, simConfig: SimConfig) :
   }
 
   private fun initSingleModeConsole(view: View) {
+    dialogView.apply { 
+      view.apply {
+  
+        vsConfigs[VSConfigType.HR] = VitalSignConfig(
+          60,
+          bHrUp, bHrDown, twHrConfigLabel
+        )
+        vsConfigs[VSConfigType.PACER_THRES] = VitalSignConfig(
+          20,
+          bPacerThresUp, bPacerThresDown, twPacerThresConfigLabel, 10
+        )
+        vsConfigs[VSConfigType.SPO2] = VitalSignConfig(
+          97,
+          bSpo2Up, bSpo2Down, twSpo2ConfigLabel
+        )
+        vsConfigs[VSConfigType.ETCO2] = VitalSignConfig(
+          35,
+          bEtco2Up, bEtco2Down, twEtco2ConfigLabel
+        )
+        vsConfigs[VSConfigType.RESP_RATE] = VitalSignConfig(
+          12,
+          bRespRateUp, bRespRateDown, twRespRateConfigLabel
+        )
+        vsConfigs[VSConfigType.SYS] = VitalSignConfig(
+          120,
+          bSysUp, bSysDown, twSysConfigLabel
+        )
+        vsConfigs[VSConfigType.DIA] = VitalSignConfig(
+          80,
+          bDiaUp, bDiaDown, twDiaConfigLabel
+        )
+        vsConfigs[VSConfigType.SHOCK_THRES] = VitalSignConfig(
+          150,
+          bDefiEnergyThresUp, bDefiEnergyThresDown, twDefiEnergyValue, 10
+        )
+  
+        vsConfigs.forEach { it.value.callback = this@SingleModeConsole }
+  
+        esdPathology.text = tempConfig.vitalSigns.pathology.name
+        esdDefiPathology.text = tempConfig.simState.defi.vitalSigns.pathology.name
+        setBoundsByPathology(vsConfigs, tempConfig.vitalSigns.pathology)
+  
+        val simState = tempConfig.simState
+        val vitalSigns = tempConfig.vitalSigns
+  
+        bEcgToggle.setActiveBackground(simState.ecgEnabled)
+        bOxyToggle.setActiveBackground(simState.oxyEnabled)
+        bCapToggle.setActiveBackground(simState.capEnabled)
+        bNibpToggle.setActiveBackground(simState.nibpEnabled)
+        bCpr.setActiveBackground(simState.hasCPR)
+        bCopd.setActiveBackground(simState.hasCOPD)
+  
+        bEcgToggle.setOnClickListener {
+          tempConfig.simState.ecgEnabled = !bEcgToggle.isActive
+          bEcgToggle.setActiveBackground(!bEcgToggle.isActive)
+        }
+  
+        bOxyToggle.setOnClickListener {
+          tempConfig.simState.oxyEnabled = !bOxyToggle.isActive
+          bOxyToggle.setActiveBackground(!bOxyToggle.isActive)
+        }
+  
+        bCapToggle.setOnClickListener {
+          tempConfig.simState.capEnabled = !bCapToggle.isActive
+          bCapToggle.setActiveBackground(!bCapToggle.isActive)
+        }
+  
+        bNibpToggle.setOnClickListener {
+          tempConfig.simState.nibpEnabled = !bNibpToggle.isActive
+          bNibpToggle.setActiveBackground(!bNibpToggle.isActive)
+        }
+  
+        bCopd.setOnClickListener {
+          tempConfig.simState.hasCOPD = !bCopd.isActive
+          bCopd.setActiveBackground(!bCopd.isActive)
+        }
+  
+        bCpr.setOnClickListener {
+          tempConfig.simState.hasCPR = !bCpr.isActive
+          bCpr.setActiveBackground(!bCpr.isActive)
+        }
+  
+        vsConfigs[VSConfigType.HR]?.update(vitalSigns.ecg.hr)
+        vsConfigs[VSConfigType.PACER_THRES]?.update(simState.pacer.energyThreshold)
+        vsConfigs[VSConfigType.SPO2]?.update(vitalSigns.oxy.spo2)
+        vsConfigs[VSConfigType.ETCO2]?.update(vitalSigns.cap.etco2)
+        vsConfigs[VSConfigType.RESP_RATE]?.update(vitalSigns.cap.respRate)
+        vsConfigs[VSConfigType.SYS]?.update(vitalSigns.nibp.sys)
+        vsConfigs[VSConfigType.DIA]?.update(vitalSigns.nibp.dia)
+        vsConfigs[VSConfigType.SHOCK_THRES]?.update(simState.defi.energyThreshold)
+  
+        esdPathology.setOnDropDownItemClickListener { _, v, _ ->
+          val pathology = Pathology((v as TextView).text.toString())
+          val defaultVS = DefaultVitalSigns.fromPathology(pathology)
+          updateVitalSignConfigs(pathology, defaultVS)
+          //notifyRequireConfigPush()
+          //TODO: Update
+  
+          callback?.setFullscreen()
+        }
+  
+        esdDefiPathology.setOnDropDownItemClickListener { _, v, _ ->
+          val pathology = Pathology((v as TextView).text.toString())
+          val defaultVS = DefaultVitalSigns.fromPathology(pathology)
+          esdDefiPathology.text = pathology.name
+  
+          tempConfig.simState.defi.vitalSigns = defaultVS.deepCopy()
+          //ncService?.sendSomething(Gson().toJson(simConfig.simState.defi))
+  
+          callback?.setFullscreen()
+        }
+  
+        esdPathology.setOnDismissListener {
+          callback?.setFullscreen()
+        }
+  
+        dialogView.bDynchangeConfig.setOnClickListener {
+          dynChangeConfig.openDialog(tempConfig)
+        }
 
-    view.apply {
-
-      vsConfigs[VSConfigType.HR] = VitalSignConfig(
-        60,
-        b_hr_up, b_hr_down, tw_hr_config_label
-      )
-      vsConfigs[VSConfigType.PACER_THRES] = VitalSignConfig(
-        20,
-        b_pacer_thres_up, b_pacer_thres_down, tw_pacer_thres_config_label, 10
-      )
-      vsConfigs[VSConfigType.SPO2] = VitalSignConfig(
-        97,
-        b_spo2_up, b_spo2_down, tw_spo2_config_label
-      )
-      vsConfigs[VSConfigType.ETCO2] = VitalSignConfig(
-        35,
-        b_etco2_up, b_etco2_down, tw_etco2_config_label
-      )
-      vsConfigs[VSConfigType.RESP_RATE] = VitalSignConfig(
-        12,
-        b_resp_rate_up, b_resp_rate_down, tw_resp_rate_config_label
-      )
-      vsConfigs[VSConfigType.SYS] = VitalSignConfig(
-        120,
-        b_sys_up, b_sys_down, tw_sys_config_label
-      )
-      vsConfigs[VSConfigType.DIA] = VitalSignConfig(
-        80,
-        b_dia_up, b_dia_down, tw_dia_config_label
-      )
-      vsConfigs[VSConfigType.SHOCK_THRES] = VitalSignConfig(
-        150,
-        b_defi_energy_thres_up, b_defi_energy_thres_down, tw_defi_energy_value, 10
-      )
-
-      vsConfigs.forEach { it.value.callback = this@SingleModeConsole }
-
-      esd_pathology.text = tempConfig.vitalSigns.pathology.name
-      esd_defi_pathology.text = tempConfig.simState.defi.vitalSigns.pathology.name
-      setBoundsByPathology(vsConfigs, tempConfig.vitalSigns.pathology)
-
-      val simState = tempConfig.simState
-      val vitalSigns = tempConfig.vitalSigns
-
-      b_ecg_toggle.setActiveBackground(simState.ecgEnabled)
-      b_oxy_toggle.setActiveBackground(simState.oxyEnabled)
-      b_cap_toggle.setActiveBackground(simState.capEnabled)
-      b_nibp_toggle.setActiveBackground(simState.nibpEnabled)
-      b_cpr.setActiveBackground(simState.hasCPR)
-      b_copd.setActiveBackground(simState.hasCOPD)
-
-      b_ecg_toggle.setOnClickListener {
-        tempConfig.simState.ecgEnabled = !b_ecg_toggle.isActive
-        b_ecg_toggle.setActiveBackground(!b_ecg_toggle.isActive)
-      }
-
-      b_oxy_toggle.setOnClickListener {
-        tempConfig.simState.oxyEnabled = !b_oxy_toggle.isActive
-        b_oxy_toggle.setActiveBackground(!b_oxy_toggle.isActive)
-      }
-
-      b_cap_toggle.setOnClickListener {
-        tempConfig.simState.capEnabled = !b_cap_toggle.isActive
-        b_cap_toggle.setActiveBackground(!b_cap_toggle.isActive)
-      }
-
-      b_nibp_toggle.setOnClickListener {
-        tempConfig.simState.nibpEnabled = !b_nibp_toggle.isActive
-        b_nibp_toggle.setActiveBackground(!b_nibp_toggle.isActive)
-      }
-
-      b_copd.setOnClickListener {
-        tempConfig.simState.hasCOPD = !b_copd.isActive
-        b_copd.setActiveBackground(!b_copd.isActive)
-      }
-
-      b_cpr.setOnClickListener {
-        tempConfig.simState.hasCPR = !b_cpr.isActive
-        b_cpr.setActiveBackground(!b_cpr.isActive)
-      }
-
-      vsConfigs[VSConfigType.HR]?.update(vitalSigns.ecg.hr)
-      vsConfigs[VSConfigType.PACER_THRES]?.update(simState.pacer.energyThreshold)
-      vsConfigs[VSConfigType.SPO2]?.update(vitalSigns.oxy.spo2)
-      vsConfigs[VSConfigType.ETCO2]?.update(vitalSigns.cap.etco2)
-      vsConfigs[VSConfigType.RESP_RATE]?.update(vitalSigns.cap.respRate)
-      vsConfigs[VSConfigType.SYS]?.update(vitalSigns.nibp.sys)
-      vsConfigs[VSConfigType.DIA]?.update(vitalSigns.nibp.dia)
-      vsConfigs[VSConfigType.SHOCK_THRES]?.update(simState.defi.energyThreshold)
-
-      esd_pathology.setOnDropDownItemClickListener { _, v, _ ->
-        val pathology = Pathology((v as TextView).text.toString())
-        val defaultVS = DefaultVitalSigns.fromPathology(pathology)
-        updateVitalSignConfigs(pathology, defaultVS)
-        //notifyRequireConfigPush()
-        //TODO: Update
-
-        callback?.setFullscreen()
-      }
-
-      esd_defi_pathology.setOnDropDownItemClickListener { _, v, _ ->
-        val pathology = Pathology((v as TextView).text.toString())
-        val defaultVS = DefaultVitalSigns.fromPathology(pathology)
-        esd_defi_pathology.text = pathology.name
-
-        tempConfig.simState.defi.vitalSigns = defaultVS.deepCopy()
-        //ncService?.sendSomething(Gson().toJson(simConfig.simState.defi))
-
-        callback?.setFullscreen()
-      }
-
-      esd_pathology.setOnDismissListener {
-        callback?.setFullscreen()
-      }
-
-      b_dynchange_config.setOnClickListener {
-        dynChangeConfig.openDialog(tempConfig)
-      }
-
-      b_ps_pathology_config.setOnClickListener {
-        psConfig.openDialog(tempConfig)
-      }
-
-      b_check.setOnClickListener {
-        performConfigUpdate()
-        dialog.dismiss()
-      }
+        dialogView.bPsPathologyConfig.setOnClickListener {
+          psConfig.openDialog(tempConfig)
+        }
+  
+        bCheck.setOnClickListener {
+          performConfigUpdate()
+          dialog.dismiss()
+        }
 
 
-      b_cancel.setOnClickListener {
-        dialog.dismiss()
-      }
+        dialogView.bCancel.setOnClickListener {
+          dialog.dismiss()
+        }
+      } 
     }
   }
 
   private fun performConfigUpdate() {
 
-    val pathology = dialogView.esd_pathology.text.toString()
+    val pathology = dialogView.esdPathology.text.toString()
 
     tempConfig.apply {
       if (pathology != vitalSigns.pathology.name)

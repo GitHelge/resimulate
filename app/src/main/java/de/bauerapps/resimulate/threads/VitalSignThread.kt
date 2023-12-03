@@ -16,7 +16,7 @@ class VitalSignThread(
   }
 
   private var running = false
-  private var canvas: Canvas? = null
+  private lateinit var canvas: Canvas
 
   override fun run() {
     var startTime: Long
@@ -28,7 +28,6 @@ class VitalSignThread(
 
     while (running) {
       startTime = System.nanoTime()
-      canvas = null
 
       //try locking the canvas for pixel editing
       try {
@@ -40,14 +39,11 @@ class VitalSignThread(
       } catch (e: Exception) {
         e.printStackTrace()
       } finally {
-        if (canvas != null) {
           try {
             surfaceHolder.unlockCanvasAndPost(canvas)
           } catch (e: Exception) {
             e.printStackTrace()
           }
-
-        }
       }
 
       timeMillis = (System.nanoTime() - startTime) / 1000000

@@ -3,7 +3,9 @@ package de.bauerapps.resimulate.views
 import android.app.Dialog
 import android.content.Context
 import android.view.WindowManager
-import de.bauerapps.resimulate.helper.FullscreenHelper
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 class ESDialog(
   context: Context, themeResId: Int,
@@ -21,7 +23,16 @@ class ESDialog(
     super.show()
 
     //Set the dialog to immersive
-    window?.decorView?.systemUiVisibility = FullscreenHelper.defaultSystemVisibility()
+    window?.let {
+      WindowCompat.setDecorFitsSystemWindows(it, false)
+      WindowInsetsControllerCompat(it, it.decorView).apply {
+        hide(WindowInsetsCompat.Type.statusBars())
+        hide(WindowInsetsCompat.Type.navigationBars())
+        systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+      }
+    }
+
+
 
     // Set the dialog to focusable again.
     window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)

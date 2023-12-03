@@ -6,13 +6,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.ActivityInfo
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import android.view.WindowInsets
 import android.view.WindowManager
 import cn.pedant.SweetAlert.SweetAlertDialog
 import de.bauerapps.resimulate.config.*
@@ -28,7 +31,7 @@ import de.bauerapps.resimulate.views.ESViewType
 import com.beardedhen.androidbootstrap.BootstrapText
 import com.beardedhen.androidbootstrap.font.FontAwesome
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_trainee_view.*
+import de.bauerapps.resimulate.databinding.ActivityTraineeViewBinding
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -36,8 +39,8 @@ class TraineeActivity : AppCompatActivity(),
   NearbyConnectionService.NCSCallback,
   NearbyConnectionService.NCSEndpointCallback,
   ESSurfaceView.Callback,
-  PacerConfig.PacerCallback,
-  DefiConfig.DefiConfigCallback,
+  TraineePacerConfig.PacerCallback,
+  TraineeActivityDefiConfig.DefiConfigCallback,
   Sound.SoundCallback,
   Measurement.MeasurementCallback,
   ECGCalculation.Callback,
@@ -69,34 +72,41 @@ class TraineeActivity : AppCompatActivity(),
   private val capMeasurement = ETCO2Measurement()
 
   private var sound: Sound? = null
-  private var defiConfig: DefiConfig? = null
+  private var defiConfig: TraineeActivityDefiConfig? = null
   private var alarmConfig: AlarmConfig? = null
   private var nibpConfig: NIBPConfig? = null
 
-  private var pacerConfig: PacerConfig? = null
+  private var pacerConfig: TraineePacerConfig? = null
   private var onOffConfig: OnOffConfig? = null
   private var shockReceived = false
+
+  lateinit var binding: ActivityTraineeViewBinding;
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    setContentView(R.layout.activity_trainee_view)
+    binding = ActivityTraineeViewBinding.inflate(layoutInflater)
+    setContentView(binding.root)
 
     // Sets interface to portrait or landscape
     if (resources.getBoolean(R.bool.forceLandscape)) {
       requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
     }
 
-    window?.setFlags(
-      WindowManager.LayoutParams.FLAG_FULLSCREEN,
-      WindowManager.LayoutParams.FLAG_FULLSCREEN
-    )
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      window.insetsController?.hide(WindowInsets.Type.statusBars())
+    } else {
+      window.setFlags(
+        WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        WindowManager.LayoutParams.FLAG_FULLSCREEN
+      )
+    }
 
 
     initVitalSignGraphs()
     sound = Sound(this)
-    defiConfig = DefiConfig(this, sound, simConfig)
-    pacerConfig = PacerConfig(this, simConfig)
+    defiConfig = TraineeActivityDefiConfig(this, sound, simConfig)
+    pacerConfig = TraineePacerConfig(this, simConfig)
     onOffConfig = OnOffConfig(this)
     alarmConfig = AlarmConfig(this, sound)
     nibpConfig = NIBPConfig(this)
@@ -112,36 +122,36 @@ class TraineeActivity : AppCompatActivity(),
     capMeasurement.measurementCallback = this
     nibpConfig?.callback = this
 
-    b_back.setOnClickListener { onBackPressed() }
+    binding.bBack.setOnClickListener { onBackPressed() }
 
     val content: View = findViewById(android.R.id.content)
 
     content.afterMeasured {
 
       val availableHeight =
-        this.height /*- ll_header.height*/ - ll_footer.height + ll_toggle_ui.height
-      if (!resources.getBoolean(R.bool.is600dp) || availableHeight < ll_sidepanel_content.height) {
+        this.height /*- ll_header.height*/ - binding.llFooter.height + binding.llToggleUi.height
+      if (!resources.getBoolean(R.bool.is600dp) || availableHeight < binding.llSidepanelContent.height) {
 
-        ll_pacer_ui.visibility = View.GONE
+        binding.llPacerUi.visibility = View.GONE
 
-        b_toggle_ui.setOnClickListener {
+        binding.bToggleUi.setOnClickListener {
 
-          val pacerVisible = ll_pacer_ui.visibility == View.VISIBLE
+          val pacerVisible = binding.llPacerUi.visibility == View.VISIBLE
 
-          ll_pacer_ui.visibility = if (pacerVisible) View.GONE else View.VISIBLE
-          ll_defi_ui.visibility = if (pacerVisible) View.VISIBLE else View.GONE
+          binding.llPacerUi.visibility = if (pacerVisible) View.GONE else View.VISIBLE
+          binding.llDefiUi.visibility = if (pacerVisible) View.VISIBLE else View.GONE
 
-          b_toggle_ui.text = if (pacerVisible)
+          binding.bToggleUi.text = if (pacerVisible)
             getString(R.string.show_pacer_module)
           else
             getString(R.string.show_defi_module)
         }
       } else {
-        ll_toggle_ui.visibility = View.GONE
+        binding.llToggleUi.visibility = View.GONE
       }
       Log.i(
         TAG,
-        "Available screen height: $availableHeight, scrollview content height: ${ll_sidepanel_content.height}"
+        "Available screen height: $availableHeight, scrollview content height: ${binding.llSidepanelContent.height}"
       )
 
     }
@@ -150,7 +160,7 @@ class TraineeActivity : AppCompatActivity(),
     //countUpTimer.start()
 
     if (NCS.chosenEndpoint?.endpointState == NCSEndpointState.CONNECTED)
-      b_connection_status.bootstrapBrand =
+      binding.bConnectionStatus.bootstrapBrand =
         ESBrandStyle(R.color.bootstrap_gray_dark, R.color.success)
 
   }
@@ -191,25 +201,25 @@ class TraineeActivity : AppCompatActivity(),
 
     when (type) {
       ESViewType.ECG -> {
-        if (isChecked) vsv_ecg.restart() else {
-          vsv_ecg.clearStop()
+        if (isChecked) binding.vsvEcg.restart() else {
+          binding.vsvEcg.clearStop()
           if (!simConfig.simState.oxyEnabled)
-            tw_hr_value.text = "--"
+            binding.twHrValue.text = "--"
         }
       }
       ESViewType.PLETH -> {
-        if (isChecked) vsv_oxy.restart() else {
-          vsv_oxy.clearStop()
-          tw_spo2_value.text = "--"
+        if (isChecked) binding.vsvOxy.restart() else {
+          binding.vsvOxy.clearStop()
+          binding.twSpo2Value.text = "--"
           if (!simConfig.simState.ecgEnabled)
-            tw_hr_value.text = "--"
+            binding.twHrValue.text = "--"
         }
       }
       ESViewType.CAP -> {
-        if (isChecked) vsv_cap.restart() else {
-          vsv_cap.clearStop()
-          tw_resp_rate_value.text = "--"
-          tw_etco2_value.text = "--"
+        if (isChecked) binding.vsvCap.restart() else {
+          binding.vsvCap.clearStop()
+          binding.twRespRateValue.text = "--"
+          binding.twEtco2Value.text = "--"
         }
       }
     }
@@ -223,14 +233,14 @@ class TraineeActivity : AppCompatActivity(),
   override fun onPostCreate(savedInstanceState: Bundle?) {
     super.onPostCreate(savedInstanceState)
 
-    fullscreenHelper = FullscreenHelper(CL_whole)
-    fullscreenHelper?.delayedHide(200)
+    fullscreenHelper = FullscreenHelper(binding.CLWhole)
+    fullscreenHelper?.hide()
   }
 
   override fun onPacerUpdate(pacerState: PacerState) {
     val tempConfig = simConfig.deepCopy()
     tempConfig.simState.pacer = pacerState
-    vsv_ecg.pacerEnergy = pacerState.energy
+    binding.vsvEcg.pacerEnergy = pacerState.energy
     ncService?.sendSomething(Gson().toJson(pacerState))
     simConfig = tempConfig
   }
@@ -238,8 +248,8 @@ class TraineeActivity : AppCompatActivity(),
   @SuppressLint("SetTextI18n")
   override fun onUpdateUI(type: PacerConfigType, value: Int) {
     when (type) {
-      PacerConfigType.Energy -> tw_pacer_energy.text = "$value\nmA"
-      PacerConfigType.Frequency -> tw_pacer_frequency.text = "$value\nbpm"
+      PacerConfigType.Energy -> binding.twPacerEnergy.text = "$value\nmA"
+      PacerConfigType.Frequency -> binding.twPacerFrequency.text = "$value\nbpm"
     }
   }
 
@@ -281,7 +291,7 @@ class TraineeActivity : AppCompatActivity(),
   override fun requestSync() {
     if (!simConfig.simState.oxyEnabled) return
 
-    vsv_oxy.performECGSync()
+    binding.vsvOxy.performECGSync()
   }
 
   override fun onMeasurement(type: MeasurementType, value: Int) {
@@ -289,8 +299,8 @@ class TraineeActivity : AppCompatActivity(),
       MeasurementType.ECG -> {
         if (!simConfig.simState.ecgEnabled) return
         runOnUiThread {
-          tw_hr_label.text = getString(R.string.hr_bpm)
-          tw_hr_value.text = if (value >= 20) "$value" else "--"
+          binding.twHrLabel.text = getString(R.string.hr_bpm)
+          binding.twHrValue.text = if (value >= 20) "$value" else "--"
 
           alarmConfig?.testForAlarm(AlarmType.HR, value)
           if (ecgMeasurement.isOverMaxIdleTime())
@@ -303,12 +313,12 @@ class TraineeActivity : AppCompatActivity(),
           if (!simConfig.simState.ecgEnabled) {
             val avgHR = oxyMeasurement.getAverageHeartrateFromSPO2()
 
-            tw_hr_label.text = getString(R.string.hr_bpm_oxy)
-            tw_hr_value.text = if (avgHR >= 20) "$avgHR" else "--"
+            binding.twHrLabel.text = getString(R.string.hr_bpm_oxy)
+            binding.twHrValue.text = if (avgHR >= 20) "$avgHR" else "--"
             alarmConfig?.testForAlarm(AlarmType.HR, avgHR)
           }
 
-          tw_spo2_value.text = if (value != 0) "$value" else "--"
+          binding.twSpo2Value.text = if (value != 0) "$value" else "--"
           alarmConfig?.testForAlarm(AlarmType.SPO2, value)
         }
       }
@@ -316,14 +326,14 @@ class TraineeActivity : AppCompatActivity(),
         if (!simConfig.simState.capEnabled) return
         runOnUiThread {
 
-          tw_etco2_value.text = if (value != 0) "$value" else "--"
+          binding.twEtco2Value.text = if (value != 0) "$value" else "--"
           alarmConfig?.testForAlarm(AlarmType.ETCO2, value)
         }
       }
       MeasurementType.RESP_RATE -> {
         if (!simConfig.simState.capEnabled) return
         runOnUiThread {
-          tw_resp_rate_value.text = if (value != 0) "$value" else "--"
+          binding.twRespRateValue.text = if (value != 0) "$value" else "--"
           alarmConfig?.testForAlarm(AlarmType.RESP_RATE, value)
         }
       }
@@ -342,7 +352,7 @@ class TraineeActivity : AppCompatActivity(),
         }
 
         if (defiConfig?.isSynchronized == true) {
-          vsv_ecg.drawSyncPeak = true
+          binding.vsvEcg.drawSyncPeak = true
           if (defiConfig?.isShockPending == true)
             defiConfig?.syncShock()
         }
@@ -399,8 +409,8 @@ class TraineeActivity : AppCompatActivity(),
         val diaText = if (diaVal > 20) "$diaVal" else "--"
         val avgText =
           if (sysVal > 20 && diaVal > 20) "${(diaVal + 0.5 * (sysVal - diaVal)).roundToInt()}" else "--"
-        tw_bp_sys_dia_value.text = "$sysText/$diaText"
-        tw_bp_avg_value.text = "($avgText)"
+        binding.twBpSysDiaValue.text = "$sysText/$diaText"
+        binding.twBpAvgValue.text = "($avgText)"
 
         alarmConfig?.testForAlarm(AlarmType.SYS, sysVal)
         alarmConfig?.testForAlarm(AlarmType.DIA, diaVal)
@@ -415,9 +425,9 @@ class TraineeActivity : AppCompatActivity(),
 
   override fun shutdownDevice() {
     alarmConfig?.deactivateAllAlarms()
-    vsv_ecg.simulationStarted = false
-    vsv_oxy.simulationStarted = false
-    vsv_cap.simulationStarted = false
+    binding.vsvEcg.simulationStarted = false
+    binding.vsvOxy.simulationStarted = false
+    binding.vsvCap.simulationStarted = false
     sound?.clearAllSounds()
   }
 
@@ -443,39 +453,39 @@ class TraineeActivity : AppCompatActivity(),
     sound?.createAllSounds()
     nibpConfig?.audioFinished()
     nibpConfig?.resetRepeatedMeasurement()
-    vsv_ecg.simulationStarted = true
-    vsv_oxy.simulationStarted = true
-    vsv_cap.simulationStarted = true
+    binding.vsvEcg.simulationStarted = true
+    binding.vsvOxy.simulationStarted = true
+    binding.vsvCap.simulationStarted = true
     setVitalSignView(ESViewType.ECG, simConfig.simState.ecgEnabled)
     setVitalSignView(ESViewType.PLETH, simConfig.simState.oxyEnabled)
     setVitalSignView(ESViewType.CAP, simConfig.simState.capEnabled)
-    vsv_ecg.needsGraphReset = true
-    vsv_oxy.needsGraphReset = true
-    vsv_cap.needsGraphReset = true
+    binding.vsvEcg.needsGraphReset = true
+    binding.vsvOxy.needsGraphReset = true
+    binding.vsvCap.needsGraphReset = true
   }
 
   @SuppressLint("SetTextI18n")
   override fun updateTimer(tick: Long) {
-    tw_bp_repeat.text = "(${tick.formatTimeMMSS})"
+    binding.twBpRepeat.text = "(${tick.formatTimeMMSS})"
   }
 
   override fun updateTimer(alarmConfig: AlarmConfig, ms: Long) {
-    b_mute.bootstrapText = BootstrapText.Builder(this, false)
+    binding.bMute.bootstrapText = BootstrapText.Builder(this, false)
       .addFontAwesomeIcon(FontAwesome.FA_BELL_SLASH)
       .addText(ms.formatTimeMMSS).build()
   }
 
   private fun initVitalSignGraphs() {
 
-    vsv_ecg.callback = this
-    vsv_oxy.callback = this
-    vsv_cap.callback = this
+    binding.vsvEcg.callback = this
+    binding.vsvOxy.callback = this
+    binding.vsvCap.callback = this
     ecgCalculation.currentHR = simConfig.vitalSigns.ecg.hr
     oxyCalculation.currentNIBP = NIBP(simConfig.vitalSigns.nibp.sys, simConfig.vitalSigns.nibp.dia)
 
-    vsv_ecg.setup(ESViewType.ECG, ESColor.HR, 2.0, -2.0)
-    vsv_oxy.setup(ESViewType.PLETH, ESColor.SPO2, 150.0, 50.0)
-    vsv_cap.setup(ESViewType.CAP, ESColor.ETCO2, 50.0, -5.0)
+    binding.vsvEcg.setup(ESViewType.ECG, ESColor.HR, 2.0, -2.0)
+    binding.vsvOxy.setup(ESViewType.PLETH, ESColor.SPO2, 150.0, 50.0)
+    binding.vsvCap.setup(ESViewType.CAP, ESColor.ETCO2, 50.0, -5.0)
   }
 
   private var mConnection = object : ServiceConnection {
@@ -540,7 +550,7 @@ class TraineeActivity : AppCompatActivity(),
       }
       NCSEndpointState.LOST, NCSEndpointState.WAITING -> color = R.color.warning
       NCSEndpointState.CONNECTED -> {
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
           ncService?.sendSomething(Gson().toJson(simConfig.simState.pacer))
         }, 500)
         color = R.color.success
@@ -551,7 +561,7 @@ class TraineeActivity : AppCompatActivity(),
       }
     }
 
-    b_connection_status.bootstrapBrand = ESBrandStyle(R.color.colorPrimaryDark, color)
+    binding.bConnectionStatus.bootstrapBrand = ESBrandStyle(R.color.colorPrimaryDark, color)
   }
 
   override fun error(title: String, description: String) {
@@ -576,6 +586,7 @@ class TraineeActivity : AppCompatActivity(),
     sound?.clearAllSounds()
   }
 
+  @Deprecated("Deprecated in Java")
   override fun onBackPressed() {
     onOffConfig?.openStopDialog(true)
   }
@@ -596,18 +607,18 @@ class TraineeActivity : AppCompatActivity(),
   }
 
   override fun onResume() {
-    vsv_ecg.resume()
-    vsv_oxy.resume()
-    vsv_cap.resume()
+    binding.vsvEcg.resume()
+    binding.vsvOxy.resume()
+    binding.vsvCap.resume()
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    fullscreenHelper?.delayedHide(100)
+    fullscreenHelper?.hide()
     super.onResume()
   }
 
   override fun onPause() {
-    vsv_ecg.pause()
-    vsv_oxy.pause()
-    vsv_cap.pause()
+    binding.vsvEcg.pause()
+    binding.vsvOxy.pause()
+    binding.vsvCap.pause()
     window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     super.onPause()
   }

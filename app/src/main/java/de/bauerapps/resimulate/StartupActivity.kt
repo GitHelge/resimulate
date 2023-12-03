@@ -15,11 +15,12 @@ import android.content.ServiceConnection
 import android.net.Uri
 import android.os.Build
 import android.os.IBinder
+import android.os.Looper
 import android.provider.Settings
 import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.util.Log
+import android.view.WindowInsets
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -33,14 +34,13 @@ import de.bauerapps.resimulate.threads.NCSEndpointState
 import de.bauerapps.resimulate.threads.NCSState
 import de.bauerapps.resimulate.threads.NearbyConnectionService
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand
-import com.beardedhen.androidbootstrap.font.FontAwesome
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
+import de.bauerapps.resimulate.databinding.ActivityStartupBinding
 import de.bauerapps.resimulate.helper.ESApplication
-import kotlinx.android.synthetic.main.activity_startup.*
 
 
 class StartupActivity : AppCompatActivity(),
@@ -60,58 +60,66 @@ class StartupActivity : AppCompatActivity(),
   private var fullscreenHelper: FullscreenHelper? = null
   private var scenarioOverviewDialog: ScenarioOverviewDialog? = null
   private var scenarioDownloadDialog: ScenarioDownloadDialog? = null
+  
+  private lateinit var binding: ActivityStartupBinding
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    setContentView(R.layout.activity_startup)
+    binding = ActivityStartupBinding.inflate(layoutInflater)
+    setContentView(binding.root)
 
     // Sets interface to portrait or landscape
     if (resources.getBoolean(R.bool.forceLandscape)) {
       requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
     }
 
-    window?.setFlags(
-      WindowManager.LayoutParams.FLAG_FULLSCREEN,
-      WindowManager.LayoutParams.FLAG_FULLSCREEN
-    )
-
-    b_trainee_choice.setOnCheckedChangedListener { _, isChecked ->
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      window.insetsController?.hide(WindowInsets.Type.statusBars())
+    } else {
+      window.setFlags(
+        WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        WindowManager.LayoutParams.FLAG_FULLSCREEN
+      )
+    }
+    
+    
+    binding.bTraineeChoice.setOnCheckedChangedListener { _, isChecked ->
       if (isChecked) traineeChosen()
     }
 
-    b_trainer_choice.setOnCheckedChangedListener { _, isChecked ->
+    binding.bTrainerChoice.setOnCheckedChangedListener { _, isChecked ->
       if (isChecked) trainerChosen()
     }
 
-    b_trainee_login.setOnClickListener(this)
+    binding.bTraineeLogin.setOnClickListener(this)
     /*b_trainee_search.setOnClickListener(this)
     b_trainer_search.setOnClickListener(this)*/
-    b_restart.setOnClickListener(this)
-    b_single_mode.setOnClickListener(this)
-    b_scenario_designer.setOnClickListener(this)
-    b_scenario_overview.setOnClickListener(this)
-    b_scenarios.setOnClickListener(this)
-    b_scenario_get_more.setOnClickListener(this)
+    binding.bRestart.setOnClickListener(this)
+    binding.bSingleMode.setOnClickListener(this)
+    binding.bScenarioDesigner.setOnClickListener(this)
+    binding.bScenarioOverview.setOnClickListener(this)
+    binding.bScenarios.setOnClickListener(this)
+    binding.bScenarioGetMore.setOnClickListener(this)
 
-    tw_location_description.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+    binding.twLocationDescription.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       getString(R.string.fine_location_description)
     } else {
       getString(R.string.coarse_location_description)
     }
 
-    et_trainee_name.setOnEditorActionListener { view, _, event ->
+    binding.etTraineeName.setOnEditorActionListener { view, _, event ->
       if (event != null &&
         event.keyCode == EditorInfo.IME_ACTION_DONE &&
         view.text.isNotEmpty()
       ) {
-        b_trainee_login.callOnClick()
+        binding.bTraineeLogin.callOnClick()
         return@setOnEditorActionListener true
       }
       return@setOnEditorActionListener false
     }
 
-    fullscreenHelper = FullscreenHelper(CL_whole)
+    fullscreenHelper = FullscreenHelper(binding.CLWhole)
     scenarioOverviewDialog = ScenarioOverviewDialog(this)
     scenarioDownloadDialog = ScenarioDownloadDialog(this)
   }
@@ -119,12 +127,12 @@ class StartupActivity : AppCompatActivity(),
   private var hasWatcher = false
   private var traineeNameListener = object : SimpleTextWatcher {
     override fun afterTextChanged(text: String) {
-      if (text.isNotEmpty() && !b_trainee_login.isEnabled) {
-        b_trainee_login.isEnabled = true
-        b_trainee_login.bootstrapBrand = DefaultBootstrapBrand.SUCCESS
-      } else if (text.isEmpty() && b_trainee_login.isEnabled) {
-        b_trainee_login.isEnabled = false
-        b_trainee_login.bootstrapBrand = DefaultBootstrapBrand.REGULAR
+      if (text.isNotEmpty() && !binding.bTraineeLogin.isEnabled) {
+        binding.bTraineeLogin.isEnabled = true
+        binding.bTraineeLogin.bootstrapBrand = DefaultBootstrapBrand.SUCCESS
+      } else if (text.isEmpty() && binding.bTraineeLogin.isEnabled) {
+        binding.bTraineeLogin.isEnabled = false
+        binding.bTraineeLogin.bootstrapBrand = DefaultBootstrapBrand.REGULAR
       }
     }
   }
@@ -132,7 +140,7 @@ class StartupActivity : AppCompatActivity(),
   override fun onClick(view: View?) {
     if (view == null) return
     when (view) {
-      b_trainee_login -> {
+      binding.bTraineeLogin -> {
         if (ncService == null) return
         if (ncService!!.needPermissions()) {
           val desc = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -142,19 +150,19 @@ class StartupActivity : AppCompatActivity(),
           }
           Snackbar.make(view, desc, Snackbar.LENGTH_LONG).show()
         } else {
-          require(et_trainee_name.text != null) { "Trainee Name is null" }
-          ncService?.updateUser(UserType.Trainee, et_trainee_name.text.toString())
+          require(binding.etTraineeName.text != null) { "Trainee Name is null" }
+          ncService?.updateUser(UserType.Trainee, binding.etTraineeName.text.toString())
 
           if (NCS.ncsState == NCSState.IDLE)
             ncService?.updateState(NCSState.SEARCHING)
 
-          b_restart.visibility = View.VISIBLE
-          ll_trainee_waiting_for_trainer.visibility = View.VISIBLE
+          binding.bRestart.visibility = View.VISIBLE
+          binding.llTraineeWaitingForTrainer.visibility = View.VISIBLE
         }
         if (currentFocus != null) {
           val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
           imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-          fullscreenHelper?.delayedHide(0)
+          fullscreenHelper?.hide()
         }
       }
       /*b_trainee_search -> {
@@ -171,27 +179,27 @@ class StartupActivity : AppCompatActivity(),
               else -> return
           }
       }*/
-      b_give_permission -> askPermission(view)
-      b_restart -> {
+      binding.bGivePermission -> askPermission(view)
+      binding.bRestart -> {
         restart()
-        b_restart.visibility = View.GONE
+        binding.bRestart.visibility = View.GONE
       }
-      b_single_mode -> {
+      binding.bSingleMode -> {
         restart()
         val intent = Intent(this, SingleModeActivity::class.java)
         startActivity(intent)
       }
-      b_scenario_designer -> {
+      binding.bScenarioDesigner -> {
         restart()
         val intent = Intent(this, ScenarioDesignActivity::class.java)
         startActivity(intent)
       }
-      b_scenarios -> {
-        val isVisible = ll_scenario_view_toggle.visibility == View.VISIBLE
-        ll_scenario_view_toggle.visibility = if (isVisible) View.INVISIBLE else View.VISIBLE
+      binding.bScenarios -> {
+        val isVisible = binding.llScenarioViewToggle.visibility == View.VISIBLE
+        binding.llScenarioViewToggle.visibility = if (isVisible) View.INVISIBLE else View.VISIBLE
       }
-      b_scenario_overview -> scenarioOverviewDialog?.openDialog()
-      b_scenario_get_more -> scenarioDownloadDialog?.openDialog()
+      binding.bScenarioOverview -> scenarioOverviewDialog?.openDialog()
+      binding.bScenarioGetMore -> scenarioDownloadDialog?.openDialog()
     }
   }
 
@@ -203,76 +211,76 @@ class StartupActivity : AppCompatActivity(),
     ncDevicesAdapter?.removeAllItems()
 
     // Reset Radio Buttons
-    b_trainee_choice.isSelected = false
-    b_trainer_choice.isSelected = false
+    binding.bTraineeChoice.isSelected = false
+    binding.bTrainerChoice.isSelected = false
 
     // Reset UI:
-    ll_trainee_name_login.visibility = View.GONE
-    ll_trainer_devices.visibility = View.GONE
-    ll_trainee_waiting_for_trainer.visibility = View.GONE
-    ll_trainer_searching.visibility = View.GONE
+    binding.llTraineeNameLogin.visibility = View.GONE
+    binding.llTrainerDevices.visibility = View.GONE
+    binding.llTraineeWaitingForTrainer.visibility = View.GONE
+    binding.llTrainerSearching.visibility = View.GONE
   }
 
   private fun traineeChosen() {
     ncService?.updateUser(type = UserType.Trainee)
 
-    if (ll_trainer_devices.visibility == View.VISIBLE) {
+    if (binding.llTrainerDevices.visibility == View.VISIBLE) {
 
-      Handler().postDelayed({
-        ll_trainer_devices.visibility = View.GONE
-        ll_trainee_name_login.visibility = View.VISIBLE
+      Handler(Looper.getMainLooper()).postDelayed({
+        binding.llTrainerDevices.visibility = View.GONE
+        binding.llTraineeNameLogin.visibility = View.VISIBLE
       }, 100)
 
     } else {
-      ll_trainee_name_login.visibility = View.VISIBLE
+      binding.llTraineeNameLogin.visibility = View.VISIBLE
     }
 
     if (!hasWatcher) {
-      et_trainee_name.addTextChangedListener(traineeNameListener)
+      binding.etTraineeName.addTextChangedListener(traineeNameListener)
       hasWatcher = true
     }
 
     if (NCS.user.name != "Trainer")
-      et_trainee_name.setText(NCS.user.name)
+      binding.etTraineeName.setText(NCS.user.name)
 
     if (ncService == null) return
     if (ncService!!.needPermissions()) {
-      ll_permission_request.visibility = View.VISIBLE
+      binding.llPermissionRequest.visibility = View.VISIBLE
     }
   }
 
   private fun trainerChosen() {
     ncService?.updateUser(type = UserType.Trainer, name = "Trainer")
-    b_restart.visibility = View.VISIBLE
+    binding.bRestart.visibility = View.VISIBLE
 
-    if (ll_trainee_name_login.visibility == View.VISIBLE) {
+    if (binding.llTraineeNameLogin.visibility == View.VISIBLE) {
 
-      if (et_trainee_name.isFocused) {
+      if (binding.etTraineeName.isFocused) {
         // Hide Softkeyboard
         if (currentFocus != null) {
           val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
           imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-          fullscreenHelper?.delayedHide(0)
+          fullscreenHelper?.hide()
         }
 
       }
 
-      Handler().postDelayed({
-        ll_trainee_name_login.visibility = View.GONE
-        ll_trainer_devices.visibility = View.VISIBLE
-        ll_trainee_waiting_for_trainer.visibility = View.GONE
+      Handler(Looper.getMainLooper()).postDelayed({
+        binding.llTraineeNameLogin.visibility = View.GONE
+        binding.llTrainerDevices.visibility = View.VISIBLE
+        binding.llTraineeWaitingForTrainer.visibility = View.GONE
 
 
       }, 100)
     } else {
-      ll_trainer_devices.visibility = View.VISIBLE
+      binding.llTrainerDevices.visibility = View.VISIBLE
     }
 
     if (ncService == null) return
     if (ncService!!.needPermissions()) {
-      ll_permission_request.visibility = View.VISIBLE
+      binding.llPermissionRequest.visibility = View.VISIBLE
     } else {
-      ll_trainer_searching.visibility = View.VISIBLE
+      binding.llTrainerSearching.visibility = View.VISIBLE
       fillNearbyConnectionsList()
     }
   }
@@ -285,7 +293,7 @@ class StartupActivity : AppCompatActivity(),
       ncService!!.ncsCallback = this@StartupActivity
 
       if (ncService!!.needPermissions())
-        b_give_permission.setOnClickListener(this@StartupActivity)
+        binding.bGivePermission.setOnClickListener(this@StartupActivity)
 
       bound = true
     }
@@ -340,9 +348,9 @@ class StartupActivity : AppCompatActivity(),
 
     if (NCS.chosenEndpoint != null) {
       if (NCS.user.type == UserType.Trainer)
-        tw_trainer_search.text = NCSEndpointState.getDesc(NCS.chosenEndpoint)
+        binding.twTrainerSearch.text = NCSEndpointState.getDesc(NCS.chosenEndpoint)
       else {
-        tw_trainee_search.text = NCSEndpointState.getDesc(NCS.chosenEndpoint)
+        binding.twTraineeSearch.text = NCSEndpointState.getDesc(NCS.chosenEndpoint)
       }
     }
 
@@ -353,10 +361,10 @@ class StartupActivity : AppCompatActivity(),
     if (NCS.ncsState == NCSState.CONNECTED || NCS.ncsState == NCSState.DISCONNECTED) {
       if (NCS.user.type == UserType.Trainee) {
         //b_trainee_search.visibility = View.INVISIBLE
-        pb_trainee_searching.visibility = View.INVISIBLE
+        binding.pbTraineeSearching.visibility = View.INVISIBLE
       } else {
         //b_trainer_search.visibility = View.INVISIBLE
-        pb_trainer_searching.visibility = View.INVISIBLE
+        binding.pbTrainerSearching.visibility = View.INVISIBLE
       }
       return
     }
@@ -371,8 +379,8 @@ class StartupActivity : AppCompatActivity(),
 
       b_trainee_search.setFontAwesomeIcon(if (isActive) FontAwesome.FA_TIMES else FontAwesome.FA_REPEAT)*/
 
-      pb_trainee_searching.visibility = if (isActive) View.VISIBLE else View.INVISIBLE
-      tw_trainee_search.text = if (isActive)
+      binding.pbTraineeSearching.visibility = if (isActive) View.VISIBLE else View.INVISIBLE
+      binding.twTraineeSearch.text = if (isActive)
         getString(R.string.searching_for_trainer)
       else
         getString(R.string.searching_stopped)
@@ -383,8 +391,8 @@ class StartupActivity : AppCompatActivity(),
           Handler().postDelayed( {b_trainer_search.visibility = View.VISIBLE}, 2000)
 
       b_trainer_search.setFontAwesomeIcon(if (isActive) FontAwesome.FA_TIMES else FontAwesome.FA_REPEAT)*/
-      pb_trainer_searching.visibility = if (isActive) View.VISIBLE else View.INVISIBLE
-      tw_trainer_search.text = if (isActive)
+      binding.pbTrainerSearching.visibility = if (isActive) View.VISIBLE else View.INVISIBLE
+      binding.twTrainerSearch.text = if (isActive)
         getString(R.string.searching_for_trainee)
       else
         getString(R.string.searching_stopped)
@@ -437,7 +445,7 @@ class StartupActivity : AppCompatActivity(),
           Log.i(TAG, "Disconnected from $id")
 
         } else {
-          pb_trainer_searching.visibility = View.VISIBLE
+          binding.pbTrainerSearching.visibility = View.VISIBLE
           Log.i(TAG, "Requested Connection to Id: $id")
           ncService?.requestConnection(id)
         }
@@ -445,8 +453,8 @@ class StartupActivity : AppCompatActivity(),
     } else {
       ncDevicesAdapter?.removeAllItems()
     }
-    rw_nearby_devices.layoutManager = LinearLayoutManager(this)
-    rw_nearby_devices.adapter = ncDevicesAdapter
+    binding.rwNearbyDevices.layoutManager = LinearLayoutManager(this)
+    binding.rwNearbyDevices.adapter = ncDevicesAdapter
   }
 
 
@@ -496,10 +504,10 @@ class StartupActivity : AppCompatActivity(),
 
     val dialogPermissionListener = object : PermissionListener {
       override fun onPermissionGranted(response: PermissionGrantedResponse) {
-        ll_permission_request.visibility = View.GONE
+        binding.llPermissionRequest.visibility = View.GONE
 
         if (NCS.user.type == UserType.Trainer) {
-          ll_trainer_searching.visibility = View.VISIBLE
+          binding.llTrainerSearching.visibility = View.VISIBLE
           fillNearbyConnectionsList()
         }
       }
@@ -548,7 +556,7 @@ class StartupActivity : AppCompatActivity(),
   override fun onPostCreate(savedInstanceState: Bundle?) {
     super.onPostCreate(savedInstanceState)
 
-    fullscreenHelper?.delayedHide(100)
+    fullscreenHelper?.hide()
   }
 
   override fun onPause() {
@@ -558,7 +566,7 @@ class StartupActivity : AppCompatActivity(),
 
   override fun onResume() {
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    fullscreenHelper?.delayedHide(100)
+    fullscreenHelper?.hide()
     super.onResume()
   }
 

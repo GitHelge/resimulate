@@ -70,6 +70,8 @@ class Pathology {
         map[VSConfigType.SYS] = Pair(0, 0)
         map[VSConfigType.DIA] = Pair(0, 0)
       }
+
+      else -> {}
     }
 
     return map

@@ -91,12 +91,12 @@ class ESSurfaceView : SurfaceView, SurfaceHolder.Callback {
     isSetup = true
   }
 
-  override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, w: Int, h: Int) {
-    Log.i(TAG, "onSizeChanged to w: $w, h: $h")
+  override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+    Log.i(TAG, "onSizeChanged to w: $width, h: $height")
     bitmap = null
   }
 
-  override fun surfaceDestroyed(p0: SurfaceHolder?) {
+  override fun surfaceDestroyed(holder: SurfaceHolder) {
     var retry = true
     while (retry) {
       try {
@@ -111,7 +111,8 @@ class ESSurfaceView : SurfaceView, SurfaceHolder.Callback {
     }
   }
 
-  override fun surfaceCreated(p0: SurfaceHolder?) {
+
+  override fun surfaceCreated(holder: SurfaceHolder) {
   }
 
   private fun getXrange(width: Int): Float {
@@ -169,8 +170,7 @@ class ESSurfaceView : SurfaceView, SurfaceHolder.Callback {
     point.x = 0f
   }
 
-
-  override fun draw(canvas: Canvas?) {
+  override fun draw(canvas: Canvas) {
     super.draw(canvas)
 
     if (!simulationStarted) return
@@ -338,4 +338,5 @@ class ESSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     return Pair(path, pacerPaint)
   }
+
 }

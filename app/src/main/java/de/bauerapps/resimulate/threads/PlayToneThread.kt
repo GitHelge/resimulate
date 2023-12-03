@@ -6,6 +6,7 @@ import android.media.AudioTrack
 import android.os.Build
 import android.media.AudioManager
 import androidx.annotation.RequiresApi
+import kotlin.math.sin
 
 /** This class is heavily inspired by the [Zentone Library](https://github.com/nisrulz/zentone)
  * from [Nishant Srivastava](https://github.com/nisrulz)
@@ -52,7 +53,8 @@ class PlayToneThread(
           else -> maxVolume
         }
 
-        val sample = (Math.sin(freqOfTone * 2.0 * Math.PI * i / sampleRate) * volume).toShort()
+        val sample =
+          (sin(freqOfTone * 2.0 * Math.PI * i / sampleRate) * volume).toInt().toShort()
         samples[i] = sample
         samples[i + 1] = sample
       }

@@ -1,6 +1,7 @@
 package de.bauerapps.resimulate.adapters
 
 import android.content.Context
+import android.view.LayoutInflater
 import androidx.appcompat.widget.AppCompatSeekBar
 import androidx.recyclerview.widget.RecyclerView
 import android.view.View
@@ -9,8 +10,8 @@ import android.widget.SeekBar
 import android.widget.TextView
 import de.bauerapps.resimulate.config.AlarmLevel
 import de.bauerapps.resimulate.R
+import de.bauerapps.resimulate.databinding.AlarmLevelListItemBinding
 import de.bauerapps.resimulate.helper.inflate
-import kotlinx.android.synthetic.main.alarm_level_list_item.view.*
 import kotlin.collections.ArrayList
 
 class AlarmLevelAdapter(val alarms: ArrayList<AlarmLevel>) :
@@ -19,9 +20,9 @@ class AlarmLevelAdapter(val alarms: ArrayList<AlarmLevel>) :
   private var context: Context? = null
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmLevelViewHolder {
-    val inflatedView = parent.inflate(R.layout.alarm_level_list_item, false)
+    val binding = AlarmLevelListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     context = parent.context
-    return AlarmLevelViewHolder(inflatedView)
+    return AlarmLevelViewHolder(binding)
   }
 
   override fun getItemCount(): Int {
@@ -32,7 +33,7 @@ class AlarmLevelAdapter(val alarms: ArrayList<AlarmLevel>) :
     holder.bindDevice(alarms[position])
   }
 
-  inner class AlarmLevelViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+  inner class AlarmLevelViewHolder(v: AlarmLevelListItemBinding) : RecyclerView.ViewHolder(v.root) {
 
     private var twAlarmLevelName: TextView? = null
     private var twAlarmLevelValue: TextView? = null
@@ -41,11 +42,11 @@ class AlarmLevelAdapter(val alarms: ArrayList<AlarmLevel>) :
     private var sbAlarmLevel: AppCompatSeekBar? = null
 
     init {
-      this.twAlarmLevelName = v.tw_alarm_name
-      this.twAlarmLevelValue = v.tw_alarm_value
-      this.twAlarmLevelMin = v.tw_alarm_min
-      this.twAlarmLevelMax = v.tw_alarm_max
-      this.sbAlarmLevel = v.sb_alarm_change
+      this.twAlarmLevelName = v.twAlarmName
+      this.twAlarmLevelValue = v.twAlarmValue
+      this.twAlarmLevelMin = v.twAlarmMin
+      this.twAlarmLevelMax = v.twAlarmMax
+      this.sbAlarmLevel = v.sbAlarmChange
     }
 
     fun bindDevice(alarm: AlarmLevel) {

@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import de.bauerapps.resimulate.config.VitalSignConfig
+import de.bauerapps.resimulate.databinding.DefiPathologyConfigDialogBinding
 import de.bauerapps.resimulate.helper.VSConfigType
 import de.bauerapps.resimulate.views.ESDialog
-import kotlinx.android.synthetic.main.defi_pathology_config_dialog.view.*
 
 @SuppressLint("InflateParams")
 class PostShockConfig(val context: AppCompatActivity, simConfig: SimConfig) {
@@ -18,8 +18,7 @@ class PostShockConfig(val context: AppCompatActivity, simConfig: SimConfig) {
 
   private var dialog: ESDialog = ESDialog(context, R.style.NoAnimDialog)
 
-  private var dialogView: View = LayoutInflater.from(context)
-    .inflate(R.layout.defi_pathology_config_dialog, null)
+  private var dialogView = DefiPathologyConfigDialogBinding.inflate(context.layoutInflater)
 
 
   var callback: Callback? = null
@@ -33,7 +32,7 @@ class PostShockConfig(val context: AppCompatActivity, simConfig: SimConfig) {
 
     dialogView.apply {
 
-      initPostShockConfigs(this)
+      initPostShockConfigs(this.root)
 
       val psVitalSigns = tempConfig.simState.defi.vitalSigns
       setBoundsByPathology(psVSConfigs, psVitalSigns.pathology)
@@ -46,18 +45,18 @@ class PostShockConfig(val context: AppCompatActivity, simConfig: SimConfig) {
       psVSConfigs[VSConfigType.DIA]?.update(psVitalSigns.nibp.dia)
 
 
-      b_check.setOnClickListener {
+      bCheck.setOnClickListener {
         updatePostShockConfig()
         callback?.updateSimConfig(tempConfig)
 
         dialog.dismiss()
       }
 
-      b_cancel.setOnClickListener { dialog.dismiss() }
+      bCancel.setOnClickListener { dialog.dismiss() }
     }
 
     dialog.apply {
-      setContentView(dialogView)
+      setContentView(dialogView.root)
       show()
     }
   }
@@ -77,30 +76,32 @@ class PostShockConfig(val context: AppCompatActivity, simConfig: SimConfig) {
 
   private fun initPostShockConfigs(psView: View) {
     psView.apply {
-      psVSConfigs[VSConfigType.HR] = VitalSignConfig(
-        60,
-        b_hr_up, b_hr_down, tw_hr_config_label
-      )
-      psVSConfigs[VSConfigType.SPO2] = VitalSignConfig(
-        97,
-        b_spo2_up, b_spo2_down, tw_spo2_config_label
-      )
-      psVSConfigs[VSConfigType.ETCO2] = VitalSignConfig(
-        35,
-        b_etco2_up, b_etco2_down, tw_etco2_config_label
-      )
-      psVSConfigs[VSConfigType.RESP_RATE] = VitalSignConfig(
-        12,
-        b_resp_rate_up, b_resp_rate_down, tw_resp_rate_config_label
-      )
-      psVSConfigs[VSConfigType.SYS] = VitalSignConfig(
-        120,
-        b_sys_up, b_sys_down, tw_sys_config_label
-      )
-      psVSConfigs[VSConfigType.DIA] = VitalSignConfig(
-        80,
-        b_dia_up, b_dia_down, tw_dia_config_label
-      )
+      dialogView.apply {
+        psVSConfigs[VSConfigType.HR] = VitalSignConfig(
+          60,
+          bHrUp, bHrDown, twHrConfigLabel
+        )
+        psVSConfigs[VSConfigType.SPO2] = VitalSignConfig(
+          97,
+          bSpo2Up, bSpo2Down, twSpo2ConfigLabel
+        )
+        psVSConfigs[VSConfigType.ETCO2] = VitalSignConfig(
+          35,
+          bEtco2Up, bEtco2Down, twEtco2ConfigLabel
+        )
+        psVSConfigs[VSConfigType.RESP_RATE] = VitalSignConfig(
+          12,
+          bRespRateUp, bRespRateDown, twRespRateConfigLabel
+        )
+        psVSConfigs[VSConfigType.SYS] = VitalSignConfig(
+          120,
+          bSysUp, bSysDown, twSysConfigLabel
+        )
+        psVSConfigs[VSConfigType.DIA] = VitalSignConfig(
+          80,
+          bDiaUp, bDiaDown, twDiaConfigLabel
+        )
+      }
     }
   }
 

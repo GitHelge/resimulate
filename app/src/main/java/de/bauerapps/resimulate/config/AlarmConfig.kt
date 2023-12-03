@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +14,7 @@ import de.bauerapps.resimulate.views.ESBootstrapButton
 import de.bauerapps.resimulate.views.ESDialog
 import com.beardedhen.androidbootstrap.BootstrapText
 import com.beardedhen.androidbootstrap.font.FontAwesome
-import kotlinx.android.synthetic.main.alarm_level_dialog.view.*
+import de.bauerapps.resimulate.databinding.AlarmLevelDialogBinding
 
 
 @SuppressLint("InflateParams")
@@ -29,8 +30,7 @@ class AlarmConfig(private val context: AppCompatActivity, private val sound: Sou
   private var alarmLevelAdapter: AlarmLevelAdapter? = null
 
   private var alarmLevelDialog = ESDialog(context, R.style.NoAnimDialog)
-  private val alarmLevelDialogView = LayoutInflater.from(context)
-    .inflate(R.layout.alarm_level_dialog, null)
+  private val alarmLevelDialogView = AlarmLevelDialogBinding.inflate(context.layoutInflater)
 
   var callback: AlarmConfigCallback? = null
 
@@ -230,17 +230,18 @@ class AlarmConfig(private val context: AppCompatActivity, private val sound: Sou
   private fun initAlarmLevelDialog() {
     alarmLevelDialogView.apply {
 
-      rv_alarms.layoutManager = LinearLayoutManager(context)
-      rv_alarms.adapter = alarmLevelAdapter
-      b_check.setOnClickListener {
+      rvAlarms.layoutManager = LinearLayoutManager(context)
+      alarmLevelDialog.window?.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+      rvAlarms.adapter = alarmLevelAdapter
+      bCheck.setOnClickListener {
         applyAlarmConfigChanges()
         alarmLevelDialog.dismiss()
       }
-      b_cancel.setOnClickListener { alarmLevelDialog.dismiss() }
+      bCancel.setOnClickListener { alarmLevelDialog.dismiss() }
     }
 
     alarmLevelDialog.apply {
-      setContentView(alarmLevelDialogView)
+      setContentView(alarmLevelDialogView.root)
     }
   }
 
