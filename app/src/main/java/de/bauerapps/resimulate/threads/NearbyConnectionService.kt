@@ -426,11 +426,17 @@ class NearbyConnectionService : Service() {
 
   fun needPermissions(): Boolean {
     return when {
-      Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-        !hasCoarseLocationPermission()
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
+        !hasTiramisuPermissions()
+      }
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+        !hasNecessarySPermissions()
       }
       Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> {
         !hasFineLocationPermission()
+      }
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
+        !hasCoarseLocationPermission()
       }
       else -> {
         false
@@ -450,6 +456,29 @@ class NearbyConnectionService : Service() {
 
     val location = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     return location == PackageManager.PERMISSION_GRANTED
+  }
+
+  @TargetApi(Build.VERSION_CODES.S)
+  fun hasNecessarySPermissions(): Boolean {
+    val fineLocation = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    val btAdvertice = checkSelfPermission(Manifest.permission.BLUETOOTH_ADVERTISE) == PackageManager.PERMISSION_GRANTED
+    val btConnect = checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED
+    val btScan = checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED
+    val wifiState = checkSelfPermission(Manifest.permission.ACCESS_WIFI_STATE) == PackageManager.PERMISSION_GRANTED
+
+    return fineLocation && btAdvertice && btConnect && btScan && wifiState
+  }
+
+  @TargetApi(Build.VERSION_CODES.TIRAMISU)
+  fun hasTiramisuPermissions(): Boolean {
+    val nearby = checkSelfPermission(Manifest.permission.NEARBY_WIFI_DEVICES) == PackageManager.PERMISSION_GRANTED
+    val fineLocation = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    val btAdvertice = checkSelfPermission(Manifest.permission.BLUETOOTH_ADVERTISE) == PackageManager.PERMISSION_GRANTED
+    val btConnect = checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED
+    val btScan = checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED
+    val wifiState = checkSelfPermission(Manifest.permission.ACCESS_WIFI_STATE) == PackageManager.PERMISSION_GRANTED
+
+    return nearby && fineLocation && btAdvertice && btConnect && btScan && wifiState
   }
 
 }

@@ -13,8 +13,8 @@
     <string name="dummy_button" translatable="false">Dummy Button</string>
     <string name="dummy_content" translatable="false">DUMMY\nCONTENT</string>
     <string name="es_icon_cd" translatable="false">ReSimulate Icon</string>
-    <string name="coarse_location_description">"For connecting to other devices, the permission to access a coarse location is required.     "</string>
-    <string name="fine_location_description">"For connecting to other devices via Bluetooth/Wifi, the permission to access a fine location is required.     "</string>
+    <string name="coarse_location_description">"For connecting to other devices, the permission to access a coarse location is required."</string>
+    <string name="fine_location_description">"For connecting to other devices via Bluetooth/Wifi, the permission to e.g. access a fine location is required."</string>
 
     <string name="app_name" translatable="false">ReSimulate</string>
     <string name="hr_bpm_oxy">HR (Oxy) [bpm]</string>

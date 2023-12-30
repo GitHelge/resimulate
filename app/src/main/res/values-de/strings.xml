@@ -5,7 +5,7 @@
     <string name="asystole">Asystolie</string>
     <string name="charge">LADEN</string>
     <string name="coarse_location_description">Um eine Verbindung mit anderen Geräten herzustellen, ist der Zugriff auf den Standort notwendig.</string>
-    <string name="fine_location_description">"Um eine Verbindung mit anderen Geräten via Bluetooth/Wifi herzustellen, ist der Zugriff auf den genauen Standort notwendig."</string>
+    <string name="fine_location_description">"Um eine Verbindung mit anderen Geräten via Bluetooth/Wifi herzustellen, ist u.a. der Zugriff auf den genauen Standort notwendig."</string>
     <string name="connection_indicator_placeholder">Verbunden mit\nChristian</string>
     <string name="ecg">EKG</string>
     <string name="energy">Energie</string>
