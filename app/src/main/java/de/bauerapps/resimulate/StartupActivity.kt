@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.view.WindowManager
-import com.karumi.dexter.Dexter
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -34,11 +33,7 @@ import de.bauerapps.resimulate.threads.NCSEndpointState
 import de.bauerapps.resimulate.threads.NCSState
 import de.bauerapps.resimulate.threads.NearbyConnectionService
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionDeniedResponse
-import com.karumi.dexter.listener.PermissionGrantedResponse
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.single.PermissionListener
+import com.permissionx.guolindev.PermissionX
 import de.bauerapps.resimulate.databinding.ActivityStartupBinding
 import de.bauerapps.resimulate.helper.ESApplication
 
@@ -502,55 +497,53 @@ class StartupActivity : AppCompatActivity(),
 
   private fun askPermission(view: View) {
 
-    val dialogPermissionListener = object : PermissionListener {
-      override fun onPermissionGranted(response: PermissionGrantedResponse) {
-        binding.llPermissionRequest.visibility = View.GONE
+    val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      PermissionX.init(this)
+        .permissions(Manifest.permission.NEARBY_WIFI_DEVICES, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.ACCESS_FINE_LOCATION)
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+      PermissionX.init(this)
+        .permissions(Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE)
 
-        if (NCS.user.type == UserType.Trainer) {
-          binding.llTrainerSearching.visibility = View.VISIBLE
-          fillNearbyConnectionsList()
-        }
-      }
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      PermissionX.init(this)
+        .permissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE)
 
-      override fun onPermissionDenied(response: PermissionDeniedResponse) {
-        val desc = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-          getString(R.string.fine_location_description)
-        } else {
-          getString(R.string.coarse_location_description)
-        }
-        val snack = Snackbar.make(view, desc, Snackbar.LENGTH_LONG)
-          .setAction("Settings") {
-            val myAppSettings = Intent(
-              Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-              Uri.parse("package:" + this@StartupActivity.packageName)
-            )
-            myAppSettings.addCategory(Intent.CATEGORY_DEFAULT)
-            myAppSettings.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            this@StartupActivity.startActivity(myAppSettings)
-          }
-        val tw = snack.view.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
-        tw.maxLines = 3
-        tw.maxWidth = 600
-        snack.show()
-      }
-
-      override fun onPermissionRationaleShouldBeShown(
-        permission: PermissionRequest,
-        token: PermissionToken
-      ) {
-        token.continuePermissionRequest()
-      }
-    }
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-      Dexter.withActivity(this)
-        .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-        .withListener(dialogPermissionListener).check()
     } else {
-      Dexter.withActivity(this)
-        .withPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-        .withListener(dialogPermissionListener).check()
+      PermissionX.init(this)
+        .permissions(Manifest.permission.ACCESS_COARSE_LOCATION)
     }
+
+    permission
+      .request { allGranted, granted, denied ->
+        if (allGranted) {
+          binding.llPermissionRequest.visibility = View.GONE
+
+          if (NCS.user.type == UserType.Trainer) {
+            binding.llTrainerSearching.visibility = View.VISIBLE
+            fillNearbyConnectionsList()
+          }
+        } else {
+          val desc = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            getString(R.string.fine_location_description)
+          } else {
+            getString(R.string.coarse_location_description)
+          }
+          val snack = Snackbar.make(view, desc, Snackbar.LENGTH_LONG)
+            .setAction("Settings") {
+              val myAppSettings = Intent(
+                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.parse("package:" + this@StartupActivity.packageName)
+              )
+              myAppSettings.addCategory(Intent.CATEGORY_DEFAULT)
+              myAppSettings.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+              this@StartupActivity.startActivity(myAppSettings)
+            }
+          val tw = snack.view.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
+          tw.maxLines = 3
+          tw.maxWidth = 600
+          snack.show()
+        }
+      }
   }
 
   override fun onPostCreate(savedInstanceState: Bundle?) {
